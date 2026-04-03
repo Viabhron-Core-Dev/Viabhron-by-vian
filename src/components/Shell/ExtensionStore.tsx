@@ -11,7 +11,9 @@ import {
   Zap,
   Wrench,
   Network,
-  ExternalLink
+  ExternalLink,
+  BookOpen,
+  Layout
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Extension, ExtensionCategory } from '../../types';
@@ -27,6 +29,7 @@ export const ExtensionStore: React.FC<ExtensionStoreProps> = ({ onInstall, insta
 
   const featuredExtensions: Extension[] = [
     { id: 'mcp-sqlite', name: 'SQLite MCP', category: 'mcp', icon: Network, status: 'inactive', source: 'inbuilt', description: 'Local database for structured data storage' },
+    { id: 'mcp-gemini-docs', name: 'Gemini API Docs', category: 'mcp', icon: BookOpen, status: 'active', source: 'inbuilt', description: 'Default knowledge base for Gemini API development' },
     { id: 'module-charts', name: 'Interactive Artifacts', category: 'module', icon: Layout, status: 'inactive', source: 'inbuilt', description: 'Claude-style interactive charts and visual data artifacts' },
     { id: 'module-ui-demo', name: 'UI Prototype Engine', category: 'module', icon: Globe, status: 'inactive', source: 'inbuilt', description: 'Lovable-style rapid UI prototyping and live demos' },
     { id: 'module-code-viz', name: 'Code-to-Image', category: 'module', icon: Zap, status: 'inactive', source: 'inbuilt', description: 'Generate high-quality diagrams and images directly from code' },

@@ -1,6 +1,6 @@
 {
   "name": "Viabhron",
-  "description": "A mobile-first AI Computer with a visual workflow orchestrator and Android-native UI.",
+  "description": "A modular AI Operating System (MAOS) with a persistent agentic office, a generative UI desk, and a secure tent-deployment model.",
   "requestFramePermissions": [
     "camera",
     "microphone",

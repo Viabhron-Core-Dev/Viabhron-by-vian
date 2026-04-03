@@ -31,7 +31,7 @@ import { BottomNavigation } from './components/Shell/BottomNavigation';
 import { SystemHUD } from './components/Shell/SystemHUD';
 import { TabSwitcher } from './components/Shell/TabSwitcher';
 
-import { Extension, TabType, Agent } from './types';
+import { Extension, TabType, Agent, UIConfig } from './types';
 import { infra } from './lib/infraManager';
 import { db } from './lib/firebase';
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from 'firebase/firestore';
@@ -65,6 +65,13 @@ export default function App() {
   const [isTabSwitcherOpen, setIsTabSwitcherOpen] = useState(false);
   const [isSystemMenuOpen, setIsSystemMenuOpen] = useState(false);
   const [canvasViewMode, setCanvasViewMode] = useState<'design' | 'logic'>('logic');
+  const [uiConfig, setUiConfig] = useState<UIConfig>({
+    theme: 'dark',
+    layout: 'default',
+    sidebarVisible: false,
+    activeTabId: '',
+    accentColor: '#3b82f6'
+  });
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [bridgedProjectId, setBridgedProjectId] = useState<string | null>(null);
 
@@ -76,8 +83,25 @@ export default function App() {
   useEffect(() => {
     if (!user) return;
     const agentsRef = collection(db, 'users', user.uid, 'agents');
-    return onSnapshot(agentsRef, (snap) => {
-      setAgents(snap.docs.map(doc => ({ ...doc.data(), id: doc.id } as Agent)));
+    return onSnapshot(agentsRef, async (snap) => {
+      const fetchedAgents = snap.docs.map(doc => ({ ...doc.data(), id: doc.id } as Agent));
+      setAgents(fetchedAgents);
+
+      // Ensure Head Agent exists
+      if (!fetchedAgents.find(a => a.role === 'head')) {
+        const headId = 'head-architect';
+        await setDoc(doc(db, 'users', user.uid, 'agents', headId), {
+          id: headId,
+          name: 'The Architect',
+          description: 'System Orchestrator & UI Manager',
+          role: 'head',
+          provider: 'gemini',
+          model: 'gemini-3-flash-preview',
+          systemInstruction: 'You are the Head Agent of Viabhron. You manage the UI and delegate tasks to other agents. You do not have access to sensitive keys.',
+          activeExtensionIds: ['m3'], // Gemini API Docs MCP
+          color: '#3b82f6'
+        });
+      }
     });
   }, [user]);
 
@@ -89,6 +113,7 @@ export default function App() {
       id: agentId,
       name: newAgentName,
       apiKey: newAgentKey,
+      role: 'major', // Default role for user-added agents
       provider,
       model: provider === 'gemini' ? 'gemini-3-flash-preview' : 'gpt-4o',
       systemInstruction: 'You are a helpful assistant.',

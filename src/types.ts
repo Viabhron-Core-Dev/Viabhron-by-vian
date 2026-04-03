@@ -2,6 +2,8 @@ import { LucideIcon } from "lucide-react";
 
 export type ExtensionCategory = 'connector' | 'skill' | 'tool' | 'mcp' | 'module';
 
+export type AgentRole = 'head' | 'major' | 'sub' | 'minor';
+
 export interface Extension {
   id: string;
   name: string;
@@ -22,13 +24,23 @@ export interface Agent {
   id: string;
   name: string;
   description: string;
+  role: AgentRole;
   provider: AIProvider;
   model: string;
-  apiKey: string; // Added apiKey field
+  apiKey?: string; // Optional for Head Agent (Least Privilege)
   systemInstruction: string;
   activeExtensionIds: string[];
   avatar?: string;
   color: string;
+  parentId?: string; // For hierarchy (Sub/Minor agents)
+}
+
+export interface UIConfig {
+  theme: 'dark' | 'light' | 'custom';
+  layout: 'default' | 'focus' | 'split' | 'canvas-first';
+  sidebarVisible: boolean;
+  activeTabId: string;
+  accentColor: string;
 }
 
 export interface Tab {
