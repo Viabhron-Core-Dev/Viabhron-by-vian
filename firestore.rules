@@ -1,0 +1,82 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    // 
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required)
+    //   - activeTabId: string (required)
+    //   - createdAt: timestamp
+    //   - updatedAt: timestamp
+    //
+    // Collection: users/{userId}/tabs
+    // Document ID: {tabId}
+    // Fields:
+    //   - id: string (required)
+    //   - title: string (required)
+    //   - type: string (required, enum: chat, settings, discovery)
+    //   - createdAt: timestamp
+    //
+    // Collection: users/{userId}/tabs/{tabId}/messages
+    // Document ID: {messageId}
+    // Fields:
+    //   - id: string (required)
+    //   - role: string (required, enum: user, assistant, system)
+    //   - content: string (required)
+    //   - timestamp: timestamp
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'activeTabId']) &&
+             data.uid == request.auth.uid;
+    }
+
+    function isValidTab(data) {
+      return data.keys().hasAll(['id', 'title', 'type']) &&
+             data.type in ['chat', 'settings', 'discovery'];
+    }
+
+    function isValidMessage(data) {
+      return data.keys().hasAll(['id', 'role', 'content', 'timestamp']) &&
+             data.role in ['user', 'assistant', 'system'];
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+
+      match /tabs/{tabId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidTab(request.resource.data);
+        allow update: if isOwner(userId) && isValidTab(request.resource.data);
+        allow delete: if isOwner(userId);
+
+        match /messages/{messageId} {
+          allow read: if isOwner(userId);
+          allow create: if isOwner(userId) && isValidMessage(request.resource.data);
+        }
+      }
+    }
+  }
+}

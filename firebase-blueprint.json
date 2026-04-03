@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "UserSession": {
+      "title": "User Session",
+      "description": "Stores user-specific app state and sessions.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The user's unique ID." },
+        "activeTabId": { "type": "string", "description": "The ID of the currently active tab." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "activeTabId"]
+    },
+    "Tab": {
+      "title": "Tab",
+      "description": "A single browser-like tab session.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["chat", "settings", "discovery"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "type"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A message within a chat session.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "assistant", "system"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "role", "content", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserSession",
+      "description": "User profile and global state."
+    },
+    "/users/{userId}/tabs/{tabId}": {
+      "schema": "Tab",
+      "description": "Tabs belonging to a specific user."
+    },
+    "/users/{userId}/tabs/{tabId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages within a specific tab."
+    }
+  }
+}

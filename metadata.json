@@ -1,0 +1,9 @@
+{
+  "name": "Viabhron",
+  "description": "A mobile-first AI Computer with a visual workflow orchestrator and Android-native UI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
