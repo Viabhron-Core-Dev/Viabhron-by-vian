@@ -9,7 +9,10 @@ import {
   ChevronRight,
   Database,
   Server,
-  HardDrive
+  HardDrive,
+  Brain,
+  Zap,
+  Cpu
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { infra } from '../../lib/infraManager';
@@ -38,11 +41,19 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectingId, setSelectingId] = useState<string | null>(null);
+  const [showBrainSelection, setShowBrainSelection] = useState<string | null>(null);
+  const [selectedBrain, setSelectedBrain] = useState<string>('gemma-2b');
   const [provisioningSteps, setProvisioningSteps] = useState<ProvisioningStep[]>([
     { id: 'firebase', label: 'Firebase Database', status: 'pending', icon: Database },
     { id: 'cloudrun', label: 'Cloud Run Office', status: 'pending', icon: Server },
     { id: 'drive', label: 'Google Drive Library', status: 'pending', icon: HardDrive },
   ]);
+
+  const BRAINS = [
+    { id: 'gemma-2b', name: 'Gemma 2b', description: 'Ultra-lightweight, fast, fits Free Tier.', icon: Zap },
+    { id: 'phi-3', name: 'Phi-3 Mini', description: 'Strong logic, efficient reasoning.', icon: Brain },
+    { id: 'llama-3.1-8b', name: 'Llama 3.1 8b', description: 'Broad knowledge, requires more RAM.', icon: Cpu },
+  ];
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -59,27 +70,37 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
     loadProjects();
   }, [accessToken]);
 
-  const handleSelect = async (projectId: string) => {
+  const handleSelect = (projectId: string) => {
+    setShowBrainSelection(projectId);
+  };
+
+  const startProvisioning = async () => {
+    if (!showBrainSelection) return;
+    const projectId = showBrainSelection;
+    setShowBrainSelection(null);
+    
     try {
       setSelectingId(projectId);
       setError(null);
       
       // Step 1: Firebase
       setProvisioningSteps(prev => prev.map(s => s.id === 'firebase' ? { ...s, status: 'loading' } : s));
-      await new Promise(r => setTimeout(r, 1500)); // Simulate API call
+      await new Promise(r => setTimeout(r, 1500)); 
       const config = await infra.getProjectConfig(projectId);
       setProvisioningSteps(prev => prev.map(s => s.id === 'firebase' ? { ...s, status: 'success' } : s));
 
       // Step 2: Cloud Run
       setProvisioningSteps(prev => prev.map(s => s.id === 'cloudrun' ? { ...s, status: 'loading' } : s));
-      await new Promise(r => setTimeout(r, 2000)); // Simulate provisioning
+      await new Promise(r => setTimeout(r, 2000)); 
       setProvisioningSteps(prev => prev.map(s => s.id === 'cloudrun' ? { ...s, status: 'success' } : s));
 
       // Step 3: Google Drive
       setProvisioningSteps(prev => prev.map(s => s.id === 'drive' ? { ...s, status: 'loading' } : s));
-      await new Promise(r => setTimeout(r, 1200)); // Simulate folder creation
+      await new Promise(r => setTimeout(r, 1200)); 
       setProvisioningSteps(prev => prev.map(s => s.id === 'drive' ? { ...s, status: 'success' } : s));
 
+      await infra.provisionTripleService(projectId, selectedBrain);
+      
       await new Promise(r => setTimeout(r, 800));
       onProjectSelected(projectId, config);
     } catch (err) {
@@ -111,6 +132,75 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
 
         {/* Provisioning Overlay */}
         <AnimatePresence>
+          {showBrainSelection && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] bg-gray-950/90 backdrop-blur-xl flex items-center justify-center p-6"
+            >
+              <div className="max-w-xl w-full space-y-8">
+                <div className="text-center space-y-2">
+                  <div className="w-16 h-16 rounded-3xl bg-blue-600/20 flex items-center justify-center mx-auto mb-4">
+                    <Brain className="w-8 h-8 text-blue-500" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white tracking-tight">Pitch Your Main Pole</h2>
+                  <p className="text-gray-400 text-sm">
+                    Select the "Brain" for your Resident Head Agent. This will be provisioned in your Cloud Run instance.
+                  </p>
+                </div>
+
+                <div className="grid gap-4">
+                  {BRAINS.map((brain) => (
+                    <button
+                      key={brain.id}
+                      onClick={() => setSelectedBrain(brain.id)}
+                      className={`
+                        flex items-center gap-4 p-4 rounded-2xl border transition-all text-left
+                        ${selectedBrain === brain.id 
+                          ? 'bg-blue-600/20 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.2)]' 
+                          : 'bg-gray-900/50 border-white/5 hover:border-white/20'}
+                      `}
+                    >
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                        selectedBrain === brain.id ? 'bg-blue-500 text-white' : 'bg-gray-800 text-gray-400'
+                      }`}>
+                        <brain.icon className="w-6 h-6" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-bold text-white">{brain.name}</div>
+                        <div className="text-xs text-gray-400">{brain.description}</div>
+                      </div>
+                      {selectedBrain === brain.id && <CheckCircle2 className="w-5 h-5 text-blue-500" />}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setShowBrainSelection(null)}
+                    className="flex-1 px-6 py-3 rounded-xl bg-gray-900 text-white font-bold hover:bg-gray-800 transition-all border border-white/5"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={startProvisioning}
+                    className="flex-[2] px-6 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20"
+                  >
+                    Pitch Tent & Provision
+                  </button>
+                </div>
+
+                <div className="p-4 bg-blue-500/5 border border-blue-500/10 rounded-xl">
+                  <p className="text-[10px] text-blue-400/60 uppercase tracking-widest text-center leading-relaxed">
+                    This will enable Cloud Run, Firestore, and Drive APIs in project {showBrainSelection}.
+                    All data stays strictly within your project boundary.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {selectingId && (
             <motion.div
               initial={{ opacity: 0 }}

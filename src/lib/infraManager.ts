@@ -65,7 +65,30 @@ class InfrastructureManager {
     return this.db;
   }
 
-  // 4. Load persisted config on startup
+  // 4. Provision Triple-Service (Simulated)
+  async provisionTripleService(projectId: string, brainType: string) {
+    console.log(`Provisioning Triple-Service for ${projectId} with brain ${brainType}...`);
+    
+    // In a real app, these would be actual API calls to GCP using the accessToken
+    // 1. Enable APIs (Cloud Run, Firestore, Drive)
+    // 2. Initialize Firestore
+    // 3. Deploy Cloud Run container with the selected brain
+    // 4. Create Drive folder
+    
+    // For now, we simulate the delay and return a success state
+    // The UI in Discovery.tsx handles the step-by-step visual feedback
+    
+    const residentUrl = `https://viabhron-architect-${projectId}.a.run.app`;
+    localStorage.setItem('resident_agent_url', residentUrl);
+    localStorage.setItem('resident_brain_type', brainType);
+    
+    return {
+      success: true,
+      residentUrl
+    };
+  }
+
+  // 5. Load persisted config on startup
   async loadPersistedConfig() {
     const savedConfig = localStorage.getItem('user_owned_config');
     if (savedConfig) {

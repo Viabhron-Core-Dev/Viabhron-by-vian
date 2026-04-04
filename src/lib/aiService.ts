@@ -7,10 +7,11 @@ export interface AIServiceConfig {
   history: Message[];
 }
 
-export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq' | 'local';
+export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq' | 'local' | 'resident';
 
 export class AIService {
   static recognizeProvider(apiKey: string, agentProvider?: string): AIProvider {
+    if (agentProvider === 'resident') return 'resident';
     if (agentProvider === 'local') return 'local';
     if (apiKey.startsWith('sk-ant-')) return 'anthropic';
     if (apiKey.startsWith('sk-')) return 'openai';
@@ -23,6 +24,13 @@ export class AIService {
     const provider = this.recognizeProvider(config.apiKey, agent.provider);
     
     switch (provider) {
+      case 'resident':
+        const residentUrl = localStorage.getItem('resident_agent_url');
+        const brain = localStorage.getItem('resident_brain_type');
+        // In a real app, this would be a fetch() to the residentUrl.
+        // For the preview, we proxy through Gemini to show you the "Resident" experience.
+        const residentResponse = await this.callGemini(config, config.apiKey);
+        return `[Resident Brain (${brain}) @ ${residentUrl}]: ${residentResponse}`;
       case 'local':
         const localResponse = await this.callGemini(config, config.apiKey);
         return `[Local Brain]: ${localResponse}`;

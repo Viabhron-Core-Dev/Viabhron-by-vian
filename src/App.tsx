@@ -126,15 +126,18 @@ export default function App() {
       setAgents(fetchedAgents);
 
       // Ensure Head Agent exists (Tiny LLM Resident)
+      const residentUrl = localStorage.getItem('resident_agent_url');
+      const residentBrain = localStorage.getItem('resident_brain_type');
+
       if (!fetchedAgents.find(a => a.role === 'head')) {
         const headId = 'head-architect';
         await setDoc(doc(db, 'users', user.uid, 'agents', headId), {
           id: headId,
-          name: 'The Architect (Tiny LLM)',
-          description: 'Private Tiny LLM Head & MAOS Root Authority',
+          name: residentUrl ? `The Architect (${residentBrain})` : 'The Architect (Tiny LLM)',
+          description: residentUrl ? `Resident Brain at ${residentUrl}` : 'Private Tiny LLM Head & MAOS Root Authority',
           role: 'head',
-          provider: 'local',
-          model: 'gemma-2b-vibe',
+          provider: residentUrl ? 'resident' : 'local',
+          model: residentBrain || 'gemma-2b-vibe',
           systemInstruction: `You are the Head Agent (The Architect) of Viabhron, a Multi-Agent Operating System (MAOS).
           You are the "Root" or "Superuser" of this Virtual Computer.
           Rules:
