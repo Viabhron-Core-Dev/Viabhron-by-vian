@@ -15,7 +15,8 @@ import {
   Shield,
   Component,
   Activity,
-  Bug
+  Bug,
+  Terminal as TerminalIcon
 } from 'lucide-react';
 import { Tab, TabType } from '../../types';
 
@@ -58,6 +59,8 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
       case 'metrics': return <Activity className="w-3.5 h-3.5" />;
       case 'simulation': return <Bug className="w-3.5 h-3.5" />;
       case 'governance': return <Shield className="w-3.5 h-3.5" />;
+      case 'forge': return <Plus className="w-3.5 h-3.5" />;
+      case 'agent_cli': return <TerminalIcon className="w-3.5 h-3.5" />;
       case 'discovery': return <Search className="w-3.5 h-3.5" />;
       case 'settings': return <Home className="w-3.5 h-3.5" />;
       default: return <Layout className="w-3.5 h-3.5" />;

@@ -42,6 +42,8 @@ import { Artifacts } from './extensions/modules/Artifacts';
 import { SystemMetrics } from './extensions/modules/SystemMetrics';
 import { Simulation } from './extensions/modules/Simulation';
 import { Governance } from './extensions/modules/Governance';
+import { Forge } from './extensions/modules/Forge';
+import { AgentCLI } from './extensions/modules/AgentCLI';
 import { Logo } from './components/Shell/Logo';
 
 import { Extension, TabType, Agent, UIConfig } from './types';
@@ -228,6 +230,8 @@ export default function App() {
           onOpenMetrics={() => onQuickAction(() => handleAddTab('metrics', 'System Metrics'))}
           onOpenSimulation={() => onQuickAction(() => handleAddTab('simulation', 'Simulation Engine'))}
           onOpenGovernance={() => onQuickAction(() => handleAddTab('governance', 'Agent Governance Toolkit'))}
+          onOpenForge={() => onQuickAction(() => handleAddTab('forge', 'Vibe Forge (AI IDE)'))}
+          onOpenAgentCLI={() => onQuickAction(() => handleAddTab('agent_cli', 'Agent CLI'))}
           onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
         />
 
@@ -321,6 +325,10 @@ export default function App() {
                   <Simulation />
                 ) : tab.type === 'governance' ? (
                   <Governance />
+                ) : tab.type === 'forge' ? (
+                  <Forge />
+                ) : tab.type === 'agent_cli' ? (
+                  <AgentCLI />
                 ) : tab.type === 'settings' ? (
                   <div className="h-full bg-gray-950 p-8 pb-32 md:pb-8 overflow-y-auto no-scrollbar">
                     <div className="max-w-2xl mx-auto space-y-8">

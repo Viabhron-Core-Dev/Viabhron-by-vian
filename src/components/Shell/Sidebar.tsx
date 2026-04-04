@@ -7,6 +7,7 @@ import {
   Plus,
   PanelLeftClose,
   PanelLeftOpen,
+  Terminal as TerminalIcon,
   X,
   Puzzle,
   Zap,
@@ -38,6 +39,8 @@ interface SidebarProps {
   onOpenMetrics: () => void;
   onOpenSimulation: () => void;
   onOpenGovernance: () => void;
+  onOpenForge: () => void;
+  onOpenAgentCLI: () => void;
   onOpenSettings: () => void;
 }
 
@@ -134,7 +137,7 @@ const SidebarSection: React.FC<SectionProps> = ({ title, icon: Icon, items, isCo
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenSettings }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSettings }) => {
   const [openSections, setOpenSections] = useState<Record<ExtensionCategory, boolean>>({
     connector: true,
     skill: true,
@@ -272,6 +275,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extension
                   <div className="flex-1 text-left">
                     <div className="text-[10px] font-bold text-white uppercase tracking-widest">Governance & Security</div>
                     <div className="text-[8px] text-red-400/60 font-medium uppercase tracking-tighter">Microsoft Policy Engine</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Forge Section */}
+              <div className="mb-4">
+                <button 
+                  onClick={onOpenForge}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-orange-500/20 bg-orange-500/5 hover:bg-orange-500/10 hover:border-orange-500/40 transition-all group"
+                >
+                  <Plus className="w-4 h-4 text-orange-400 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] font-bold text-white uppercase tracking-widest">Vibe Forge</div>
+                    <div className="text-[8px] text-orange-400/60 font-medium uppercase tracking-tighter">AI Code Staging</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Agent CLI Section */}
+              <div className="mb-4">
+                <button 
+                  onClick={onOpenAgentCLI}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-cyan-500/20 bg-cyan-500/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all group"
+                >
+                  <TerminalIcon className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] font-bold text-white uppercase tracking-widest">Agent CLI</div>
+                    <div className="text-[8px] text-cyan-400/60 font-medium uppercase tracking-tighter">System Execution</div>
                   </div>
                 </button>
               </div>

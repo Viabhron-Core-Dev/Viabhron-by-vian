@@ -55,6 +55,7 @@ export const Canvas: React.FC<CanvasProps> = ({
   const canvasRef = useRef<HTMLDivElement>(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [isToolbarExpanded, setIsToolbarExpanded] = useState(false);
 
   useEffect(() => {
     onUpdate({ nodes, edges });
@@ -98,30 +99,50 @@ export const Canvas: React.FC<CanvasProps> = ({
         }}
       />
 
-      {/* Toolbar - Moved to bottom and made more compact */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-gray-900/90 backdrop-blur-2xl border border-white/10 p-1 rounded-xl shadow-2xl">
+      {/* Toolbar - Collapsible Icon */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-gray-900/90 backdrop-blur-2xl border border-white/10 p-1 rounded-2xl shadow-2xl overflow-hidden">
         <button 
-          onClick={() => setViewMode('design')}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${viewMode === 'design' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+          onClick={() => setIsToolbarExpanded(!isToolbarExpanded)}
+          className={`p-2 rounded-xl transition-all ${isToolbarExpanded ? 'bg-white/5 text-white' : 'text-blue-400 hover:bg-blue-500/10'}`}
+          title={isToolbarExpanded ? "Collapse Controls" : "Expand Controls"}
         >
-          <Layout className="w-3.5 h-3.5" />
-          Design
+          <Settings className={`w-4 h-4 transition-transform duration-500 ${isToolbarExpanded ? 'rotate-90' : ''}`} />
         </button>
-        <button 
-          onClick={() => setViewMode('logic')}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${viewMode === 'logic' ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
-        >
-          <Zap className="w-3.5 h-3.5" />
-          Logic
-        </button>
-        <div className="w-px h-4 bg-white/10 mx-1" />
-        <button 
-          onClick={() => setIsPreviewOpen(true)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold text-green-400 hover:bg-green-400/10 transition-all"
-        >
-          <Play className="w-3.5 h-3.5" />
-          Run
-        </button>
+
+        <AnimatePresence>
+          {isToolbarExpanded && (
+            <motion.div 
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 'auto', opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              className="flex items-center gap-1 overflow-hidden"
+            >
+              <div className="w-px h-4 bg-white/10 mx-1" />
+              <button 
+                onClick={() => { setViewMode('design'); setIsToolbarExpanded(false); }}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${viewMode === 'design' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+              >
+                <Layout className="w-3.5 h-3.5" />
+                Design
+              </button>
+              <button 
+                onClick={() => { setViewMode('logic'); setIsToolbarExpanded(false); }}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${viewMode === 'logic' ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+              >
+                <Zap className="w-3.5 h-3.5" />
+                Logic
+              </button>
+              <div className="w-px h-4 bg-white/10 mx-1" />
+              <button 
+                onClick={() => { setIsPreviewOpen(true); setIsToolbarExpanded(false); }}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold text-green-400 hover:bg-green-400/10 transition-all"
+              >
+                <Play className="w-3.5 h-3.5" />
+                Run
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Node Sidebar */}

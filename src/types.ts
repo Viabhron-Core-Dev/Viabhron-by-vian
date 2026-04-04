@@ -16,7 +16,7 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli';
 
 export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq';
 
