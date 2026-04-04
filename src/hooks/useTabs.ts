@@ -119,6 +119,8 @@ export function useTabs(user: User | null, extensions: Extension[]) {
   };
 
   const handleAddTab = async (type: TabType = 'chat', title: string = 'New Session', agentId?: string) => {
+    const effectiveAgentId = agentId || (type === 'chat' ? 'head-architect' : undefined);
+    
     if (type === 'settings' || type === 'agents') {
       const existing = tabs.find(t => t.type === type);
       if (existing) {
@@ -147,7 +149,7 @@ export function useTabs(user: User | null, extensions: Extension[]) {
         type, 
         active: true,
         status: 'active',
-        agentId,
+        agentId: effectiveAgentId,
         activeExtensionIds: defaultExtensionIds,
         canvasData: type === 'canvas' ? { nodes: [], edges: [] } : undefined,
         metadata: { lastAccessed: new Date() }
@@ -165,7 +167,7 @@ export function useTabs(user: User | null, extensions: Extension[]) {
       type,
       active: true,
       status: 'active',
-      agentId,
+      agentId: effectiveAgentId,
       activeExtensionIds: defaultExtensionIds,
       canvasData: type === 'canvas' ? { nodes: [], edges: [] } : undefined,
       metadata: { lastAccessed: serverTimestamp() },

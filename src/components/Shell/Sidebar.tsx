@@ -41,7 +41,9 @@ interface SidebarProps {
   onOpenGovernance: () => void;
   onOpenForge: () => void;
   onOpenAgentCLI: () => void;
+  onOpenSentinel: () => void;
   onOpenSettings: () => void;
+  geminiApiKey?: string;
 }
 
 interface SectionProps {
@@ -137,7 +139,7 @@ const SidebarSection: React.FC<SectionProps> = ({ title, icon: Icon, items, isCo
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSettings }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSentinel, onOpenSettings, geminiApiKey }) => {
   const [openSections, setOpenSections] = useState<Record<ExtensionCategory, boolean>>({
     connector: true,
     skill: true,
@@ -182,7 +184,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extension
             {/* BYOI Header */}
             <div className="p-4 border-b border-white/10 space-y-3">
               <div className="flex items-center gap-3 mb-2 px-1">
-                <Logo className="w-8 h-8" />
+                <Logo className="w-8 h-8" apiKey={geminiApiKey} />
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-bold text-white tracking-tight truncate">Viabhron</div>
                   <div className="text-[8px] text-gray-500 uppercase tracking-widest font-medium">Core OS</div>
@@ -303,6 +305,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extension
                   <div className="flex-1 text-left">
                     <div className="text-[10px] font-bold text-white uppercase tracking-widest">Agent CLI</div>
                     <div className="text-[8px] text-cyan-400/60 font-medium uppercase tracking-tighter">System Execution</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Sentinel Section */}
+              <div className="mb-4">
+                <button 
+                  onClick={onOpenSentinel}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/40 transition-all group"
+                >
+                  <Shield className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] font-bold text-white uppercase tracking-widest">Sentinel Guardian</div>
+                    <div className="text-[8px] text-blue-400/60 font-medium uppercase tracking-tighter">Threat Detection</div>
                   </div>
                 </button>
               </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
-export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10" }) => {
+export const Logo: React.FC<{ className?: string, apiKey?: string }> = ({ className = "w-10 h-10", apiKey }) => {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -11,9 +11,11 @@ export const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10"
       return;
     }
 
+    if (!apiKey) return;
+
     const generateLogo = async () => {
       try {
-        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+        const ai = new GoogleGenAI({ apiKey });
         const response = await ai.models.generateContent({
           model: 'gemini-2.5-flash-image',
           contents: {

@@ -7,10 +7,11 @@ export interface AIServiceConfig {
   history: Message[];
 }
 
-export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq';
+export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq' | 'local';
 
 export class AIService {
-  static recognizeProvider(apiKey: string): AIProvider {
+  static recognizeProvider(apiKey: string, agentProvider?: string): AIProvider {
+    if (agentProvider === 'local') return 'local';
     if (apiKey.startsWith('sk-ant-')) return 'anthropic';
     if (apiKey.startsWith('sk-')) return 'openai';
     if (apiKey.startsWith('gsk_')) return 'groq';
@@ -19,11 +20,14 @@ export class AIService {
 
   static async generateResponse(config: AIServiceConfig): Promise<string> {
     const { agent } = config;
-    const provider = this.recognizeProvider(agent.apiKey);
+    const provider = this.recognizeProvider(config.apiKey, agent.provider);
     
     switch (provider) {
+      case 'local':
+        const localResponse = await this.callGemini(config, config.apiKey);
+        return `[Local Brain]: ${localResponse}`;
       case 'gemini':
-        return this.callGemini(config, agent.apiKey);
+        return this.callGemini(config, config.apiKey);
       case 'openai':
       case 'anthropic':
       case 'groq':
@@ -34,7 +38,10 @@ export class AIService {
   }
 
   private static async callGemini(config: AIServiceConfig, apiKey: string): Promise<string> {
-    const ai = new GoogleGenAI({ apiKey: apiKey || process.env.GEMINI_API_KEY || '' });
+    if (!apiKey) {
+      throw new Error("Gemini API Key is required. Please configure it in System Settings.");
+    }
+    const ai = new GoogleGenAI({ apiKey });
     
     // Construct history for Gemini
     const contents = config.history.map(msg => ({

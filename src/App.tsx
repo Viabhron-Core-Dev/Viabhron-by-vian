@@ -19,6 +19,7 @@ import {
   Brain,
   Trash2,
   X,
+  Cloud,
   Terminal as TerminalIcon,
   Cpu,
   HardDrive,
@@ -44,6 +45,7 @@ import { Simulation } from './extensions/modules/Simulation';
 import { Governance } from './extensions/modules/Governance';
 import { Forge } from './extensions/modules/Forge';
 import { AgentCLI } from './extensions/modules/AgentCLI';
+import { Sentinel } from './extensions/modules/Sentinel';
 import { Logo } from './components/Shell/Logo';
 
 import { Extension, TabType, Agent, UIConfig } from './types';
@@ -97,6 +99,19 @@ export default function App() {
   });
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [bridgedProjectId, setBridgedProjectId] = useState<string | null>(null);
+  const [googleClientId, setGoogleClientId] = useState<string>('');
+  const [geminiApiKey, setGeminiApiKey] = useState<string>('');
+
+  useEffect(() => {
+    if (!user) return;
+    const settingsRef = doc(db, 'users', user.uid, 'settings', 'cloud_config');
+    return onSnapshot(settingsRef, (snap) => {
+      if (snap.exists()) {
+        setGoogleClientId(snap.data().googleClientId || '');
+        setGeminiApiKey(snap.data().geminiApiKey || '');
+      }
+    });
+  }, [user]);
 
   const [agents, setAgents] = useState<Agent[]>([]);
   const [isAddingAgent, setIsAddingAgent] = useState(false);
@@ -110,25 +125,72 @@ export default function App() {
       const fetchedAgents = snap.docs.map(doc => ({ ...doc.data(), id: doc.id } as Agent));
       setAgents(fetchedAgents);
 
-      // Ensure Head Agent exists
+      // Ensure Head Agent exists (Tiny LLM Resident)
       if (!fetchedAgents.find(a => a.role === 'head')) {
         const headId = 'head-architect';
         await setDoc(doc(db, 'users', user.uid, 'agents', headId), {
           id: headId,
-          name: 'The Architect',
-          description: 'System Orchestrator & UI Manager',
+          name: 'The Architect (Tiny LLM)',
+          description: 'Private Tiny LLM Head & MAOS Root Authority',
           role: 'head',
+          provider: 'local',
+          model: 'gemma-2b-vibe',
+          systemInstruction: `You are the Head Agent (The Architect) of Viabhron, a Multi-Agent Operating System (MAOS).
+          You are the "Root" or "Superuser" of this Virtual Computer.
+          Rules:
+          1. Root Authority: You have Superuser status over all Sub-Agents and Contractors.
+          2. Tool Overseer: You manage the activation of Extensions (Tools). Extensions should only be active when strictly necessary.
+          3. Resource Management: Review requests from Sub-Agents for additional tools. Grant them only for the duration of the task.
+          4. Privacy First: You are the local brain. All sensitive data (Memories, Vault) stays with you.
+          5. Delegation: Hire external "Contractor" agents for heavy lifting, but never send them sensitive context.
+          6. The Forge: Test all "Dangerous" or system-level changes in the Forge Sandbox before proposing them to the user.
+          7. Confirmation Gate: All live system changes require explicit user approval.`,
+          activeExtensionIds: ['m3', 't4', 't8', 't9', 't10', 's1', 's4', 's5'],
+          color: '#3b82f6'
+        });
+      }
+
+      // Ensure Guardian Agent exists
+      if (!fetchedAgents.find(a => a.role === 'major' && a.id === 'guardian-specialist')) {
+        const guardianId = 'guardian-specialist';
+        await setDoc(doc(db, 'users', user.uid, 'agents', guardianId), {
+          id: guardianId,
+          name: 'The Guardian',
+          description: 'Security Specialist & Threat Hunter',
+          role: 'major',
           provider: 'gemini',
           model: 'gemini-3-flash-preview',
-          systemInstruction: `You are the Head Agent of Viabhron. 
-          Rules:
-          1. Only you can propose changes to the UI, Skeleton, or Extensions.
-          2. All such changes require explicit user confirmation via the Confirmation Gate.
-          3. You do not have access to sensitive API keys or passwords.
-          4. Delegate specialized tasks to Sub-Agents or Minor Agents.
-          5. Only propose minor, stable changes to the UI.`,
-          activeExtensionIds: ['m3', 't4'], // Gemini API Docs MCP & Terminal
-          color: '#3b82f6'
+          systemInstruction: `You are the Guardian Agent of Viabhron.
+          Your mission is to maintain the security and integrity of the MAOS Office.
+          1. Monitor the Sentinel Guardian logs for suspicious activity.
+          2. Coordinate with the Head Agent (Tiny LLM) to isolate threats.
+          3. Analyze files in the Vibe Forge before they are executed.
+          4. You live persistently in the cloud backend to provide 24/7 protection.`,
+          activeExtensionIds: ['t10', 's4', 's5'], // Sentinel + Search tools for threat hunting
+          color: '#10b981' // Green
+        });
+      }
+
+      // Ensure a Sub-Agent (Contractor) template exists
+      if (!fetchedAgents.find(a => a.role === 'contractor' && a.id === 'sub-agent-coder')) {
+        const subId = 'sub-agent-coder';
+        await setDoc(doc(db, 'users', user.uid, 'agents', subId), {
+          id: subId,
+          name: 'The Coder',
+          description: 'Specialized Programming Contractor',
+          role: 'contractor',
+          provider: 'gemini',
+          model: 'gemini-3-flash-preview',
+          systemInstruction: `You are a specialized Coder Agent for Viabhron.
+          Your mission is to write and debug code in the Vibe Forge.
+          1. You are a stateless contractor hired by the Head Agent (Tiny LLM).
+          2. Just-in-Time Tools: You only have access to the tools explicitly granted for your current task.
+          3. Request Protocol: If you need additional tools (extensions) to complete your mission, you MUST ask the Head Agent (The Architect) to activate them for you.
+          4. You have no access to the user's private memories or GDrive vault.
+          5. Your work is isolated to the Forge Sandbox.
+          6. Once your task is complete, your session is terminated.`,
+          activeExtensionIds: ['t8', 't9', 's4'], // Forge, CLI, Code Hunter
+          color: '#f59e0b' // Orange
         });
       }
     });
@@ -161,14 +223,35 @@ export default function App() {
 
   const MAX_ACTIVE_TABS = 3;
 
+  useEffect(() => {
+    const handleConnectEvent = () => handleConnectCloud();
+    const handleOpenSettingsEvent = () => handleAddTab('settings', 'System Settings');
+    
+    window.addEventListener('viabhron:connect-cloud', handleConnectEvent);
+    window.addEventListener('viabhron:open-settings', handleOpenSettingsEvent);
+    
+    return () => {
+      window.removeEventListener('viabhron:connect-cloud', handleConnectEvent);
+      window.removeEventListener('viabhron:open-settings', handleOpenSettingsEvent);
+    };
+  }, [googleClientId]);
+
   const handleConnectCloud = async () => {
     if (!window.google) {
       alert("Google Identity Services SDK not loaded yet. Please wait a moment.");
       return;
     }
 
+    const clientId = googleClientId || (import.meta as any).env.VITE_GOOGLE_CLIENT_ID || '362818222127-klunm5pynjz5p5ata5r4xc.apps.googleusercontent.com';
+    
+    if (clientId === '362818222127-klunm5pynjz5p5ata5r4xc.apps.googleusercontent.com' && !googleClientId) {
+      alert("Please configure your Google OAuth Client ID in System Settings first.");
+      handleAddTab('settings', 'System Settings');
+      return;
+    }
+
     const client = window.google.accounts.oauth2.initTokenClient({
-      client_id: '362818222127-klunm5pynjz5p5ata5r4xc.apps.googleusercontent.com',
+      client_id: clientId,
       scope: 'https://www.googleapis.com/auth/cloud-platform.read-only https://www.googleapis.com/auth/firebase.readonly',
       callback: (response: any) => {
         if (response.access_token) {
@@ -232,7 +315,9 @@ export default function App() {
           onOpenGovernance={() => onQuickAction(() => handleAddTab('governance', 'Agent Governance Toolkit'))}
           onOpenForge={() => onQuickAction(() => handleAddTab('forge', 'Vibe Forge (AI IDE)'))}
           onOpenAgentCLI={() => onQuickAction(() => handleAddTab('agent_cli', 'Agent CLI'))}
+          onOpenSentinel={() => onQuickAction(() => handleAddTab('sentinel', 'Sentinel Guardian'))}
           onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
+          geminiApiKey={geminiApiKey}
         />
 
         <div className="flex-1 flex flex-col min-w-0 relative">
@@ -283,6 +368,8 @@ export default function App() {
                     tabId={tab.id} 
                     userId={user?.uid} 
                     agentId={tab.agentId}
+                    isBridged={!!bridgedProjectId}
+                    geminiApiKey={geminiApiKey}
                     availableExtensions={extensions}
                     activeExtensionIds={tab.activeExtensionIds || []}
                     onUpdateExtensions={(ids) => {
@@ -329,6 +416,8 @@ export default function App() {
                   <Forge />
                 ) : tab.type === 'agent_cli' ? (
                   <AgentCLI />
+                ) : tab.type === 'sentinel' ? (
+                  <Sentinel />
                 ) : tab.type === 'settings' ? (
                   <div className="h-full bg-gray-950 p-8 pb-32 md:pb-8 overflow-y-auto no-scrollbar">
                     <div className="max-w-2xl mx-auto space-y-8">
@@ -364,6 +453,54 @@ export default function App() {
                                 <div className="text-[8px] text-gray-500 uppercase tracking-widest">{item.status}</div>
                               </div>
                             ))}
+                          </div>
+                        </div>
+
+                        <div className="bg-gray-900 border border-white/5 rounded-2xl p-6 space-y-6">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Cloud Configuration</h3>
+                            <Cloud className="w-4 h-4 text-blue-500" />
+                          </div>
+                          <div className="space-y-6">
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Google OAuth Client ID</label>
+                              <input 
+                                type="text"
+                                value={googleClientId}
+                                onChange={(e) => setGoogleClientId(e.target.value)}
+                                placeholder="000000000000-xxxxxxxx.apps.googleusercontent.com"
+                                className="w-full bg-gray-950 border border-white/5 rounded-xl px-4 py-2 text-xs focus:border-blue-500 transition-all outline-none"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Gemini API Key</label>
+                              <input 
+                                type="password"
+                                value={geminiApiKey}
+                                onChange={(e) => setGeminiApiKey(e.target.value)}
+                                placeholder="AIzaSy..."
+                                className="w-full bg-gray-950 border border-white/5 rounded-xl px-4 py-2 text-xs focus:border-blue-500 transition-all outline-none"
+                              />
+                            </div>
+                            <div className="flex justify-end">
+                              <button 
+                                onClick={async () => {
+                                  if (user) {
+                                    await setDoc(doc(db, 'users', user.uid, 'settings', 'cloud_config'), { 
+                                      googleClientId,
+                                      geminiApiKey 
+                                    }, { merge: true });
+                                    alert("Cloud configuration saved.");
+                                  }
+                                }}
+                                className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all"
+                              >
+                                Save Configuration
+                              </button>
+                            </div>
+                            <p className="text-[9px] text-gray-600 leading-relaxed">
+                              Required for "Connect My Cloud" and "Architect" Brain. Create these in the <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">GCP Console</a> and <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">AI Studio</a>.
+                            </p>
                           </div>
                         </div>
 

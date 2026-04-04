@@ -35,6 +35,73 @@
         "timestamp": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "role", "content", "timestamp"]
+    },
+    "Memory": {
+      "title": "Memory Fragment",
+      "description": "A learned insight or preference for the AI Second Brain.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["preference", "fact", "style", "goal", "resonance"] },
+        "content": { "type": "string" },
+        "strength": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "content", "strength", "timestamp"]
+    },
+    "VaultPointer": {
+      "title": "Vault Pointer",
+      "description": "A reference to an encrypted, compressed file stored in Google Drive.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "path": { "type": "string" },
+        "gdriveId": { "type": "string" },
+        "encryptionHash": { "type": "string" },
+        "size": { "type": "integer" },
+        "compressed": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "path", "gdriveId", "encryptionHash", "size", "compressed", "timestamp"]
+    },
+    "AgentLog": {
+      "title": "Agent Log",
+      "description": "Execution logs for background agents.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["command", "output", "error", "system", "thought"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "agentId": { "type": "string" }
+      },
+      "required": ["id", "type", "content", "timestamp"]
+    },
+    "SentinelConfig": {
+      "title": "Sentinel Configuration",
+      "description": "Settings for the Sentinel Guardian antivirus.",
+      "type": "object",
+      "properties": {
+        "scanInterval": { "type": "integer", "minimum": 1, "maximum": 24 },
+        "scanDepth": { "type": "string", "enum": ["quick", "deep", "paranoid"] },
+        "virusTotalApiKey": { "type": "string" },
+        "active": { "type": "boolean" }
+      },
+      "required": ["scanInterval", "scanDepth", "active"]
+    },
+    "ScanResult": {
+      "title": "Scan Result",
+      "description": "Results of a file integrity scan.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "fileName": { "type": "string" },
+        "status": { "type": "string", "enum": ["clean", "suspicious", "malicious"] },
+        "threatLevel": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "engine": { "type": "string" }
+      },
+      "required": ["id", "fileName", "status", "threatLevel", "timestamp", "engine"]
     }
   },
   "firestore": {
@@ -49,6 +116,26 @@
     "/users/{userId}/tabs/{tabId}/messages/{messageId}": {
       "schema": "Message",
       "description": "Messages within a specific tab."
+    },
+    "/users/{userId}/memories/{memoryId}": {
+      "schema": "Memory",
+      "description": "The Soul Core: Learned insights and user resonance."
+    },
+    "/users/{userId}/vault/{pointerId}": {
+      "schema": "VaultPointer",
+      "description": "The Neural Archive: Pointers to deep storage in GDrive."
+    },
+    "/users/{userId}/logs/{logId}": {
+      "schema": "AgentLog",
+      "description": "Rolling execution logs for agents."
+    },
+    "/users/{userId}/sentinel/config": {
+      "schema": "SentinelConfig",
+      "description": "Sentinel Guardian settings."
+    },
+    "/users/{userId}/sentinel/results/{resultId}": {
+      "schema": "ScanResult",
+      "description": "Threat detection history."
     }
   }
 }

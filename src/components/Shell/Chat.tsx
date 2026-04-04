@@ -41,6 +41,8 @@ interface ChatProps {
   tabId: string;
   userId?: string;
   agentId?: string;
+  isBridged?: boolean;
+  geminiApiKey?: string;
   availableExtensions: Extension[];
   activeExtensionIds: string[];
   onUpdateExtensions: (ids: string[]) => void;
@@ -50,6 +52,8 @@ export const Chat: React.FC<ChatProps> = ({
   tabId, 
   userId, 
   agentId,
+  isBridged,
+  geminiApiKey,
   availableExtensions, 
   activeExtensionIds,
   onUpdateExtensions 
@@ -145,12 +149,12 @@ export const Chat: React.FC<ChatProps> = ({
       const keysSnap = await getDoc(keysRef);
       const keys = keysSnap.data() || {};
       const provider = agent?.provider || 'gemini';
-      const apiKey = keys[provider];
+      const apiKey = provider === 'gemini' ? geminiApiKey : keys[provider];
 
-      if (!apiKey && provider === 'gemini') {
-        // Fallback to environment key for Gemini if user hasn't provided one
+      if (provider === 'local' || provider === 'gemini') {
+        // Use user-provided Gemini API key
         const response = await AIService.generateResponse({
-          apiKey: process.env.GEMINI_API_KEY || '',
+          apiKey: geminiApiKey || '',
           agent: agent || {
             id: 'default',
             name: 'Viabhron Assistant',
@@ -193,6 +197,45 @@ export const Chat: React.FC<ChatProps> = ({
       setIsTyping(false);
     }
   };
+
+  if (!userId || !agentId || !isBridged || !geminiApiKey) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center bg-gray-950 p-8 text-center space-y-6">
+        <div className="w-20 h-20 rounded-3xl bg-blue-600/10 flex items-center justify-center mb-4">
+          <Brain className="w-10 h-10 text-blue-500 animate-pulse" />
+        </div>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Sovereign Setup Required</h2>
+        <p className="text-gray-400 max-w-md mx-auto text-sm leading-relaxed">
+          To activate your private **Tiny LLM Head Agent**, you must bridge Viabhron to your infrastructure and provide your own Gemini API Key.
+        </p>
+        <div className="flex flex-col gap-3 w-full max-w-xs">
+          {!isBridged && (
+            <button 
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('viabhron:connect-cloud'));
+              }}
+              className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-blue-600/20"
+            >
+              Connect My Cloud
+            </button>
+          )}
+          {!geminiApiKey && (
+            <button 
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('viabhron:open-settings'));
+              }}
+              className="w-full py-3 bg-gray-900 hover:bg-gray-800 text-white border border-white/10 rounded-2xl font-bold transition-all"
+            >
+              Configure API Key
+            </button>
+          )}
+          <p className="text-[10px] text-gray-600 uppercase tracking-widest">
+            This ensures your data and costs stay entirely yours.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full bg-gray-950 text-gray-100 overflow-hidden relative">

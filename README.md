@@ -41,6 +41,73 @@ The **Agent CLI** and **Vibe Forge** interact with a Dockerized backend. This al
 ### 3. Cloud-Only Compilation
 100% of the Docker build process happens in **GitHub Actions**. Your phone just sends the "Push" command.
 
+### 🧠 The "Soul-Link" (AI Second Brain Architecture)
+
+Viabhron is designed to evolve from a tool into a **Net Soul Half** or **AI Second Brain**. This is achieved through a dual-memory infrastructure:
+
+#### 1. The Soul Core (Firestore)
+*   **Active Memory**: Stores real-time insights, user resonance, and immediate goals in the `memories` collection.
+*   **Reflective Loop**: Agents periodically analyze chat logs to "mutate" their system instructions, allowing them to grow a personality that matches the user.
+
+### 🖥️ The Virtual Computer Architecture
+
+Viabhron is a **Multi-Agent Operating System (MAOS)** running on a private, virtualized infrastructure:
+*   **The CPU/RAM (Cloud Run)**: Your private "Office" where the agents live and execute code in real-time.
+*   **The Hard Drive (Google Drive)**: Your "Neural Archive" where all persistent data, logs, and "Agent Memories" are stored as encrypted fragments.
+*   **The Root Authority (Tiny LLM Head)**: The "Soul" of the system. A private, resident **Tiny LLM** (e.g., Gemma 2B) that acts as the **Superuser** of the MAOS. It is the only entity with access to your sensitive context.
+
+#### 🛡️ The Sentinel & Guardian (Security Layer)
+*   **System-Wide Protection**: Sentinel scans **all** files brought into or built within the MAOS, not just those in the Forge.
+*   **The Guardian Agent**: Acts as the "Security Kernel," monitoring the "Gate" between the isolated Sandbox and the live "Root" environment.
+*   **Dangerous Commands**: The Tiny LLM Head is authorized to issue "Dangerous" or system-level commands to Sub-Agents to maintain the OS, provided they are executed within the Forge Sandbox or verified by the Guardian.
+
+### 🛠️ Specialized Intelligence Tools
+
+The MAOS includes a suite of specialized "Skills" for deep information retrieval:
+*   **Code Hunter**: Deep search for GitHub repositories, libraries, and technical documentation.
+*   **Global Pulse**: Geopolitical and political analysis engine for tracking world events.
+*   **Social Sentinel**: Real-time social media trend monitoring and sentiment analysis.
+*   **Doc Forge**: Advanced PDF/EPUB generation for creating reports and documentation.
+
+### 🤖 Agent Hierarchy (Resident vs. Contractor)
+
+Viabhron distinguishes between persistent "Resident" intelligence and ephemeral "Contractor" muscle:
+
+#### 1. Resident Agents (Private & Persistent)
+*   **Head Agent (The Architect)**: A private, **Tiny LLM** resident agent living in the "Tent." It manages the system and holds the user's "Second Brain."
+*   **Tool Overseer**: The Architect manages the activation of **Extensions (Tools)**. Tools are only active when strictly necessary to maintain system efficiency and security.
+*   **Guardian (The Immune System)**: A built-in security specialist that monitors the "Gate" between the Sandbox and the live Office.
+
+#### 2. Contractor Agents (External & Ephemeral)
+*   **Sub-Agents / Outside Agents**: Standard LLM-powered agents (Gemini Pro, GPT-4) "hired" via API for specific complex tasks. 
+*   **Just-in-Time Tools**: Contractors only have access to the tools explicitly granted for their current task.
+*   **Request Protocol**: If a Contractor needs additional tools to complete their mission, they must request them from the **Head Agent (The Architect)**.
+*   **Stateless Execution**: They are hired for a single task, provided only the necessary context, and have no access to the "Soul Core" or "Neural Archive."
+*   **Isolation**: Their work is strictly confined to the Forge Sandbox or a specific tool's output.
+*   **Instructions**: They follow a "Contractor Protocol" where they are given a clear mission, a set of constraints, and a termination condition.
+
+#### 3. The Disconnected Forge (The Lab)
+*   The **Forge Sandbox** is a disconnected, isolated environment. Code is tested here without constant scanning to save resources. The **Guardian** only intervenes when code is proposed for deployment to the live "Office."
+
+#### 4. The Neural Archive (Google Drive)
+*   **Deep Subconscious**: Massive logs, historical code versions, and binary assets are compressed and encrypted before being offloaded to Google Drive.
+*   **Vault Pointers**: Firestore maintains a lightweight index (`vault` collection) of these encrypted fragments.
+*   **Privacy**: All data is encrypted with a **User-Controlled Key** (The Shared Secret) before leaving the "Tent."
+
+#### 3. Data Density Control
+*   Users can adjust the **Compression Level** to balance GDrive space usage vs. retrieval speed.
+*   **Archival Mode**: High compression for long-term storage.
+*   **Performance Mode**: Low compression for active projects.
+
+### 🛡️ The "Guardian" (Sentinel Antivirus)
+
+Viabhron includes a built-in security layer called **Sentinel Guardian** to protect your private cloud environment:
+*   **Persistent Guardian Agent**: A dedicated, "Always-On" specialist agent that monitors the system 24/7. It coordinates with the **Head Agent** to isolate threats and analyze code in the **Forge**.
+*   **Interval Scanning**: Automatically scans your "Office" (Cloud Run) and "Neural Archive" (GDrive) at user-defined intervals.
+*   **Threat Intelligence**: Integrates with **VirusTotal API** to check file hashes against 70+ antivirus engines.
+*   **Resource Balancing**: Users can configure the scan depth (Quick, Deep, Paranoid) and frequency to manage Cloud Run resource consumption.
+*   **Sandbox Execution**: Suspicious files can be isolated and analyzed in a secure, ephemeral Docker container.
+
 ## 📱 Dual-Mode Architecture (PWA + APK)
 
 Viabhron is built with a **"Zero-Local-Build"** philosophy, specifically optimized for ultra-low-end Android devices (3GB RAM).

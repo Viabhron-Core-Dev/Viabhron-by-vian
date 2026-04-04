@@ -2,7 +2,7 @@ import { LucideIcon } from "lucide-react";
 
 export type ExtensionCategory = 'connector' | 'skill' | 'tool' | 'mcp' | 'module';
 
-export type AgentRole = 'head' | 'major' | 'sub' | 'minor';
+export type AgentRole = 'head' | 'major' | 'sub' | 'minor' | 'contractor';
 
 export interface Extension {
   id: string;
@@ -16,9 +16,9 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel';
 
-export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq';
+export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq' | 'local';
 
 export interface Agent {
   id: string;
@@ -88,4 +88,34 @@ export interface Message {
     args: any;
     status: 'running' | 'complete' | 'error';
   }[];
+}
+
+export interface Memory {
+  id: string;
+  type: 'preference' | 'fact' | 'style' | 'goal' | 'resonance';
+  content: string;
+  strength: number; // 1-10
+  timestamp: Date;
+  metadata?: Record<string, any>;
+}
+
+export interface VaultPointer {
+  id: string;
+  path: string; // Original path in MAOS
+  gdriveId: string; // ID in Google Drive
+  encryptionHash: string; // For integrity check
+  size: number; // Original size
+  compressedSize: number; // Size on GDrive
+  compressed: boolean;
+  algorithm: 'gzip' | 'brotli' | 'none';
+  timestamp: Date;
+}
+
+export interface AgentLog {
+  id: string;
+  type: 'command' | 'output' | 'error' | 'system' | 'thought';
+  content: string;
+  timestamp: Date;
+  agentId?: string;
+  tabId?: string;
 }

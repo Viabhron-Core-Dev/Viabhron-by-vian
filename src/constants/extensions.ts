@@ -12,7 +12,10 @@ import {
   FileText,
   Activity,
   Bug,
-  Shield
+  Shield,
+  Plus,
+  Code,
+  Share2
 } from 'lucide-react';
 import { Extension } from '../types';
 
@@ -23,9 +26,11 @@ export const INITIAL_EXTENSIONS: Extension[] = [
   { id: 'sl', name: 'Slack', category: 'connector', icon: Slack, status: 'inactive', source: 'inbuilt', description: 'Team alerts' },
   
   // Skills
-  { id: 's1', name: 'Research Module', category: 'skill', icon: Search, status: 'active', source: 'inbuilt', description: 'Perplexity-powered research' },
+  { id: 's1', name: 'Global Pulse', category: 'skill', icon: Globe, status: 'active', source: 'inbuilt', description: 'Political & Geopolitical analysis engine' },
   { id: 's2', name: 'Doc Forge', category: 'skill', icon: FileText, status: 'active', source: 'inbuilt', description: 'PDF/EPUB generation' },
   { id: 's3', name: 'Artifact Sandbox', category: 'skill', icon: Layout, status: 'active', source: 'inbuilt', description: 'Live code execution' },
+  { id: 's4', name: 'Code Hunter', category: 'skill', icon: Code, status: 'active', source: 'inbuilt', description: 'Deep search for GitHub repos & libraries' },
+  { id: 's5', name: 'Social Sentinel', category: 'skill', icon: Share2, status: 'active', source: 'inbuilt', description: 'Real-time social media trend monitoring' },
   
   // Tools
   { id: 't1', name: 'Headless Browser', category: 'tool', icon: Globe, status: 'active', source: 'inbuilt', description: 'Server-side web automation' },
@@ -40,4 +45,7 @@ export const INITIAL_EXTENSIONS: Extension[] = [
   { id: 't5', name: 'System Metrics', category: 'module', icon: Activity, status: 'active', source: 'inbuilt', description: 'Real-time performance and resource monitoring' },
   { id: 't6', name: 'Simulation Engine', category: 'module', icon: Bug, status: 'active', source: 'inbuilt', description: 'Developer suite for agent simulation and testing' },
   { id: 't7', name: 'Governance Toolkit', category: 'module', icon: Shield, status: 'active', source: 'inbuilt', description: 'Microsoft-powered agent policy and identity engine' },
+  { id: 't8', name: 'Vibe Forge', category: 'module', icon: Plus, status: 'active', source: 'inbuilt', description: 'AI Code Staging & Development Environment' },
+  { id: 't9', name: 'Agent CLI', category: 'module', icon: Terminal, status: 'active', source: 'inbuilt', description: 'Real-time system execution and command logs' },
+  { id: 't10', name: 'Sentinel Guardian', category: 'module', icon: Shield, status: 'active', source: 'inbuilt', description: 'Antivirus and threat detection for the MAOS Office' },
 ];
