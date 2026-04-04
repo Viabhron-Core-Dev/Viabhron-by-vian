@@ -242,9 +242,9 @@ export default function App() {
       return;
     }
 
-    const clientId = googleClientId || (import.meta as any).env.VITE_GOOGLE_CLIENT_ID || '362818222127-klunm5pynjz5p5ata5r4xc.apps.googleusercontent.com';
+    const clientId = googleClientId || (import.meta as any).env.VITE_GOOGLE_CLIENT_ID;
     
-    if (clientId === '362818222127-klunm5pynjz5p5ata5r4xc.apps.googleusercontent.com' && !googleClientId) {
+    if (!clientId) {
       alert("Please configure your Google OAuth Client ID in System Settings first.");
       handleAddTab('settings', 'System Settings');
       return;
@@ -265,7 +265,12 @@ export default function App() {
 
   const handleProjectSelected = async (projectId: string, config: any) => {
     try {
-      await infra.connectToUserBackend(config);
+      const shouldMigrate = window.confirm(
+        "Would you like to migrate your current chat history and agents to your private cloud? " +
+        "This will move your data from the default server to your own infrastructure."
+      );
+
+      await infra.connectToUserBackend(config, user?.uid, shouldMigrate);
       setBridgedProjectId(projectId);
       if (activeTabId) {
         handleCloseTab(activeTabId);

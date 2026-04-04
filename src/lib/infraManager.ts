@@ -1,5 +1,6 @@
 import { initializeApp, deleteApp, getApps, FirebaseApp } from "firebase/app";
 import { getFirestore, Firestore } from "firebase/firestore";
+import { MigrationService, MigrationData } from "./migrationService";
 
 /**
  * TECHNIQUE: Dynamic Infrastructure Re-initialization
@@ -9,6 +10,7 @@ class InfrastructureManager {
   private currentApp: FirebaseApp | null = null;
   public db: Firestore | null = null;
   private token: string | null = null;
+  private migrationPackage: MigrationData | null = null;
 
   // 1. Fetch User's Google Cloud Projects
   async fetchUserProjects(accessToken: string) {
@@ -34,7 +36,12 @@ class InfrastructureManager {
   }
 
   // 3. Hot-Swap the Database Connection
-  async connectToUserBackend(config: any) {
+  async connectToUserBackend(config: any, userId?: string, shouldMigrate?: boolean) {
+    // If migration is requested, export from default DB first
+    if (shouldMigrate && userId) {
+      this.migrationPackage = await MigrationService.exportData(userId);
+    }
+
     // Clear existing Firebase instances to prevent "Duplicate App" errors
     const apps = getApps();
     for (const app of apps) {
@@ -45,6 +52,12 @@ class InfrastructureManager {
     this.currentApp = initializeApp(config);
     this.db = getFirestore(this.currentApp);
     
+    // If we have a migration package, import it now
+    if (this.migrationPackage && userId) {
+      await MigrationService.importData(userId, this.migrationPackage, this.db);
+      this.migrationPackage = null; // Clear it
+    }
+
     // Save locally for persistence
     localStorage.setItem('user_owned_config', JSON.stringify(config));
     
