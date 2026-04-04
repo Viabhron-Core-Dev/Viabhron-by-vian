@@ -213,42 +213,11 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100 overflow-hidden font-sans">
-      <header className="flex h-11 md:h-12 border-b border-white/10 bg-gray-900/80 backdrop-blur-xl items-center px-3 md:px-4 gap-3 z-50">
-        <div className="flex items-center gap-2 shrink-0">
-          <Logo className="w-6 h-6" />
-          <span className="font-bold text-sm tracking-tight hidden sm:inline">Viabhron <span className="text-blue-500">Shell</span></span>
-        </div>
-
-        <div className="flex-1 max-w-2xl relative group">
-          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-            <Shield className="w-3 h-3 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
-          </div>
-          <input 
-            type="text" 
-            readOnly
-            value={`viabhron://shell/${tabs.find(t => t.id === activeTabId)?.type || 'new'}`}
-            className="w-full bg-gray-950/50 border border-white/5 rounded-xl pl-8 pr-4 py-1 text-[10px] md:text-xs font-mono text-gray-400 focus:outline-none focus:border-blue-500/50 transition-all cursor-default"
-          />
-        </div>
-
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="hidden sm:flex items-center gap-2 px-2 py-1 bg-white/5 rounded-lg border border-white/5">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Online</span>
-          </div>
-          {user && (
-            <button 
-              onClick={() => handleAddTab('settings', 'System Settings')}
-              className="w-7 h-7 md:w-8 md:h-8 rounded-full overflow-hidden border border-white/10 hover:border-blue-500 transition-all"
-            >
-              <img src={user.photoURL || ''} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-            </button>
-          )}
-        </div>
-      </header>
-
       <div className="flex-1 flex overflow-hidden relative">
         <Sidebar 
+          user={user}
+          login={login}
+          logout={logout}
           extensions={extensions} 
           onConnectCloud={handleConnectCloud} 
           isCollapsed={isSidebarCollapsed}
@@ -366,24 +335,6 @@ export default function App() {
                       </div>
 
                       <div className="grid gap-4">
-                        <div className="bg-gray-900 border border-white/5 rounded-2xl p-6 space-y-4">
-                          <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Account</h3>
-                          {user ? (
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <img src={user.photoURL || ''} className="w-10 h-10 rounded-full" referrerPolicy="no-referrer" />
-                                <div>
-                                  <div className="text-sm font-bold text-white">{user.displayName}</div>
-                                  <div className="text-xs text-gray-500">{user.email}</div>
-                                </div>
-                              </div>
-                              <button onClick={logout} className="px-4 py-2 bg-white/5 hover:bg-red-500/10 text-red-400 rounded-xl text-xs font-bold transition-all">Sign Out</button>
-                            </div>
-                          ) : (
-                            <button onClick={login} className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all">Sign In with Google</button>
-                          )}
-                        </div>
-
                         <div className="bg-gray-900 border border-white/5 rounded-2xl p-6 space-y-6">
                           <div className="flex items-center justify-between">
                             <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">System Provisioning</h3>

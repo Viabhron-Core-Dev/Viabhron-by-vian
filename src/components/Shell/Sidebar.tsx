@@ -7,6 +7,7 @@ import {
   Plus,
   PanelLeftClose,
   PanelLeftOpen,
+  X,
   Puzzle,
   Zap,
   Wrench,
@@ -20,9 +21,13 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Extension, ExtensionCategory } from '../../types';
+import { User } from 'firebase/auth';
 import { Logo } from './Logo';
 
 interface SidebarProps {
+  user: User | null;
+  login: () => void;
+  logout: () => void;
   extensions: Extension[];
   onConnectCloud: () => void;
   isCollapsed: boolean;
@@ -129,7 +134,7 @@ const SidebarSection: React.FC<SectionProps> = ({ title, icon: Icon, items, isCo
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenSettings }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenSettings }) => {
   const [openSections, setOpenSections] = useState<Record<ExtensionCategory, boolean>>({
     connector: true,
     skill: true,
@@ -310,10 +315,45 @@ export const Sidebar: React.FC<SidebarProps> = ({ extensions, onConnectCloud, is
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-white/10 bg-gray-900/50">
-              <div className="flex items-center gap-3 rounded-md hover:bg-white/5 cursor-pointer transition-all text-gray-400 hover:text-white px-2 py-2">
+            <div className="p-4 border-t border-white/10 bg-gray-900/50 space-y-2">
+              {user ? (
+                <div className="flex items-center justify-between px-2 py-1.5 bg-white/5 rounded-xl border border-white/5 mb-1">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <img 
+                      src={user.photoURL || ''} 
+                      className="w-7 h-7 rounded-full border border-white/10" 
+                      referrerPolicy="no-referrer" 
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] font-bold text-white truncate leading-tight">{user.displayName}</div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-[8px] text-gray-500 uppercase tracking-widest font-bold">Online</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={logout}
+                    className="p-1.5 text-gray-500 hover:text-red-400 transition-colors"
+                    title="Sign Out"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={login}
+                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mb-1 shadow-lg shadow-blue-600/20"
+                >
+                  Sign In
+                </button>
+              )}
+              <div 
+                onClick={onOpenSettings}
+                className="flex items-center gap-3 rounded-xl hover:bg-white/5 cursor-pointer transition-all text-gray-400 hover:text-white px-3 py-2"
+              >
                 <Settings className="w-4 h-4" />
-                <span className="text-xs font-medium">Settings</span>
+                <span className="text-xs font-bold uppercase tracking-wider">System Settings</span>
               </div>
             </div>
           </motion.div>
