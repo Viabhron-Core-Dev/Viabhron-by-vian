@@ -9,7 +9,10 @@ import {
   Terminal, 
   Database, 
   Cpu,
-  FileText
+  FileText,
+  Activity,
+  Bug,
+  Shield
 } from 'lucide-react';
 import { Extension } from '../types';
 
@@ -33,4 +36,8 @@ export const INITIAL_EXTENSIONS: Extension[] = [
   { id: 'm1', name: 'Local Database', category: 'mcp', icon: Database, status: 'active', source: 'inbuilt', description: 'SQLite MCP Server' },
   { id: 'm2', name: 'System Metrics', category: 'mcp', icon: Cpu, status: 'active', source: 'inbuilt', description: 'Host performance monitoring' },
   { id: 'm3', name: 'Gemini API Docs', category: 'mcp', icon: BookOpen, status: 'active', source: 'inbuilt', description: 'Real-time access to Gemini API documentation' },
+  { id: 't4', name: 'Agent Terminal', category: 'module', icon: Terminal, status: 'active', source: 'inbuilt', description: 'Real-time log and command output for AI agents' },
+  { id: 't5', name: 'System Metrics', category: 'module', icon: Activity, status: 'active', source: 'inbuilt', description: 'Real-time performance and resource monitoring' },
+  { id: 't6', name: 'Simulation Engine', category: 'module', icon: Bug, status: 'active', source: 'inbuilt', description: 'Developer suite for agent simulation and testing' },
+  { id: 't7', name: 'Governance Toolkit', category: 'module', icon: Shield, status: 'active', source: 'inbuilt', description: 'Microsoft-powered agent policy and identity engine' },
 ];

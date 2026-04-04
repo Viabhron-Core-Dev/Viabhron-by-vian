@@ -18,7 +18,13 @@ import {
   Shield,
   Brain,
   Trash2,
-  X
+  X,
+  Terminal as TerminalIcon,
+  Cpu,
+  HardDrive,
+  Server,
+  Activity,
+  Database
 } from 'lucide-react';
 
 import { Tabs } from './components/Shell/Tabs';
@@ -30,6 +36,13 @@ import { Canvas } from './components/Shell/Canvas';
 import { BottomNavigation } from './components/Shell/BottomNavigation';
 import { SystemHUD } from './components/Shell/SystemHUD';
 import { TabSwitcher } from './components/Shell/TabSwitcher';
+import { ConfirmationGate } from './components/Shell/ConfirmationGate';
+import { Terminal } from './extensions/modules/Terminal';
+import { Artifacts } from './extensions/modules/Artifacts';
+import { SystemMetrics } from './extensions/modules/SystemMetrics';
+import { Simulation } from './extensions/modules/Simulation';
+import { Governance } from './extensions/modules/Governance';
+import { Logo } from './components/Shell/Logo';
 
 import { Extension, TabType, Agent, UIConfig } from './types';
 import { infra } from './lib/infraManager';
@@ -64,6 +77,14 @@ export default function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isTabSwitcherOpen, setIsTabSwitcherOpen] = useState(false);
   const [isSystemMenuOpen, setIsSystemMenuOpen] = useState(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [confirmationRequest, setConfirmationRequest] = useState<{
+    isOpen: boolean;
+    title: string;
+    description: string;
+    agentName: string;
+    onConfirm: () => void;
+  } | null>(null);
   const [canvasViewMode, setCanvasViewMode] = useState<'design' | 'logic'>('logic');
   const [uiConfig, setUiConfig] = useState<UIConfig>({
     theme: 'dark',
@@ -97,8 +118,14 @@ export default function App() {
           role: 'head',
           provider: 'gemini',
           model: 'gemini-3-flash-preview',
-          systemInstruction: 'You are the Head Agent of Viabhron. You manage the UI and delegate tasks to other agents. You do not have access to sensitive keys.',
-          activeExtensionIds: ['m3'], // Gemini API Docs MCP
+          systemInstruction: `You are the Head Agent of Viabhron. 
+          Rules:
+          1. Only you can propose changes to the UI, Skeleton, or Extensions.
+          2. All such changes require explicit user confirmation via the Confirmation Gate.
+          3. You do not have access to sensitive API keys or passwords.
+          4. Delegate specialized tasks to Sub-Agents or Minor Agents.
+          5. Only propose minor, stable changes to the UI.`,
+          activeExtensionIds: ['m3', 't4'], // Gemini API Docs MCP & Terminal
           color: '#3b82f6'
         });
       }
@@ -188,9 +215,7 @@ export default function App() {
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100 overflow-hidden font-sans">
       <header className="flex h-11 md:h-12 border-b border-white/10 bg-gray-900/80 backdrop-blur-xl items-center px-3 md:px-4 gap-3 z-50">
         <div className="flex items-center gap-2 shrink-0">
-          <div className="w-6 h-6 rounded-lg bg-blue-600 flex items-center justify-center">
-            <Bot className="w-3.5 h-3.5 text-white" />
-          </div>
+          <Logo className="w-6 h-6" />
           <span className="font-bold text-sm tracking-tight hidden sm:inline">Viabhron <span className="text-blue-500">Shell</span></span>
         </div>
 
@@ -230,6 +255,10 @@ export default function App() {
           onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           onOpenStore={() => onQuickAction(() => handleAddTab('store', 'Extension Store'))}
           onOpenCanvas={() => onQuickAction(() => handleAddTab('canvas', 'Visual Workflow'))}
+          onOpenArtifacts={() => onQuickAction(() => handleAddTab('artifacts', 'Generative Artifacts'))}
+          onOpenMetrics={() => onQuickAction(() => handleAddTab('metrics', 'System Metrics'))}
+          onOpenSimulation={() => onQuickAction(() => handleAddTab('simulation', 'Simulation Engine'))}
+          onOpenGovernance={() => onQuickAction(() => handleAddTab('governance', 'Agent Governance Toolkit'))}
           onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
         />
 
@@ -248,6 +277,26 @@ export default function App() {
             <SystemHUD 
               onClearCache={() => console.log('Cache cleared')}
               onHibernateAll={() => tabs.forEach(t => handleShelveTab(t.id))}
+            />
+
+            <AnimatePresence>
+              {isTerminalOpen && (
+                <div className="absolute bottom-4 right-4 w-full max-w-lg h-64 z-[150]">
+                  <Terminal onClose={() => setIsTerminalOpen(false)} />
+                </div>
+              )}
+            </AnimatePresence>
+
+            <ConfirmationGate 
+              isOpen={confirmationRequest?.isOpen || false}
+              title={confirmationRequest?.title || ''}
+              description={confirmationRequest?.description || ''}
+              agentName={confirmationRequest?.agentName || ''}
+              onConfirm={() => {
+                confirmationRequest?.onConfirm();
+                setConfirmationRequest(null);
+              }}
+              onCancel={() => setConfirmationRequest(null)}
             />
 
             <div className="flex-1 relative h-full">
@@ -292,6 +341,17 @@ export default function App() {
                       }
                     }}
                   />
+                ) : tab.type === 'artifacts' ? (
+                  <Artifacts 
+                    tabId={tab.id}
+                    userId={user?.uid}
+                  />
+                ) : tab.type === 'metrics' ? (
+                  <SystemMetrics />
+                ) : tab.type === 'simulation' ? (
+                  <Simulation />
+                ) : tab.type === 'governance' ? (
+                  <Governance />
                 ) : tab.type === 'settings' ? (
                   <div className="h-full bg-gray-950 p-8 pb-32 md:pb-8 overflow-y-auto no-scrollbar">
                     <div className="max-w-2xl mx-auto space-y-8">
@@ -324,9 +384,36 @@ export default function App() {
                           )}
                         </div>
 
+                        <div className="bg-gray-900 border border-white/5 rounded-2xl p-6 space-y-6">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">System Provisioning</h3>
+                            <div className="flex items-center gap-2 px-2 py-1 bg-green-500/10 border border-green-500/20 rounded-lg">
+                              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                              <span className="text-[9px] font-bold text-green-400 uppercase tracking-widest">Bridged</span>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-3 gap-3">
+                            {[
+                              { label: 'Firebase', icon: Database, status: 'Active', color: 'text-orange-400' },
+                              { label: 'Cloud Run', icon: Server, status: 'Active', color: 'text-blue-400' },
+                              { label: 'G-Drive', icon: HardDrive, status: 'Active', color: 'text-purple-400' },
+                            ].map((item) => (
+                              <div key={item.label} className="bg-gray-950 border border-white/5 rounded-xl p-3 text-center space-y-2">
+                                <item.icon className={`w-5 h-5 mx-auto ${item.color}`} />
+                                <div className="text-[10px] font-bold text-white uppercase tracking-tight">{item.label}</div>
+                                <div className="text-[8px] text-gray-500 uppercase tracking-widest">{item.status}</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
                         <div className="bg-gray-900 border border-white/5 rounded-2xl p-6 space-y-6 relative">
                           <div className="flex items-center justify-between">
-                            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">AI Agents</h3>
+                            <div className="space-y-1">
+                              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Agent Cluster Manager</h3>
+                              <p className="text-[10px] text-gray-600 uppercase tracking-tighter">Manage your Private AI Kernel & Specialists</p>
+                            </div>
                             <button 
                               onClick={() => setIsAddingAgent(true)}
                               className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20"
@@ -334,8 +421,28 @@ export default function App() {
                               <Plus className="w-4 h-4 text-white" />
                             </button>
                           </div>
+
+                          {/* Head AI (Kernel) */}
+                          <div className="p-4 bg-blue-600/5 border border-blue-500/20 rounded-2xl space-y-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+                                  <Brain className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                  <div className="text-sm font-bold text-white uppercase tracking-tight">Main Head AI <span className="text-[10px] text-blue-400 ml-2">Kernel</span></div>
+                                  <div className="text-[10px] text-gray-500 uppercase tracking-widest">Gemma 2B (Local Office)</div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-[10px] font-bold text-green-400 uppercase tracking-widest">Running</div>
+                                <div className="text-[8px] text-gray-600 uppercase tracking-tighter">4GB RAM Allocated</div>
+                              </div>
+                            </div>
+                          </div>
                           
                           <div className="space-y-3">
+                            <h4 className="text-[10px] font-bold text-gray-600 uppercase tracking-widest px-1">Sub-Head Specialists</h4>
                             {agents.map((agent) => (
                               <div key={agent.id} className="flex items-center justify-between p-3 bg-gray-950 border border-white/5 rounded-xl group">
                                 <div className="flex items-center gap-3">
@@ -344,21 +451,26 @@ export default function App() {
                                   </div>
                                   <div>
                                     <div className="text-sm font-medium text-white">{agent.name}</div>
-                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest">{agent.provider}</div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest">{agent.provider} Specialist</div>
                                   </div>
                                 </div>
-                                <button 
-                                  onClick={() => handleDeleteAgent(agent.id)}
-                                  className="p-2 text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
+                                <div className="flex items-center gap-4">
+                                  <div className="hidden group-hover:flex items-center gap-2 text-[9px] text-gray-500 uppercase tracking-widest">
+                                    <Cpu className="w-3 h-3" /> 2 vCPU
+                                  </div>
+                                  <button 
+                                    onClick={() => handleDeleteAgent(agent.id)}
+                                    className="p-2 text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
                               </div>
                             ))}
                             {agents.length === 0 && (
                               <div className="text-center py-8 border-2 border-dashed border-white/5 rounded-2xl">
                                 <Bot className="w-8 h-8 text-gray-700 mx-auto mb-2" />
-                                <p className="text-xs text-gray-600">No agents configured yet</p>
+                                <p className="text-xs text-gray-600">No specialists added to cluster</p>
                               </div>
                             )}
                           </div>
@@ -473,6 +585,16 @@ export default function App() {
                   className="fixed bottom-24 right-4 w-64 bg-gray-900/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl z-[120] overflow-hidden"
                 >
                   <div className="p-2 space-y-1">
+                    <button 
+                      onClick={() => {
+                        setIsTerminalOpen(!isTerminalOpen);
+                        setIsSystemMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/5 rounded-2xl transition-colors text-left group"
+                    >
+                      <TerminalIcon className="w-4 h-4 text-gray-500 group-hover:text-blue-400" />
+                      <span className="text-xs font-bold text-gray-300 group-hover:text-white uppercase tracking-wider">Agent Terminal</span>
+                    </button>
                     <button 
                       onClick={() => {
                         setCanvasViewMode(prev => prev === 'design' ? 'logic' : 'design');

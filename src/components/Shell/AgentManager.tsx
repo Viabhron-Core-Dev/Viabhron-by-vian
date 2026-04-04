@@ -11,11 +11,13 @@ import {
   ShieldCheck,
   ChevronRight,
   Save,
-  X
+  X,
+  Puzzle
 } from 'lucide-react';
-import { Agent, AIProvider } from '../../types';
+import { Agent, AIProvider, Extension } from '../../types';
 import { db } from '../../lib/firebase';
 import { collection, onSnapshot, doc, setDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
+import { INITIAL_EXTENSIONS } from '../../constants/extensions';
 
 interface AgentManagerProps {
   userId?: string;
@@ -127,28 +129,45 @@ export const AgentManager: React.FC<AgentManagerProps> = ({ userId, onSelectAgen
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="flex -space-x-2">
-                    {agent.activeExtensionIds.slice(0, 3).map(id => (
-                      <div key={id} className="w-6 h-6 rounded-full bg-gray-800 border border-gray-950 flex items-center justify-center text-[10px] text-gray-400">
-                        {id.charAt(0).toUpperCase()}
-                      </div>
-                    ))}
-                    {agent.activeExtensionIds.length > 3 && (
-                      <div className="w-6 h-6 rounded-full bg-gray-800 border border-gray-950 flex items-center justify-center text-[10px] text-gray-400">
-                        +{agent.activeExtensionIds.length - 3}
-                      </div>
-                    )}
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Puzzle className="w-3.5 h-3.5 text-blue-400" />
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Active Extensions</span>
                   </div>
-                  <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Tools Ready</span>
+                  <span className="text-[10px] text-gray-600 font-mono">{agent.activeExtensionIds.length} Loaded</span>
                 </div>
-                <button 
-                  onClick={() => onSelectAgent?.(agent.id)}
-                  className="flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  Deploy <ChevronRight className="w-3 h-3" />
-                </button>
+                
+                <div className="flex flex-wrap gap-1.5">
+                  {agent.activeExtensionIds.length > 0 ? (
+                    agent.activeExtensionIds.map(id => {
+                      const ext = INITIAL_EXTENSIONS.find(e => e.id === id);
+                      if (!ext) return null;
+                      const Icon = ext.icon;
+                      return (
+                        <div 
+                          key={id} 
+                          className="flex items-center gap-1.5 px-2 py-1 bg-white/5 border border-white/5 rounded-lg text-[10px] text-gray-300 group-hover:border-blue-500/30 transition-all"
+                          title={ext.description}
+                        >
+                          <Icon className="w-3 h-3 text-blue-400/70" />
+                          <span>{ext.name}</span>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-[10px] text-gray-600 italic">No extensions assigned</div>
+                  )}
+                </div>
+
+                <div className="pt-3 flex items-center justify-end">
+                  <button 
+                    onClick={() => onSelectAgent?.(agent.id)}
+                    className="flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    Deploy Agent <ChevronRight className="w-3 h-3" />
+                  </button>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -211,6 +230,41 @@ export const AgentManager: React.FC<AgentManagerProps> = ({ userId, onSelectAgen
                       className="w-full bg-gray-950 border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 transition-all outline-none h-32 resize-none"
                       placeholder="Define how this agent should behave..."
                     />
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Assigned Extensions & Tools</label>
+                    <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2 no-scrollbar">
+                      {INITIAL_EXTENSIONS.map(ext => {
+                        const isActive = editingAgent.activeExtensionIds?.includes(ext.id);
+                        const Icon = ext.icon;
+                        return (
+                          <button
+                            key={ext.id}
+                            onClick={() => {
+                              const current = editingAgent.activeExtensionIds || [];
+                              const next = isActive 
+                                ? current.filter(id => id !== ext.id)
+                                : [...current, ext.id];
+                              setEditingAgent({ ...editingAgent, activeExtensionIds: next });
+                            }}
+                            className={`flex items-center gap-3 p-2.5 rounded-xl border transition-all text-left ${
+                              isActive 
+                                ? 'bg-blue-600/10 border-blue-500/50 text-white' 
+                                : 'bg-gray-950 border-white/5 text-gray-500 hover:border-white/20'
+                            }`}
+                          >
+                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${isActive ? 'bg-blue-600 text-white' : 'bg-gray-800'}`}>
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-[11px] font-bold truncate">{ext.name}</div>
+                              <div className="text-[8px] uppercase tracking-tighter opacity-60">{ext.category}</div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div className="bg-blue-500/5 border border-blue-500/10 rounded-2xl p-4 flex gap-4">

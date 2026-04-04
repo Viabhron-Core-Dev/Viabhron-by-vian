@@ -17,8 +17,15 @@ The frontend is your "window" into the office. It is a **Generative UI** that ca
 A central, persistent agent that manages the system.
 *   **Least Privilege**: The Head Agent manages workers and UI but *cannot* see sensitive API keys or passwords.
 *   **Orchestration**: It delegates complex tasks to specialized Sub-Agents and Minor Agents.
+*   **Security Gate**: Only the Head Agent can propose changes to the UI, Skeleton, or Extensions. All such changes require explicit user approval via the **Confirmation Gate**.
+*   **Minor Changes Only**: The system is designed for stable, incremental improvements. Major structural changes are restricted to ensure stability.
 
-### 4. The Tent (BYO Infrastructure)
+### 4. Agent Terminal
+A real-time monitoring module that allows you to see exactly what your agents are doing.
+*   **Log Output**: View info, success, and error logs from all active agents.
+*   **Command Tracking**: See the specific tools and commands being executed in the background.
+
+### 5. The Tent (BYO Infrastructure)
 Users "pitch their own tent" by connecting their own **Firebase** and **Google Cloud** projects. This ensures total data sovereignty and privacy.
 
 ## 📂 Repository Structure

@@ -7,7 +7,9 @@ import {
   Loader2, 
   ExternalLink,
   ChevronRight,
-  Database
+  Database,
+  Server,
+  HardDrive
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { infra } from '../../lib/infraManager';
@@ -23,12 +25,24 @@ interface DiscoveryProps {
   onProjectSelected: (projectId: string, config: any) => void;
 }
 
+interface ProvisioningStep {
+  id: 'firebase' | 'cloudrun' | 'drive';
+  label: string;
+  status: 'pending' | 'loading' | 'success' | 'error';
+  icon: any;
+}
+
 export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSelected }) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectingId, setSelectingId] = useState<string | null>(null);
+  const [provisioningSteps, setProvisioningSteps] = useState<ProvisioningStep[]>([
+    { id: 'firebase', label: 'Firebase Database', status: 'pending', icon: Database },
+    { id: 'cloudrun', label: 'Cloud Run Office', status: 'pending', icon: Server },
+    { id: 'drive', label: 'Google Drive Library', status: 'pending', icon: HardDrive },
+  ]);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -49,10 +63,28 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
     try {
       setSelectingId(projectId);
       setError(null);
+      
+      // Step 1: Firebase
+      setProvisioningSteps(prev => prev.map(s => s.id === 'firebase' ? { ...s, status: 'loading' } : s));
+      await new Promise(r => setTimeout(r, 1500)); // Simulate API call
       const config = await infra.getProjectConfig(projectId);
+      setProvisioningSteps(prev => prev.map(s => s.id === 'firebase' ? { ...s, status: 'success' } : s));
+
+      // Step 2: Cloud Run
+      setProvisioningSteps(prev => prev.map(s => s.id === 'cloudrun' ? { ...s, status: 'loading' } : s));
+      await new Promise(r => setTimeout(r, 2000)); // Simulate provisioning
+      setProvisioningSteps(prev => prev.map(s => s.id === 'cloudrun' ? { ...s, status: 'success' } : s));
+
+      // Step 3: Google Drive
+      setProvisioningSteps(prev => prev.map(s => s.id === 'drive' ? { ...s, status: 'loading' } : s));
+      await new Promise(r => setTimeout(r, 1200)); // Simulate folder creation
+      setProvisioningSteps(prev => prev.map(s => s.id === 'drive' ? { ...s, status: 'success' } : s));
+
+      await new Promise(r => setTimeout(r, 800));
       onProjectSelected(projectId, config);
     } catch (err) {
-      setError(`Failed to fetch Firebase config for ${projectId}. Ensure the Firebase Management API is enabled in the GCP Console.`);
+      setError(`Failed to provision services for ${projectId}. Ensure all APIs are enabled in the GCP Console.`);
+      setProvisioningSteps(prev => prev.map(s => s.status === 'loading' ? { ...s, status: 'error' } : s));
     } finally {
       setSelectingId(null);
     }
@@ -76,6 +108,63 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
             Select a Google Cloud project to bridge your AI Computer to your own infrastructure.
           </p>
         </div>
+
+        {/* Provisioning Overlay */}
+        <AnimatePresence>
+          {selectingId && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] bg-gray-950/90 backdrop-blur-xl flex items-center justify-center p-6"
+            >
+              <div className="max-w-md w-full space-y-8">
+                <div className="text-center space-y-2">
+                  <div className="w-16 h-16 rounded-3xl bg-blue-600/20 flex items-center justify-center mx-auto mb-4">
+                    <Cloud className="w-8 h-8 text-blue-500 animate-pulse" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white tracking-tight">Provisioning Your Office</h2>
+                  <p className="text-gray-400 text-sm">Setting up the Triple Service bridge for {selectingId}...</p>
+                </div>
+
+                <div className="space-y-3">
+                  {provisioningSteps.map((step) => (
+                    <div 
+                      key={step.id}
+                      className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
+                        step.status === 'success' ? 'bg-green-500/5 border-green-500/20' :
+                        step.status === 'loading' ? 'bg-blue-500/5 border-blue-500/20' :
+                        'bg-gray-900/50 border-white/5'
+                      }`}
+                    >
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                        step.status === 'success' ? 'bg-green-500/20 text-green-400' :
+                        step.status === 'loading' ? 'bg-blue-500/20 text-blue-400' :
+                        'bg-gray-800 text-gray-500'
+                      }`}>
+                        <step.icon className={`w-5 h-5 ${step.status === 'loading' ? 'animate-pulse' : ''}`} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-xs font-bold text-white uppercase tracking-widest">{step.label}</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-tighter">
+                          {step.status === 'success' ? 'Ready' : 
+                           step.status === 'loading' ? 'Configuring...' : 
+                           step.status === 'error' ? 'Failed' : 'Waiting...'}
+                        </div>
+                      </div>
+                      {step.status === 'success' && <CheckCircle2 className="w-4 h-4 text-green-400" />}
+                      {step.status === 'loading' && <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-600 uppercase tracking-widest">This may take a few moments</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Search & Stats */}
         <div className="flex items-center gap-4 bg-gray-900/50 p-4 rounded-xl border border-white/5">
