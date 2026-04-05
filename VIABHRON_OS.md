@@ -1,0 +1,149 @@
+# 🛡️ VIABHRON OS: Master Blueprint
+
+**Product Vision:** A private, portable Multi-Agent Operating System (MAOS) that lives in the user's own cloud infrastructure. It is a "Folded Tent"—easy to pitch, impossible to seize, and 100% sovereign.
+
+---
+
+## 1. The Virtual Computer (The Substrate)
+The "Virtual Computer" is the total environment, turning cloud infrastructure into a functional, private office. It lives entirely in the cloud substrate (Firebase, Cloud Run, Drive).
+
+### 1.1 The Skeleton (Hardened Task Sandboxing Engine)
+The Skeleton provides the physical and logical isolation for all work in the OS.
+*   **Physical Isolation (OpenSandbox)**: Every task/tab is an ephemeral, isolated Docker/K8s container. Malicious or "Dangerous" actions are contained within the sandbox.
+*   **The "Tab" Illusion**: To the human user, these sandboxes appear as "Tabs." To the AI, they are independent execution cells.
+*   **Real-time State Sync**: Powered by Firebase `onSnapshot` to keep the UI in sync with the cloud "Brain."
+
+### 1.2 The Extension Manager (The Toolbox)
+A structured registry that manages the capabilities and power levels of the OS.
+*   **The Toolbox**: A collection of six distinct extension types:
+    *   **Normal Skills**: General-purpose AI capabilities (e.g., Global Pulse, Summarization).
+    *   **Recipe Skills**: Artisanal blueprints for specific, high-fidelity outputs (e.g., Doc Forge, Editorial PPT Maker).
+    *   **Tools**: Lightweight utility functions (e.g., PDF Extractor, Web Search).
+    *   **Connectors**: Secure bridges to external data/services (e.g., Gmail, Slack, Hugging Face).
+    *   **MCP Servers**: Standardized data/tool integration layers.
+    *   **Modules**: Large-scale UI/UX features or complex workflows (e.g., Agent Terminal, Workflow Canvas).
+*   **Universal AI Port**: Support for importing external capabilities (Claude Skills, MCP Servers, Hugging Face Models/Spaces) into the private substrate.
+    *   **External Skills**: Default to "Artisanal Wrapper" (Head Agent prompt overlay) with optional "Raw Mode."
+    *   **MCP Servers**: Default to "User-Brought" (External URL) with "Sovereign Bridge" (WebSocket/HTTPS proxying).
+    *   **Hugging Face Hub**: Default source for open-source models, datasets, and Spaces. Supports both Public (no key) and Private (User Token) access.
+    *   **Agent "Hatching" Protocol (Internal Staff)**: For agents with source code (GitHub/Source). Cloned into a Forge Sandbox, containerized on Cloud Run, and wrapped in a Sovereign prompt. 100% private.
+    *   **Agent "Accreditation" Protocol (External Consultants)**: For cloud-hosted agents (OpenAI, Genspark, Mistral, Claude). Established via an **Ambassador Bridge** (API/OAuth). Reports via a **Secure Intercom** (Webhook Receiver).
+    *   **External Intelligence Plugins (Consultants)**:
+        *   **Codex Integration**: Integrates OpenAI's Codex via the `Codex-plugin-cc` model.
+        *   **Consultant Role**: Codex acts as a Level 4 Consultant for adversarial reviews and correctness checks.
+        *   **Rescue Sandbox Protocol**: If Codex detects a critical failure during a background review, the OS initiates a "Rescue Sandbox"—a dedicated, high-priority environment where Codex and the Coder Agent work to resolve the issue in isolation.
+        *   **Plugin Configuration**: Managed via the **Agent Settings** (3-dots menu) in the Chat interface. Supports per-plugin API keys and security toggles (e.g., Review Gate).
+*   **Policy Enforcement (Microsoft Governance)**: Runtime security policies that "Silent Block + Notify" actions violating the Chairman's rules.
+*   **Authority**: Only the **User (The Chairman)** and the **Head Agent (The Cloud Manager)** have the keys to the Toolbox.
+*   **Recipe Skills**: Artisanal blueprints that dictate the "Vibe," tone, and style of AI outputs.
+
+### 1.3 The Agents (The Staff Hierarchy)
+The "Active Intelligence" that performs work within the office, managed by a **Model-Agnostic Orchestration System (Claude Code Rewrite)**.
+
+1.  **Level 1: The Resident (Head Agent)**
+    *   **Status**: Permanent, "In-Office."
+    *   **Brain**: Tiny LLM (Gemma/Phi).
+    *   **Role**: The "Office Manager" who never leaves. Root Authority.
+2.  **Level 2: Executive Staff (Special Agents)**
+    *   **Status**: Permanent, "In-Office."
+    *   **Brain**: Larger LLMs (Llama 3.1 70b, etc.).
+    *   **Role**: For users who can afford more "Resident" power in their private cloud.
+3.  **Level 3: Contractors (Sub-Agents)**
+    *   **Status**: Temporary, "On-Call."
+    *   **Brain**: API-based (Gemini, OpenAI, Anthropic).
+    *   **Role**: Hired via API keys for specific, heavy-lifting tasks.
+4.  **Level 4: Consultants (External Agents)**
+    *   **Status**: Cross-Platform.
+    *   **Brain**: Third-party (e.g., Cursor 3 agents, specialized external AI, imported Claude Skills).
+    *   **Role**: Integrated into the office to bring in outside expertise, managed via the Universal AI Port.
+5.  **Specialized Roles (Optional)**
+    *   **The Librarian**: An optional agent dedicated to monitoring Hugging Face and GitHub for new "Eggs" (models, tools, datasets) that align with the Chairman's interests and project needs.
+
+### 1.4 Protected Divisions (The Machine Room)
+The "Machine Room" contains the core infrastructure controls, isolated from agent interference.
+*   **Security Division**: 
+    *   **Role**: Houses core security rules, firewall configurations, and privacy patches.
+    *   **Agent Access**: **Read-Only**. Agents can follow rules but cannot modify them.
+    *   **Natural Language Rule Builder**: The Chairman can describe rules in plain English; the OS translates them into hard technical blocks.
+    *   **Emergency Lockdown (The Red Switch)**: A high-security protocol to instantly terminate all agent containers and revoke API keys.
+*   **Efficiency Patches Division**:
+    *   **Role**: Manages improvements to the Engine (Orchestration) and Skeleton (Infrastructure).
+    *   **Agent Access**: **Read-Only**.
+    *   **Performance Dashboard**: Side-by-side comparison of speed, memory, and cloud cost.
+    *   **Vibe-Modes**: Presets for OS performance:
+        *   **Turbo Mode**: Maximum speed and reasoning depth.
+        *   **Eco Mode**: Maximum cost-efficiency.
+        *   **Stealth Mode**: Minimal footprint and maximum privacy.
+
+---
+
+## 2. The Triple-Service Bridge (The Infrastructure)
+The "Field" where the tent is pitched, using the user's **BYO Identity**.
+
+*   **Nervous System (Firebase)**: Real-time UI state, intercom, and live data streams.
+*   **Brain (Cloud Run)**: The scale-to-zero compute engine where the Resident Architect and Staff live.
+*   **Filing Cabinet (Google Drive)**: The Sovereign Vault for long-term memory, logs, and project files.
+*   **Sovereign Bridge (MCP)**: Secure proxying for MCP servers. Supports Cloud-to-Cloud (HTTPS) and Local Bridge (WebSocket to user's physical machine).
+*   **Open Intelligence (Hugging Face)**: Default connector for accessing the global hub of open-source AI models, datasets, and interactive Spaces.
+
+---
+
+## 3. The "Chairman" Protocol (UI/UX)
+The UI is a **Thin Client / Remote Screen**—a window into the Virtual Computer.
+
+*   **The Chairman (The Human)**: Sits at the top of the hierarchy. Does not do the "Work" (coding, searching, processing).
+*   **Instruction Hierarchy (OpenAI IH-Challenge)**: The Architect is programmed to prioritize the Chairman's commands as "System Level" and ignore conflicting "Lower-Tier" requests from sub-agents.
+*   **The Dashboard**: The UI is for the Chairman to look at **Artifacts** (documents/results) and grant **Permissions**.
+*   **The Machine Room UI**: A visually distinct "Industrial" interface (Terminal-Core aesthetic) for Security and Efficiency controls.
+*   **The Sentinel Feed**: A central notification hub for security logs, policy violations, and system-level "Patch" notifications.
+    *   **Background Task Monitoring**: Real-time tracking of long-running agent operations (e.g., adversarial reviews, model downloads).
+    *   **External Pulses**: Logging of incoming data from accredited external agents via the **Secure Intercom (Webhook Receiver)**.
+    *   **Codex Rescue Integration**: Direct action buttons within the feed to initiate a Rescue Sandbox for failed or critical background tasks.
+*   **Confirmation Gates**: The "Safety Switch." The Chairman grants permission; the Head Agent manages the Toolbox.
+*   **Agent Settings (The 3-Dots Menu)**: A dedicated configuration layer within the Chat interface for the Chairman to manage agent-specific logic, external plugins, and security gates without leaving the conversation.
+*   **The "Hatchery" UI**: A specialized interface for importing GitHub repos or API endpoints to onboard new agents into the Staff Hierarchy.
+*   **Lockdown Recovery**: A manual, multi-step "System Health Check" required by the Chairman to reboot the OS after an emergency lockdown.
+
+---
+
+## 4. Security & Sovereignty
+*   **BYO Identity**: OAuth-based access to the user's own cloud.
+*   **Zero-Knowledge**: No data or infrastructure access for the developers.
+*   **The Sentinel**: Real-time threat detection and logging of all agent actions.
+*   **The Vault**: Encrypted storage in the user's own Google Drive.
+
+---
+
+## 5. Maintenance & Evolution
+*   **Master Blueprint**: This file (`VIABHRON_OS.md`) is the source of truth for all development.
+*   **Change Protocol**: No updates to the core architecture without explicit user approval.
+*   **Sovereignty Audit**: Every new feature must be audited for "Sovereignty Violations."
+
+---
+
+## 6. Future Plans: The Local Substrate (The Bunker)
+The "Distant Future" goal is to enable Viabhron to run fully offline, transitioning from a Cloud-based OS to a Hardware-based OS.
+
+### 6.1 The Sovereignty Spectrum
+The Chairman will have the choice between three modes of operation:
+*   **Cloud Substrate (Current)**: High power, accessible from anywhere, managed by the user's private cloud.
+*   **Hybrid Substrate**: Cloud compute for heavy lifting, but a **Local Vault** for physical data privacy.
+*   **Local Substrate (The Bunker)**: 100% offline, 100% private, running entirely on the user's physical hardware.
+
+### 6.2 Local Infrastructure Components
+*   **The Local Brain**: Integration with local LLM engines (Ollama, LocalAI, LM Studio). The Resident Head Agent will run on local RAM/GPU using efficient models (Gemma 2B, Phi-3, Llama 3.2 1B/3B).
+*   **The Local Vault**: Transition from Google Drive API to the **File System Access API** or direct OS access. The Vault becomes a physical folder on the user's hard drive (e.g., `~/Documents/Viabhron_Vault`).
+*   **The Local Nervous System**: Replacement of Firebase with local, browser-based databases like **PouchDB** or **IndexedDB**.
+*   **The Desktop Shell**: Packaging the UI in a desktop shell (Tauri or Electron) to break browser sandbox constraints and enable direct hardware/file-system access.
+*   **The Local Bridge (MCP)**: Agents will communicate with MCP servers running on the user's physical machine (localhost) via a secure internal WebSocket bridge.
+
+### 6.3 Connectivity Modes
+*   **Sync-able Mode**: The OS can move between cloud and local substrates, synchronizing the Nervous System and Vault when a secure connection is established.
+*   **Hard-Gapped Mode**: Once transitioned to the Local Substrate, the OS is "Air-Gapped." It will never attempt to contact the cloud or external APIs, ensuring absolute physical isolation.
+
+### 6.4 The Physical Key: The USB Portable OS
+The ultimate vision for Viabhron is the **"Office on a Stick."**
+*   **Self-Contained Environment**: The entire OS—including the UI, the Local Brain (Models), the Local Vault (Data), and the Local Nervous System (State)—lives on a single, encrypted physical USB drive.
+*   **Plug-and-Play Sovereignty**: The Chairman can plug this drive into any computer (Mac, PC, Linux) and instantly boot their private, secure office.
+*   **Zero Footprint**: When the drive is unplugged, no data, logs, or traces are left on the host machine. The "Tent" is folded and removed physically.
+*   **The Ultimate Backup**: A physical, air-gapped copy of the user's entire digital life that they can carry in their pocket.

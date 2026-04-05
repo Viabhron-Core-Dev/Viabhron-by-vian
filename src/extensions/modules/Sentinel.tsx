@@ -13,46 +13,93 @@ import {
   FileWarning,
   CheckCircle2,
   RefreshCw,
-  ExternalLink
+  ExternalLink,
+  Bell,
+  Eye,
+  EyeOff,
+  Trash2,
+  Filter
 } from 'lucide-react';
+import { Notification, BackgroundTask } from '../../types';
 
-interface ScanResult {
-  id: string;
-  fileName: string;
-  status: 'clean' | 'suspicious' | 'malicious';
-  threatLevel: number; // 0-100
-  timestamp: Date;
-  engine: string;
+interface SentinelProps {
+  backgroundTasks?: BackgroundTask[];
+  onRescue?: (taskId: string) => void;
 }
 
-export const Sentinel: React.FC = () => {
+export const Sentinel: React.FC<SentinelProps> = ({ backgroundTasks = [], onRescue }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [scanInterval, setScanInterval] = useState(6); // hours
   const [scanDepth, setScanDepth] = useState<'quick' | 'deep' | 'paranoid'>('deep');
-  const [results, setResults] = useState<ScanResult[]>([
-    { id: '1', fileName: 'main.py', status: 'clean', threatLevel: 0, timestamp: new Date(), engine: 'Viabhron Core' },
-    { id: '2', fileName: 'agent_v3_patch.bin', status: 'suspicious', threatLevel: 45, timestamp: new Date(Date.now() - 3600000), engine: 'VirusTotal API' },
-    { id: '3', fileName: 'utils.js', status: 'clean', threatLevel: 2, timestamp: new Date(Date.now() - 7200000), engine: 'Viabhron Core' }
+  const [notifications, setNotifications] = useState<Notification[]>([
+    { 
+      id: 'n1', 
+      title: 'Policy Violation Blocked', 
+      message: 'External skill "Claude-Writer" attempted to access unapproved domain: analytics.external.com. Action was silently blocked.', 
+      type: 'security', 
+      timestamp: new Date(Date.now() - 1000 * 60 * 15), 
+      agentId: 'a2',
+      read: false 
+    },
+    { 
+      id: 'n2', 
+      title: 'Vault Integrity Check', 
+      message: 'Routine scan of the Sovereign Vault completed. 1,240 files verified. No anomalies detected.', 
+      type: 'info', 
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), 
+      read: true 
+    },
+    { 
+      id: 'n3', 
+      title: 'Suspicious Activity Detected', 
+      message: 'Unusual API call pattern detected from "Contractor-Beta". Monitoring increased.', 
+      type: 'warning', 
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), 
+      agentId: 'a3',
+      read: false 
+    },
+    { 
+      id: 'n4', 
+      title: 'Identity Key Rotation', 
+      message: 'Root identity keys rotated successfully as per security policy.', 
+      type: 'security', 
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), 
+      read: true 
+    }
   ]);
+
+  const [filter, setFilter] = useState<'all' | 'security' | 'warning' | 'info'>('all');
 
   const handleStartScan = () => {
     setIsScanning(true);
     setTimeout(() => setIsScanning(false), 3000);
   };
 
-  const getStatusColor = (status: ScanResult['status']) => {
-    switch (status) {
-      case 'clean': return 'text-green-500';
-      case 'suspicious': return 'text-yellow-500';
-      case 'malicious': return 'text-red-500';
+  const markAsRead = (id: string) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  };
+
+  const deleteNotification = (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  const filteredNotifications = notifications.filter(n => filter === 'all' || n.type === filter);
+
+  const getTypeStyles = (type: Notification['type']) => {
+    switch (type) {
+      case 'security': return 'bg-red-500/10 border-red-500/20 text-red-400';
+      case 'warning': return 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400';
+      case 'info': return 'bg-blue-500/10 border-blue-500/20 text-blue-400';
+      case 'error': return 'bg-red-600/10 border-red-600/20 text-red-500';
     }
   };
 
-  const getStatusIcon = (status: ScanResult['status']) => {
-    switch (status) {
-      case 'clean': return <ShieldCheck className="w-4 h-4 text-green-500" />;
-      case 'suspicious': return <ShieldAlert className="w-4 h-4 text-yellow-500" />;
-      case 'malicious': return <AlertTriangle className="w-4 h-4 text-red-500" />;
+  const getTypeIcon = (type: Notification['type']) => {
+    switch (type) {
+      case 'security': return <ShieldAlert className="w-4 h-4" />;
+      case 'warning': return <AlertTriangle className="w-4 h-4" />;
+      case 'info': return <Bell className="w-4 h-4" />;
+      case 'error': return <FileWarning className="w-4 h-4" />;
     }
   };
 
@@ -66,7 +113,7 @@ export const Sentinel: React.FC = () => {
           </div>
           <div>
             <h2 className="text-sm font-bold text-white uppercase tracking-widest">Sentinel Guardian</h2>
-            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">System Integrity & Threat Detection</p>
+            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Security Hub & Notification Feed</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -74,17 +121,13 @@ export const Sentinel: React.FC = () => {
             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
             <span className="text-[9px] font-bold text-green-400 uppercase tracking-widest">Active Protection</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-            <span className="text-[9px] font-bold text-blue-400 uppercase tracking-widest">Guardian Linked</span>
-          </div>
           <button 
             onClick={handleStartScan}
             disabled={isScanning}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20"
           >
             {isScanning ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
-            {isScanning ? 'Scanning...' : 'Manual Scan'}
+            {isScanning ? 'Scanning...' : 'System Audit'}
           </button>
         </div>
       </div>
@@ -93,50 +136,139 @@ export const Sentinel: React.FC = () => {
         {/* Main Feed */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <StatCard icon={Activity} label="Files Scanned" value="12,450" color="text-blue-400" />
-            <StatCard icon={ShieldAlert} label="Threats Blocked" value="0" color="text-green-400" />
-            <StatCard icon={Zap} label="API Integrity" value="100%" color="text-purple-400" />
+            <StatCard icon={Activity} label="Events Logged" value={notifications.length.toString()} color="text-blue-400" />
+            <StatCard icon={ShieldAlert} label="Blocks (24h)" value="12" color="text-red-400" />
+            <StatCard icon={Zap} label="System Integrity" value="100%" color="text-green-400" />
           </div>
+
+          {backgroundTasks.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest px-1">Active Background Tasks</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {backgroundTasks.map(task => (
+                  <div key={task.id} className="bg-gray-900/50 border border-white/10 rounded-2xl p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <RefreshCw className={`w-3.5 h-3.5 text-blue-400 ${task.status === 'running' ? 'animate-spin' : ''}`} />
+                        <span className="text-xs font-bold text-white uppercase tracking-tight">{task.name}</span>
+                      </div>
+                      <span className={`text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded border ${
+                        task.status === 'running' ? 'border-blue-500/20 text-blue-400' : 
+                        task.status === 'completed' ? 'border-green-500/20 text-green-400' : 
+                        'border-red-500/20 text-red-400'
+                      }`}>
+                        {task.status}
+                      </span>
+                    </div>
+                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${task.progress}%` }}
+                        className="h-full bg-blue-500"
+                      />
+                    </div>
+                    {task.status === 'failed' && onRescue && (
+                      <button 
+                        onClick={() => onRescue(task.id)}
+                        className="w-full py-2 bg-red-900/20 hover:bg-red-900/40 border border-red-900/50 text-red-400 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all"
+                      >
+                        Initiate Codex Rescue
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="space-y-4">
             <div className="flex items-center justify-between px-1">
-              <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Recent Activity</h3>
-              <button className="text-[9px] text-blue-400 font-bold uppercase hover:underline">Clear History</button>
+              <div className="flex items-center gap-4">
+                <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Sentinel Feed</h3>
+                <div className="flex items-center gap-2 bg-gray-900/50 border border-white/5 rounded-lg px-2 py-1">
+                  <Filter className="w-3 h-3 text-gray-500" />
+                  <select 
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value as any)}
+                    className="bg-transparent text-[9px] font-bold text-gray-400 uppercase tracking-widest outline-none border-none cursor-pointer"
+                  >
+                    <option value="all">All Events</option>
+                    <option value="security">Security Only</option>
+                    <option value="warning">Warnings</option>
+                    <option value="info">Info</option>
+                  </select>
+                </div>
+              </div>
+              <button 
+                onClick={() => setNotifications([])}
+                className="text-[9px] text-gray-500 hover:text-red-400 font-bold uppercase tracking-widest transition-colors"
+              >
+                Clear All
+              </button>
             </div>
+
             <div className="space-y-2">
-              {results.map((result) => (
-                <motion.div 
-                  key={result.id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="bg-gray-900/50 border border-white/5 rounded-2xl p-4 flex items-center justify-between group hover:border-white/10 transition-all"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="p-2 bg-gray-950 rounded-xl">
-                      {getStatusIcon(result.status)}
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-white mb-0.5">{result.fileName}</div>
-                      <div className="flex items-center gap-3 text-[9px] text-gray-500 uppercase tracking-widest font-bold">
-                        <span>{result.engine}</span>
-                        <span className="w-1 h-1 rounded-full bg-gray-700" />
-                        <span>{result.timestamp.toLocaleTimeString()}</span>
+              <AnimatePresence mode="popLayout">
+                {filteredNotifications.map((n) => (
+                  <motion.div 
+                    key={n.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className={`bg-gray-900/50 border rounded-2xl p-4 flex flex-col gap-3 group transition-all ${n.read ? 'border-white/5 opacity-70' : 'border-white/10 shadow-lg shadow-white/5'}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-xl border ${getTypeStyles(n.type)}`}>
+                          {getTypeIcon(n.type)}
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-white mb-0.5 flex items-center gap-2">
+                            {n.title}
+                            {!n.read && <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />}
+                          </div>
+                          <div className="flex items-center gap-3 text-[9px] text-gray-500 uppercase tracking-widest font-bold">
+                            <span>{n.timestamp.toLocaleTimeString()}</span>
+                            {n.agentId && (
+                              <>
+                                <span className="w-1 h-1 rounded-full bg-gray-700" />
+                                <span className="text-blue-400">Agent: {n.agentId}</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                          onClick={() => markAsRead(n.id)}
+                          className="p-2 text-gray-500 hover:text-blue-400 transition-colors"
+                          title={n.read ? "Mark as unread" : "Mark as read"}
+                        >
+                          {n.read ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                        <button 
+                          onClick={() => deleteNotification(n.id)}
+                          className="p-2 text-gray-500 hover:text-red-400 transition-colors"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-6">
-                    <div className="text-right">
-                      <div className={`text-[10px] font-bold uppercase tracking-widest ${getStatusColor(result.status)}`}>
-                        {result.status}
-                      </div>
-                      <div className="text-[9px] text-gray-600 uppercase tracking-tighter">Threat: {result.threatLevel}%</div>
-                    </div>
-                    <button className="p-2 text-gray-600 hover:text-white transition-colors">
-                      <ExternalLink className="w-4 h-4" />
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
+                    <p className="text-[11px] text-gray-400 leading-relaxed pl-11">
+                      {n.message}
+                    </p>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              
+              {filteredNotifications.length === 0 && (
+                <div className="py-20 flex flex-col items-center justify-center text-gray-600 space-y-4">
+                  <ShieldCheck className="w-12 h-12 opacity-20" />
+                  <p className="text-xs font-bold uppercase tracking-widest opacity-40">No events to display</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -163,29 +295,22 @@ export const Sentinel: React.FC = () => {
                   onChange={(e) => setScanInterval(parseInt(e.target.value))}
                   className="w-full h-1 bg-white/5 rounded-full appearance-none cursor-pointer accent-blue-500"
                 />
-                <p className="text-[8px] text-gray-600 uppercase tracking-tighter italic">More frequent scans consume more Cloud Run resources.</p>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Scan Depth</label>
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Policy Enforcement</label>
                 <div className="grid grid-cols-1 gap-2">
                   <DepthOption 
-                    active={scanDepth === 'quick'} 
-                    label="Quick Scan" 
-                    desc="Metadata only" 
-                    onClick={() => setScanDepth('quick')} 
+                    active={true} 
+                    label="Silent Block + Notify" 
+                    desc="Default Viabhron Policy" 
+                    onClick={() => {}} 
                   />
                   <DepthOption 
-                    active={scanDepth === 'deep'} 
-                    label="Deep Analysis" 
-                    desc="Heuristic + API" 
-                    onClick={() => setScanDepth('deep')} 
-                  />
-                  <DepthOption 
-                    active={scanDepth === 'paranoid'} 
-                    label="Paranoid" 
-                    desc="Full Sandbox" 
-                    onClick={() => setScanDepth('paranoid')} 
+                    active={false} 
+                    label="Confirmation Gate" 
+                    desc="Ask for every action" 
+                    onClick={() => {}} 
                   />
                 </div>
               </div>
@@ -195,15 +320,21 @@ export const Sentinel: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-gray-400">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <h3 className="text-[10px] font-bold uppercase tracking-widest">Integrations</h3>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest">Security Status</h3>
             </div>
             <div className="p-4 bg-gray-950 border border-white/5 rounded-2xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider">VirusTotal API</span>
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Kernel Integrity</span>
                 <div className="w-2 h-2 rounded-full bg-green-500" />
               </div>
-              <p className="text-[9px] text-gray-500 leading-relaxed">Suspicious files are automatically hashed and checked against 70+ antivirus engines.</p>
-              <button className="w-full py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-bold uppercase tracking-widest text-gray-400 transition-all">Configure API Key</button>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Vault Encryption</span>
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Network Sandbox</span>
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+              </div>
             </div>
           </div>
         </div>

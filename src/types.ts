@@ -2,7 +2,7 @@ import { LucideIcon } from "lucide-react";
 
 export type ExtensionCategory = 'connector' | 'skill' | 'tool' | 'mcp' | 'module';
 
-export type AgentRole = 'head' | 'major' | 'sub' | 'minor' | 'contractor';
+export type AgentRole = 'head' | 'executive' | 'contractor' | 'consultant' | 'specialized';
 
 export interface Extension {
   id: string;
@@ -16,9 +16,34 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery';
 
-export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq' | 'local';
+export type SystemMode = 'turbo' | 'eco' | 'stealth';
+
+export interface SecurityRule {
+  id: string;
+  name: string;
+  description: string;
+  naturalLanguage: string;
+  technicalBlock: string;
+  active: boolean;
+  createdAt: Date;
+}
+
+export interface EfficiencyPatch {
+  id: string;
+  name: string;
+  description: string;
+  version: string;
+  applied: boolean;
+  metrics: {
+    speedBoost: number;
+    memorySaved: number;
+    costReduction: number;
+  };
+}
+
+export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq' | 'local' | 'resident';
 
 export interface Agent {
   id: string;
@@ -33,6 +58,9 @@ export interface Agent {
   avatar?: string;
   color: string;
   parentId?: string; // For hierarchy (Sub/Minor agents)
+  status: 'active' | 'inactive' | 'error';
+  capabilities: string[];
+  lastActive: Date;
 }
 
 export interface UIConfig {
@@ -96,6 +124,38 @@ export interface Memory {
   content: string;
   strength: number; // 1-10
   timestamp: Date;
+  metadata?: Record<string, any>;
+}
+
+export interface ExternalPlugin {
+  id: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  config: Record<string, any>;
+  type: string;
+  status: 'active' | 'inactive' | 'error';
+}
+
+export interface BackgroundTask {
+  id: string;
+  name: string;
+  status: 'running' | 'completed' | 'failed';
+  progress: number;
+  startTime: Date;
+  endTime?: Date;
+  type: string;
+}
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'security' | 'info' | 'warning' | 'error' | 'system';
+  timestamp: Date;
+  agentId?: string;
+  taskId?: string;
+  read: boolean;
   metadata?: Record<string, any>;
 }
 

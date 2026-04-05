@@ -17,7 +17,8 @@ import {
   Terminal as TerminalIcon,
   Activity,
   Bug,
-  Shield
+  Shield,
+  RefreshCw
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Extension, ExtensionCategory } from '../../types';
@@ -73,50 +74,72 @@ export const ExtensionStore: React.FC<ExtensionStoreProps> = ({ onInstall, insta
         <div className="space-y-4">
           <h1 className="text-3xl font-bold text-white flex items-center gap-3">
             <Puzzle className="w-8 h-8 text-blue-500" />
-            Extension Store
+            Universal AI Port
           </h1>
-          <p className="text-gray-400 max-w-2xl">
-            Enhance your AI Computer with modular extensions. Install inbuilt skills or import custom tools and MCP servers from GitHub.
+          <p className="text-gray-400 max-w-2xl text-sm leading-relaxed">
+            Enhance your Sovereign OS with modular extensions. Import external capabilities from Claude, GitHub, Hugging Face, or any MCP-compliant server. All external tools are proxied through the <span className="text-blue-400 font-bold">Sovereign Bridge</span> for your privacy.
           </p>
         </div>
 
         {/* Import Section */}
-        <div className="bg-gray-900/50 border border-white/10 rounded-xl p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Download className="w-5 h-5 text-green-500" />
-            Import from URL
-          </h2>
-          <form onSubmit={handleImport} className="flex gap-3">
+        <div className="bg-gray-900/50 border border-white/10 rounded-2xl p-8 space-y-6 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+            <Network className="w-32 h-32 text-blue-500" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2 uppercase tracking-widest">
+              <Download className="w-5 h-5 text-blue-400" />
+              Import External Capability
+            </h2>
+            <p className="text-xs text-gray-500 uppercase tracking-tighter font-bold">Supports Claude Skills, GitHub Repos, Hugging Face Hub, and MCP Endpoints</p>
+          </div>
+          <form onSubmit={handleImport} className="flex flex-col md:flex-row gap-3 relative z-10">
             <div className="flex-1 relative">
-              <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input 
                 type="text" 
                 value={importUrl}
                 onChange={(e) => setImportUrl(e.target.value)}
                 placeholder="https://github.com/user/repo or MCP URL..."
-                className="w-full bg-gray-900 border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-blue-500 transition-all"
+                className="w-full bg-gray-950 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-sm text-white focus:outline-none focus:border-blue-500 transition-all shadow-inner"
               />
             </div>
             <button 
               disabled={isImporting || !importUrl}
-              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg font-medium transition-all flex items-center gap-2"
+              className="px-8 py-3.5 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-xl font-bold uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20"
             >
               {isImporting ? (
-                <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                <RefreshCw className="w-4 h-4 animate-spin" />
               ) : (
                 <Plus className="w-4 h-4" />
               )}
-              Import
+              {isImporting ? 'Linking...' : 'Hatch Extension'}
             </button>
           </form>
-          <p className="text-[10px] text-gray-500">
-            Supports GitHub repositories, Gists, and standardized MCP server endpoints.
-          </p>
+          <div className="flex items-center gap-4 text-[9px] font-bold text-gray-600 uppercase tracking-widest">
+            <div className="flex items-center gap-1.5">
+              <Shield className="w-3 h-3 text-green-500" />
+              Sovereign Bridge Active
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Zap className="w-3 h-3 text-yellow-500" />
+              Artisanal Wrapper Enabled
+            </div>
+          </div>
         </div>
 
-        {/* Featured Extensions */}
-        <div className="space-y-6">
-          <h2 className="text-lg font-semibold text-white">Featured Extensions</h2>
+        {/* Categories */}
+        <div className="space-y-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold text-gray-500 uppercase tracking-[0.2em]">Available Extensions</h2>
+            <div className="flex gap-2">
+              {['All', 'Connectors', 'Skills', 'Tools', 'MCP', 'Modules'].map(cat => (
+                <button key={cat} className="px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full text-[9px] font-bold text-gray-400 uppercase tracking-widest transition-all">
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {featuredExtensions.map((ext) => {
               const isInstalled = installedIds.includes(ext.id);

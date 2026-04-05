@@ -44,9 +44,9 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
   const [showBrainSelection, setShowBrainSelection] = useState<string | null>(null);
   const [selectedBrain, setSelectedBrain] = useState<string>('gemma-2b');
   const [provisioningSteps, setProvisioningSteps] = useState<ProvisioningStep[]>([
-    { id: 'firebase', label: 'Firebase Database', status: 'pending', icon: Database },
-    { id: 'cloudrun', label: 'Cloud Run Office', status: 'pending', icon: Server },
-    { id: 'drive', label: 'Google Drive Library', status: 'pending', icon: HardDrive },
+    { id: 'firebase', label: 'Firebase Nervous System', status: 'pending', icon: Database },
+    { id: 'cloudrun', label: 'Cloud Run Substrate', status: 'pending', icon: Server },
+    { id: 'drive', label: 'Google Drive Vault', status: 'pending', icon: HardDrive },
   ]);
 
   const BRAINS = [
@@ -144,9 +144,9 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
                   <div className="w-16 h-16 rounded-3xl bg-blue-600/20 flex items-center justify-center mx-auto mb-4">
                     <Brain className="w-8 h-8 text-blue-500" />
                   </div>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">Pitch Your Main Pole</h2>
+                  <h2 className="text-2xl font-bold text-white tracking-tight">Pitch Your Main Pole (Resident Agent)</h2>
                   <p className="text-gray-400 text-sm">
-                    Select the "Brain" for your Resident Head Agent. This will be provisioned in your Cloud Run instance.
+                    Select the "Brain" for your Resident Head Agent. This will be provisioned in your private Cloud Run substrate.
                   </p>
                 </div>
 
@@ -213,7 +213,7 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
                   <div className="w-16 h-16 rounded-3xl bg-blue-600/20 flex items-center justify-center mx-auto mb-4">
                     <Cloud className="w-8 h-8 text-blue-500 animate-pulse" />
                   </div>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">Provisioning Your Office</h2>
+                  <h2 className="text-2xl font-bold text-white tracking-tight">Provisioning Your Substrate</h2>
                   <p className="text-gray-400 text-sm">Setting up the Triple Service bridge for {selectingId}...</p>
                 </div>
 

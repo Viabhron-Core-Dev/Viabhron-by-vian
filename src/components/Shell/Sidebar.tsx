@@ -18,7 +18,9 @@ import {
   Component,
   Activity,
   Bug,
-  Shield
+  Shield,
+  Cpu,
+  Egg
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Extension, ExtensionCategory } from '../../types';
@@ -42,6 +44,9 @@ interface SidebarProps {
   onOpenForge: () => void;
   onOpenAgentCLI: () => void;
   onOpenSentinel: () => void;
+  onOpenSecurity: () => void;
+  onOpenEfficiency: () => void;
+  onOpenHatchery: () => void;
   onOpenSettings: () => void;
   geminiApiKey?: string;
 }
@@ -139,7 +144,7 @@ const SidebarSection: React.FC<SectionProps> = ({ title, icon: Icon, items, isCo
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSentinel, onOpenSettings, geminiApiKey }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSentinel, onOpenSecurity, onOpenEfficiency, onOpenHatchery, onOpenSettings, geminiApiKey }) => {
   const [openSections, setOpenSections] = useState<Record<ExtensionCategory, boolean>>({
     connector: true,
     skill: true,
@@ -319,6 +324,53 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extension
                   <div className="flex-1 text-left">
                     <div className="text-[10px] font-bold text-white uppercase tracking-widest">Sentinel Guardian</div>
                     <div className="text-[8px] text-blue-400/60 font-medium uppercase tracking-tighter">Threat Detection</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Machine Room Header */}
+              <div className="px-3 py-2 mb-2">
+                <div className="text-[9px] font-bold text-gray-600 uppercase tracking-[0.3em]">Protected Divisions</div>
+              </div>
+
+              {/* Security Division */}
+              <div className="mb-4">
+                <button 
+                  onClick={onOpenSecurity}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-green-500/20 bg-green-500/5 hover:bg-green-500/10 hover:border-green-500/40 transition-all group"
+                >
+                  <Shield className="w-4 h-4 text-green-400 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] font-bold text-white uppercase tracking-widest">Security Division</div>
+                    <div className="text-[8px] text-green-400/60 font-medium uppercase tracking-tighter">Kernel Rule Builder</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Efficiency Division */}
+              <div className="mb-4">
+                <button 
+                  onClick={onOpenEfficiency}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/40 transition-all group"
+                >
+                  <Cpu className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] font-bold text-white uppercase tracking-widest">Efficiency Patches</div>
+                    <div className="text-[8px] text-blue-400/60 font-medium uppercase tracking-tighter">Engine Optimization</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Hatchery Section */}
+              <div className="mb-4">
+                <button 
+                  onClick={onOpenHatchery}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-orange-500/20 bg-orange-500/5 hover:bg-orange-500/10 hover:border-orange-500/40 transition-all group"
+                >
+                  <Egg className="w-4 h-4 text-orange-400 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] font-bold text-white uppercase tracking-widest">The Hatchery</div>
+                    <div className="text-[8px] text-orange-400/60 font-medium uppercase tracking-tighter">Agent Onboarding</div>
                   </div>
                 </button>
               </div>
