@@ -1,4 +1,4 @@
-import { Github, Mail, Slack, Database } from 'lucide-react';
+import { Github, Mail, Slack, Database, Share2, ListTodo } from 'lucide-react';
 import { Extension } from '../../types';
 
 export const githubConnector: Extension = { 
@@ -9,6 +9,26 @@ export const githubConnector: Extension = {
   status: 'active', 
   source: 'inbuilt', 
   description: 'Vibe-Forge CDE & Repo Access' 
+};
+
+export const linearConnector: Extension = {
+  id: 'linear',
+  name: 'Linear',
+  category: 'connector',
+  icon: ListTodo,
+  status: 'inactive',
+  source: 'external',
+  description: 'Project Management & Ticket Sync for Symphony Orchestration.'
+};
+
+export const cqConnector: Extension = {
+  id: 'cq',
+  name: 'Collective Intelligence (cq)',
+  category: 'connector',
+  icon: Share2,
+  status: 'inactive',
+  source: 'external',
+  description: 'Mozilla.ai knowledge-sharing system for AI agents.'
 };
 
 export const huggingFaceConnector: Extension = { 
@@ -39,4 +59,14 @@ export const slackConnector: Extension = {
   status: 'inactive', 
   source: 'inbuilt', 
   description: 'Team alerts' 
+};
+
+export const symphonyModule: Extension = {
+  id: 'symphony',
+  name: 'Symphony Orchestrator',
+  category: 'module',
+  icon: Share2,
+  status: 'inactive',
+  source: 'external',
+  description: 'Autonomous AI-driven implementation runs based on Linear tickets.'
 };

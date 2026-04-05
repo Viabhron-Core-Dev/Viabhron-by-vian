@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { 
   Bot, 
@@ -104,7 +104,34 @@ export default function App() {
   const [bridgedProjectId, setBridgedProjectId] = useState<string | null>(null);
   const [googleClientId, setGoogleClientId] = useState<string>('');
   const [geminiApiKey, setGeminiApiKey] = useState<string>('');
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>([
+    { 
+      id: 'n1', 
+      title: 'Policy Violation Blocked', 
+      message: 'External skill "Claude-Writer" attempted to access unapproved domain: analytics.external.com. Action was silently blocked.', 
+      type: 'security', 
+      timestamp: new Date(Date.now() - 1000 * 60 * 15), 
+      agentId: 'a2',
+      read: false 
+    },
+    { 
+      id: 'n2', 
+      title: 'External Pulse Received', 
+      message: 'Accredited Agent "Mistral-Consultant" established a Secure Intercom connection.', 
+      type: 'system', 
+      timestamp: new Date(Date.now() - 1000 * 60 * 30), 
+      metadata: { agentId: 'Mistral-Consultant' },
+      read: false 
+    },
+    {
+      id: 'n3',
+      title: 'Linear Ticket Detected',
+      message: 'Symphony Orchestrator has detected a new ticket: "VIAB-124: Implement OAuth Bridge". Spawning Forge Sandbox...',
+      type: 'info',
+      timestamp: new Date(Date.now() - 1000 * 60 * 2),
+      read: false
+    }
+  ]);
   const [systemMode, setSystemMode] = useState<SystemMode>('eco');
   const [isLockdown, setIsLockdown] = useState(false);
   const [securityRules, setSecurityRules] = useState<SecurityRule[]>([]);
@@ -124,6 +151,14 @@ export default function App() {
       version: '1.3.1',
       applied: false,
       metrics: { speedBoost: 5, memorySaved: 45, costReduction: 25 }
+    },
+    {
+      id: 'p3',
+      name: 'cq Collective Cache',
+      description: 'Synchronizes local agent solutions with the global cq network (Sovereign Filter enabled).',
+      version: '0.1.0-alpha',
+      applied: false,
+      metrics: { speedBoost: 15, memorySaved: 10, costReduction: 60 }
     }
   ]);
   const [externalPlugins, setExternalPlugins] = useState<ExternalPlugin[]>([
@@ -132,7 +167,36 @@ export default function App() {
       name: 'OpenAI Codex Plugin',
       description: 'Integrates Codex for code reviews, adversarial challenges, and task delegation.',
       enabled: false,
-      config: { apiKey: '', reviewGate: false }
+      config: { apiKey: '', reviewGate: false },
+      type: 'agent-extension',
+      status: 'inactive'
+    },
+    {
+      id: 'cq-protocol-mozilla',
+      name: 'Collective Intelligence (cq)',
+      description: 'Mozilla.ai open-source knowledge-sharing system. Pools solutions and flags outdated fixes to prevent token waste.',
+      enabled: false,
+      config: { privacyLevel: 'sovereign', autoSync: true, anonymousMode: true },
+      type: 'efficiency-extension',
+      status: 'inactive'
+    },
+    {
+      id: 'linear-connector',
+      name: 'Linear Connector',
+      description: 'Syncs tickets from Linear to trigger autonomous Symphony runs.',
+      enabled: false,
+      config: { apiKey: '', workspaceId: '', syncInterval: 5 },
+      type: 'connector',
+      status: 'inactive'
+    },
+    {
+      id: 'symphony-orchestrator',
+      name: 'Symphony Orchestrator',
+      description: 'Autonomous AI implementation framework. Monitors tickets and runs isolated Forge Sandboxes.',
+      enabled: false,
+      config: { autoApprove: false, sandboxType: 'cloud-run' },
+      type: 'module',
+      status: 'inactive'
     }
   ]);
   const [backgroundTasks, setBackgroundTasks] = useState<BackgroundTask[]>([
@@ -143,9 +207,58 @@ export default function App() {
       progress: 85,
       startTime: new Date(Date.now() - 1000 * 60 * 5),
       type: 'codex-rescue'
+    },
+    {
+      id: 't2',
+      name: 'Symphony Run: VIAB-124',
+      status: 'running',
+      progress: 42,
+      startTime: new Date(Date.now() - 1000 * 60 * 2),
+      type: 'symphony-orchestration'
     }
   ]);
   const [isAgentSettingsOpen, setIsAgentSettingsOpen] = useState(false);
+  const seenPulseIds = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const response = await fetch('/api/health');
+        if (response.ok) {
+          const data = await response.json();
+          console.log('🛡️ OS Kernel Health:', data);
+        }
+      } catch (error) {
+        console.warn('🛡️ OS Kernel Health Check Failed (Server might be starting):', error);
+      }
+    };
+    checkHealth();
+
+    const pollPulses = async () => {
+      try {
+        const response = await fetch('/api/webhooks/pulses');
+        if (!response.ok) return;
+        
+        const pulses = await response.json();
+        pulses.forEach((pulse: any) => {
+          if (!seenPulseIds.current.has(pulse.id)) {
+            seenPulseIds.current.add(pulse.id);
+            addNotification({
+              title: 'External Pulse Received',
+              message: `Accredited Agent "${pulse.agentId}" sent a secure update: ${JSON.stringify(pulse.payload)}`,
+              type: 'system',
+              metadata: { pulseId: pulse.id, agentId: pulse.agentId }
+            });
+          }
+        });
+      } catch (error) {
+        // Silent fail for polling to avoid console spam during dev restarts
+      }
+    };
+
+    const interval = setInterval(pollPulses, 5000);
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array - seenPulseIds.current handles the logic
 
   const addNotification = (n: Omit<Notification, 'id' | 'timestamp' | 'read'>) => {
     const newNotification: Notification = {
@@ -619,6 +732,10 @@ export default function App() {
                   <Sentinel 
                     backgroundTasks={backgroundTasks}
                     onRescue={handleCodexRescue}
+                    notifications={notifications}
+                    onMarkRead={(id) => setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: !n.read } : n))}
+                    onDelete={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
+                    onClearAll={() => setNotifications([])}
                   />
                 ) : tab.type === 'security' ? (
                   <SecurityDivision 

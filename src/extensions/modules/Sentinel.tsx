@@ -25,62 +25,28 @@ import { Notification, BackgroundTask } from '../../types';
 interface SentinelProps {
   backgroundTasks?: BackgroundTask[];
   onRescue?: (taskId: string) => void;
+  notifications: Notification[];
+  onMarkRead: (id: string) => void;
+  onDelete: (id: string) => void;
+  onClearAll: () => void;
 }
 
-export const Sentinel: React.FC<SentinelProps> = ({ backgroundTasks = [], onRescue }) => {
+export const Sentinel: React.FC<SentinelProps> = ({ 
+  backgroundTasks = [], 
+  onRescue, 
+  notifications,
+  onMarkRead,
+  onDelete,
+  onClearAll
+}) => {
   const [isScanning, setIsScanning] = useState(false);
   const [scanInterval, setScanInterval] = useState(6); // hours
   const [scanDepth, setScanDepth] = useState<'quick' | 'deep' | 'paranoid'>('deep');
-  const [notifications, setNotifications] = useState<Notification[]>([
-    { 
-      id: 'n1', 
-      title: 'Policy Violation Blocked', 
-      message: 'External skill "Claude-Writer" attempted to access unapproved domain: analytics.external.com. Action was silently blocked.', 
-      type: 'security', 
-      timestamp: new Date(Date.now() - 1000 * 60 * 15), 
-      agentId: 'a2',
-      read: false 
-    },
-    { 
-      id: 'n2', 
-      title: 'Vault Integrity Check', 
-      message: 'Routine scan of the Sovereign Vault completed. 1,240 files verified. No anomalies detected.', 
-      type: 'info', 
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), 
-      read: true 
-    },
-    { 
-      id: 'n3', 
-      title: 'Suspicious Activity Detected', 
-      message: 'Unusual API call pattern detected from "Contractor-Beta". Monitoring increased.', 
-      type: 'warning', 
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), 
-      agentId: 'a3',
-      read: false 
-    },
-    { 
-      id: 'n4', 
-      title: 'Identity Key Rotation', 
-      message: 'Root identity keys rotated successfully as per security policy.', 
-      type: 'security', 
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), 
-      read: true 
-    }
-  ]);
-
-  const [filter, setFilter] = useState<'all' | 'security' | 'warning' | 'info'>('all');
+  const [filter, setFilter] = useState<'all' | 'security' | 'warning' | 'info' | 'system'>('all');
 
   const handleStartScan = () => {
     setIsScanning(true);
     setTimeout(() => setIsScanning(false), 3000);
-  };
-
-  const markAsRead = (id: string) => {
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
-  };
-
-  const deleteNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
   };
 
   const filteredNotifications = notifications.filter(n => filter === 'all' || n.type === filter);
@@ -91,6 +57,7 @@ export const Sentinel: React.FC<SentinelProps> = ({ backgroundTasks = [], onResc
       case 'warning': return 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400';
       case 'info': return 'bg-blue-500/10 border-blue-500/20 text-blue-400';
       case 'error': return 'bg-red-600/10 border-red-600/20 text-red-500';
+      case 'system': return 'bg-purple-500/10 border-purple-500/20 text-purple-400';
     }
   };
 
@@ -100,6 +67,7 @@ export const Sentinel: React.FC<SentinelProps> = ({ backgroundTasks = [], onResc
       case 'warning': return <AlertTriangle className="w-4 h-4" />;
       case 'info': return <Bell className="w-4 h-4" />;
       case 'error': return <FileWarning className="w-4 h-4" />;
+      case 'system': return <Zap className="w-4 h-4" />;
     }
   };
 
@@ -196,11 +164,12 @@ export const Sentinel: React.FC<SentinelProps> = ({ backgroundTasks = [], onResc
                     <option value="security">Security Only</option>
                     <option value="warning">Warnings</option>
                     <option value="info">Info</option>
+                    <option value="system">External Pulses</option>
                   </select>
                 </div>
               </div>
               <button 
-                onClick={() => setNotifications([])}
+                onClick={onClearAll}
                 className="text-[9px] text-gray-500 hover:text-red-400 font-bold uppercase tracking-widest transition-colors"
               >
                 Clear All
@@ -230,10 +199,10 @@ export const Sentinel: React.FC<SentinelProps> = ({ backgroundTasks = [], onResc
                           </div>
                           <div className="flex items-center gap-3 text-[9px] text-gray-500 uppercase tracking-widest font-bold">
                             <span>{n.timestamp.toLocaleTimeString()}</span>
-                            {n.agentId && (
+                            {(n.agentId || n.metadata?.agentId) && (
                               <>
                                 <span className="w-1 h-1 rounded-full bg-gray-700" />
-                                <span className="text-blue-400">Agent: {n.agentId}</span>
+                                <span className="text-blue-400">Agent: {n.agentId || n.metadata?.agentId}</span>
                               </>
                             )}
                           </div>
@@ -241,14 +210,14 @@ export const Sentinel: React.FC<SentinelProps> = ({ backgroundTasks = [], onResc
                       </div>
                       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button 
-                          onClick={() => markAsRead(n.id)}
+                          onClick={() => onMarkRead(n.id)}
                           className="p-2 text-gray-500 hover:text-blue-400 transition-colors"
                           title={n.read ? "Mark as unread" : "Mark as read"}
                         >
                           {n.read ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                         <button 
-                          onClick={() => deleteNotification(n.id)}
+                          onClick={() => onDelete(n.id)}
                           className="p-2 text-gray-500 hover:text-red-400 transition-colors"
                           title="Delete"
                         >
