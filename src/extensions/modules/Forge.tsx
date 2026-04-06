@@ -9,7 +9,8 @@ import {
   FileText, 
   Plus,
   Terminal,
-  Search
+  Search,
+  Shield
 } from 'lucide-react';
 
 interface FileEntry {
@@ -18,14 +19,34 @@ interface FileEntry {
   language: string;
 }
 
-export const Forge: React.FC = () => {
+interface ForgeProps {
+  isLockdown?: boolean;
+  checkSovereignProcedures?: (action: string, metadata?: any) => { allowed: boolean; message?: string };
+}
+
+export const Forge: React.FC<ForgeProps> = ({ isLockdown, checkSovereignProcedures }) => {
   const [files, setFiles] = useState<FileEntry[]>([
     { name: 'main.py', content: 'print("Hello from Viabhron Forge")', language: 'python' },
     { name: 'utils.js', content: 'export const add = (a, b) => a + b;', language: 'javascript' }
   ]);
   const [activeFileIndex, setActiveFileIndex] = useState(0);
+  const [blockMessage, setBlockMessage] = useState<string | null>(null);
 
   const activeFile = files[activeFileIndex];
+
+  const handleAction = (actionName: string) => {
+    if (isLockdown) return;
+    if (checkSovereignProcedures) {
+      const check = checkSovereignProcedures(`${actionName}: ${activeFile.name}`, { fileName: activeFile.name });
+      if (!check.allowed) {
+        setBlockMessage(check.message || 'Action blocked by Sovereign Procedure.');
+        setTimeout(() => setBlockMessage(null), 3000);
+        return;
+      }
+    }
+    // Proceed with action (simulated)
+    console.log(`Executing ${actionName} on ${activeFile.name}`);
+  };
 
   return (
     <div className="h-full bg-gray-950 flex flex-col md:flex-row overflow-hidden font-mono">
@@ -62,11 +83,19 @@ export const Forge: React.FC = () => {
             <span className="text-[10px] px-1.5 py-0.5 bg-white/5 rounded text-gray-500 uppercase tracking-widest">{activeFile.language}</span>
           </div>
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white rounded-lg text-[10px] font-bold transition-all">
+            <button 
+              onClick={() => handleAction('Save File')}
+              disabled={isLockdown}
+              className={`flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white rounded-lg text-[10px] font-bold transition-all ${isLockdown ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
               <Save className="w-3 h-3" />
               Save
             </button>
-            <button className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold transition-all shadow-lg shadow-blue-600/20">
+            <button 
+              onClick={() => handleAction('Run Test')}
+              disabled={isLockdown}
+              className={`flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold transition-all shadow-lg shadow-blue-600/20 ${isLockdown ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
               <Play className="w-3 h-3" />
               Run Test
             </button>
@@ -77,13 +106,29 @@ export const Forge: React.FC = () => {
           <textarea
             value={activeFile.content}
             onChange={(e) => {
+              if (isLockdown) return;
               const newFiles = [...files];
               newFiles[activeFileIndex].content = e.target.value;
               setFiles(newFiles);
             }}
-            className="absolute inset-0 w-full h-full bg-transparent p-6 text-sm text-gray-300 focus:outline-none resize-none selection:bg-blue-500/30 no-scrollbar"
+            readOnly={isLockdown}
+            className={`absolute inset-0 w-full h-full bg-transparent p-6 text-sm ${isLockdown ? 'text-red-900' : 'text-gray-300'} focus:outline-none resize-none selection:bg-blue-500/30 no-scrollbar`}
             spellCheck={false}
           />
+          {isLockdown && (
+            <div className="absolute inset-0 bg-red-950/10 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+              <div className="bg-red-600 text-white px-4 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Read-Only Mode</div>
+            </div>
+          )}
+          {blockMessage && (
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+              <div className="bg-gray-900 border border-red-900/50 p-6 rounded-2xl shadow-2xl text-center space-y-4 max-w-xs">
+                <Shield className="w-12 h-12 text-red-500 mx-auto animate-pulse" />
+                <h3 className="text-sm font-bold text-white uppercase tracking-widest">Sovereign Block</h3>
+                <p className="text-[11px] text-gray-400 leading-relaxed">{blockMessage}</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Console / Output Area */}

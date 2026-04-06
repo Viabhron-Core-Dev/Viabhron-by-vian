@@ -57,6 +57,8 @@ interface ChatProps {
   externalPlugins?: ExternalPlugin[];
   onUpdateExternalPlugins?: (plugins: ExternalPlugin[]) => void;
   onUpdateExtensions: (ids: string[]) => void;
+  isLockdown?: boolean;
+  checkSovereignProcedures?: (action: string, metadata?: any) => { allowed: boolean; message?: string };
 }
 
 export const Chat: React.FC<ChatProps> = ({ 
@@ -69,7 +71,9 @@ export const Chat: React.FC<ChatProps> = ({
   activeExtensionIds,
   externalPlugins = [],
   onUpdateExternalPlugins,
-  onUpdateExtensions 
+  onUpdateExtensions,
+  isLockdown,
+  checkSovereignProcedures
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -132,9 +136,24 @@ export const Chat: React.FC<ChatProps> = ({
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim() || isTyping) return;
+    if (!input.trim() || isTyping || isLockdown) return;
     
     const content = input;
+    
+    if (checkSovereignProcedures) {
+      const check = checkSovereignProcedures(`Send message: ${content}`, { tabId, agentId });
+      if (!check.allowed) {
+        const messagesRef = collection(db, 'users', userId!, 'tabs', tabId, 'messages');
+        await addDoc(messagesRef, {
+          role: 'system',
+          content: check.message || 'Action blocked by Sovereign Procedure.',
+          timestamp: serverTimestamp()
+        });
+        setInput('');
+        return;
+      }
+    }
+
     setInput('');
 
     if (!userId) {
@@ -387,8 +406,9 @@ export const Chat: React.FC<ChatProps> = ({
                         handleSend();
                       }
                     }}
-                    placeholder="Ask anything..."
-                    className="w-full bg-transparent border-none focus:ring-0 text-sm text-gray-200 placeholder-gray-500 resize-none py-3 max-h-32 no-scrollbar"
+                    disabled={isLockdown}
+                    placeholder={isLockdown ? "SYSTEM LOCKDOWN ACTIVE..." : "Ask anything..."}
+                    className={`w-full bg-transparent border-none focus:ring-0 text-sm ${isLockdown ? 'text-red-500 placeholder-red-900' : 'text-gray-200 placeholder-gray-500'} resize-none py-3 max-h-32 no-scrollbar`}
                     rows={1}
                   />
                 </div>
@@ -402,10 +422,10 @@ export const Chat: React.FC<ChatProps> = ({
                   </button>
                   <button 
                     onClick={handleSend}
-                    disabled={!input.trim()}
+                    disabled={!input.trim() || isLockdown}
                     className={`
                       p-3 rounded-full transition-all
-                      ${input.trim() ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-600 bg-white/5'}
+                      ${isLockdown ? 'bg-red-900/20 text-red-900 cursor-not-allowed' : input.trim() ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-600 bg-white/5'}
                     `}
                   >
                     <Send className="w-5 h-5" />

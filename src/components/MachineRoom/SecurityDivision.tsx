@@ -21,6 +21,8 @@ interface SecurityDivisionProps {
   onToggleRule: (id: string) => void;
   onDeleteRule: (id: string) => void;
   onLockdown: () => void;
+  isLockdownActive: boolean;
+  onUnlock: () => void;
 }
 
 export const SecurityDivision: React.FC<SecurityDivisionProps> = ({
@@ -28,9 +30,13 @@ export const SecurityDivision: React.FC<SecurityDivisionProps> = ({
   onAddRule,
   onToggleRule,
   onDeleteRule,
-  onLockdown
+  onLockdown,
+  isLockdownActive,
+  onUnlock
 }) => {
   const [newRuleText, setNewRuleText] = useState('');
+  const [newRuleType, setNewRuleType] = useState<'security' | 'operational' | 'fiscal'>('security');
+  const [newRuleUrgency, setNewRuleUrgency] = useState<'standard' | 'critical'>('standard');
   const [isLockdownConfirmOpen, setIsLockdownConfirmOpen] = useState(false);
   const [lockdownPhrase, setLockdownPhrase] = useState('');
   const LOCKDOWN_PHRASE = 'INITIATE_SOVEREIGN_LOCKDOWN';
@@ -41,11 +47,13 @@ export const SecurityDivision: React.FC<SecurityDivisionProps> = ({
 
     // In a real app, this would be translated by an AI service
     onAddRule({
-      name: `Policy: ${newRuleText.slice(0, 20)}...`,
-      description: 'Chairman-defined security policy',
+      name: `${newRuleType.toUpperCase()}_POLICY_${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
+      description: 'Chairman-defined sovereign procedure',
       naturalLanguage: newRuleText,
       technicalBlock: `BLOCK_ACCESS_IF(intent.matches("${newRuleText}"))`,
-      active: true
+      active: true,
+      type: newRuleType,
+      urgencyLevel: newRuleUrgency
     });
     setNewRuleText('');
   };
@@ -82,11 +90,36 @@ export const SecurityDivision: React.FC<SecurityDivisionProps> = ({
               Natural Language Rule Builder
             </h2>
             <form onSubmit={handleAddRule} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] text-green-900 uppercase font-bold">Procedure Type</label>
+                  <select 
+                    value={newRuleType}
+                    onChange={(e) => setNewRuleType(e.target.value as any)}
+                    className="w-full bg-black border border-green-900/50 rounded p-2 text-xs text-green-500 focus:outline-none focus:border-green-500 appearance-none"
+                  >
+                    <option value="security">Security Protocol</option>
+                    <option value="operational">Operational SOP</option>
+                    <option value="fiscal">Fiscal Policy</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] text-green-900 uppercase font-bold">Urgency Level</label>
+                  <select 
+                    value={newRuleUrgency}
+                    onChange={(e) => setNewRuleUrgency(e.target.value as any)}
+                    className="w-full bg-black border border-green-900/50 rounded p-2 text-xs text-green-500 focus:outline-none focus:border-green-500 appearance-none"
+                  >
+                    <option value="standard">Standard (Silent Block)</option>
+                    <option value="critical">Critical (Sentinel Alert)</option>
+                  </select>
+                </div>
+              </div>
               <div className="relative">
                 <textarea
                   value={newRuleText}
                   onChange={(e) => setNewRuleText(e.target.value)}
-                  placeholder="Describe a security rule (e.g., 'No agent can access my financial folder')..."
+                  placeholder="Describe a sovereign procedure (e.g., 'No agent can access my financial folder')..."
                   className="w-full bg-black border border-green-900/50 rounded p-4 text-sm focus:outline-none focus:border-green-500 transition-all h-32 resize-none placeholder:text-green-900"
                 />
                 <div className="absolute bottom-4 right-4 text-[10px] text-green-900">
@@ -98,7 +131,7 @@ export const SecurityDivision: React.FC<SecurityDivisionProps> = ({
                 className="w-full py-3 bg-green-900/20 hover:bg-green-900/40 border border-green-900 text-xs font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
-                Hatch Security Rule
+                Ratify Sovereign Procedure
               </button>
             </form>
           </section>
@@ -112,9 +145,17 @@ export const SecurityDivision: React.FC<SecurityDivisionProps> = ({
               {rules.map(rule => (
                 <div key={rule.id} className="bg-black border border-green-900/30 p-4 rounded flex items-start justify-between group hover:border-green-500/50 transition-all">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <span className={`w-2 h-2 rounded-full ${rule.active ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
                       <h3 className="text-sm font-bold text-green-400">{rule.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[8px] px-1.5 py-0.5 bg-green-900/20 text-green-700 rounded border border-green-900/30 uppercase font-bold">
+                          {rule.type}
+                        </span>
+                        <span className={`text-[8px] px-1.5 py-0.5 rounded border uppercase font-bold ${rule.urgencyLevel === 'critical' ? 'bg-red-900/20 text-red-700 border-red-900/30' : 'bg-blue-900/20 text-blue-700 border-blue-900/30'}`}>
+                          {rule.urgencyLevel}
+                        </span>
+                      </div>
                     </div>
                     <p className="text-xs text-green-700 italic">"{rule.naturalLanguage}"</p>
                     <div className="text-[9px] text-green-900 mt-2 font-mono bg-green-950/20 p-1 rounded">
@@ -154,10 +195,20 @@ export const SecurityDivision: React.FC<SecurityDivisionProps> = ({
               Emergency Protocols
             </h2>
             <p className="text-[10px] text-red-900 mb-6 leading-relaxed uppercase tracking-tighter">
-              Immediate termination of all active agent containers and revocation of temporary tokens.
+              {isLockdownActive 
+                ? 'System is currently in lockdown. All autonomous agents are terminated.' 
+                : 'Immediate termination of all active agent containers and revocation of temporary tokens.'}
             </p>
             
-            {!isLockdownConfirmOpen ? (
+            {isLockdownActive ? (
+              <button 
+                onClick={onUnlock}
+                className="w-full py-4 bg-green-900/20 hover:bg-green-600 hover:text-white border border-green-900 text-green-500 text-xs font-bold uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-2"
+              >
+                <Power className="w-5 h-5" />
+                Lift Lockdown
+              </button>
+            ) : !isLockdownConfirmOpen ? (
               <button 
                 onClick={() => setIsLockdownConfirmOpen(true)}
                 className="w-full py-4 bg-red-900/20 hover:bg-red-600 hover:text-white border border-red-900 text-red-500 text-xs font-bold uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-2"
@@ -180,7 +231,11 @@ export const SecurityDivision: React.FC<SecurityDivisionProps> = ({
                 <div className="flex gap-2">
                   <button 
                     onClick={() => {
-                      if (lockdownPhrase === LOCKDOWN_PHRASE) onLockdown();
+                      if (lockdownPhrase === LOCKDOWN_PHRASE) {
+                        onLockdown();
+                        setIsLockdownConfirmOpen(false);
+                        setLockdownPhrase('');
+                      }
                     }}
                     disabled={lockdownPhrase !== LOCKDOWN_PHRASE}
                     className="flex-1 py-3 bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest disabled:opacity-50 transition-all"

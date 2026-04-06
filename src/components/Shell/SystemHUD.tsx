@@ -11,15 +11,17 @@ import {
   X, 
   ChevronDown,
   HardDrive,
-  Zap
+  Zap,
+  Shield
 } from 'lucide-react';
 
 interface SystemHUDProps {
   onClearCache: () => void;
   onHibernateAll: () => void;
+  isLockdown?: boolean;
 }
 
-export const SystemHUD: React.FC<SystemHUDProps> = ({ onClearCache, onHibernateAll }) => {
+export const SystemHUD: React.FC<SystemHUDProps> = ({ onClearCache, onHibernateAll, isLockdown }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [ramUsage, setRamUsage] = useState(45);
   const [storageUsage, setStorageUsage] = useState(12);
@@ -57,17 +59,23 @@ export const SystemHUD: React.FC<SystemHUDProps> = ({ onClearCache, onHibernateA
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="bg-gray-900/80 backdrop-blur-xl border border-white/10 p-2 rounded-xl flex flex-col items-center gap-1.5 shadow-2xl group min-w-[44px]"
+        className={`${isLockdown ? 'bg-red-600 border-red-400 animate-pulse' : 'bg-gray-900/80 border-white/10'} backdrop-blur-xl border p-2 rounded-xl flex flex-col items-center gap-1.5 shadow-2xl group min-w-[44px]`}
       >
-        <div className="flex items-center gap-1">
-          <Cpu className={`w-2.5 h-2.5 ${getStatusColor(ramUsage)}`} />
-          <span className={`text-[8px] font-bold ${getStatusColor(ramUsage)}`}>{Math.round(ramUsage)}%</span>
-        </div>
-        <div className="w-full h-px bg-white/10" />
-        <div className="flex items-center gap-1">
-          <HardDrive className="w-2.5 h-2.5 text-blue-400" />
-          <span className="text-[8px] font-bold text-gray-400 group-hover:text-white transition-colors">{storageUsage}%</span>
-        </div>
+        {isLockdown ? (
+          <Shield className="w-4 h-4 text-white" />
+        ) : (
+          <>
+            <div className="flex items-center gap-1">
+              <Cpu className={`w-2.5 h-2.5 ${getStatusColor(ramUsage)}`} />
+              <span className={`text-[8px] font-bold ${getStatusColor(ramUsage)}`}>{Math.round(ramUsage)}%</span>
+            </div>
+            <div className="w-full h-px bg-white/10" />
+            <div className="flex items-center gap-1">
+              <HardDrive className="w-2.5 h-2.5 text-blue-400" />
+              <span className="text-[8px] font-bold text-gray-400 group-hover:text-white transition-colors">{storageUsage}%</span>
+            </div>
+          </>
+        )}
       </motion.button>
 
       {/* Detailed Dashboard */}

@@ -1,4 +1,4 @@
-import { Globe, FileText, Layout, Code, Share2 } from 'lucide-react';
+import { Globe, FileText, Layout, Code, Share2, ShieldAlert } from 'lucide-react';
 import { Extension } from '../../types';
 
 export const globalPulseSkill: Extension = { 
@@ -49,4 +49,14 @@ export const socialSentinelSkill: Extension = {
   status: 'active', 
   source: 'inbuilt', 
   description: 'Real-time social media trend monitoring' 
+};
+
+export const githubSecurityAuditorSkill: Extension = { 
+  id: 's6', 
+  name: 'GitHub Security Auditor', 
+  category: 'skill', 
+  icon: ShieldAlert, 
+  status: 'active', 
+  source: 'inbuilt', 
+  description: 'AI-powered taskflow agent for vulnerability detection' 
 };

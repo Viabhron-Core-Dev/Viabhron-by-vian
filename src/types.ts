@@ -27,6 +27,8 @@ export interface SecurityRule {
   naturalLanguage: string;
   technicalBlock: string;
   active: boolean;
+  type: 'security' | 'operational' | 'fiscal';
+  urgencyLevel: 'standard' | 'critical';
   createdAt: Date;
 }
 
@@ -157,6 +159,23 @@ export interface Notification {
   taskId?: string;
   read: boolean;
   metadata?: Record<string, any>;
+  action?: {
+    type: 'confirmation' | 'review';
+    label: string;
+    onApprove: () => void;
+    onReject: () => void;
+    status?: 'pending' | 'approved' | 'rejected';
+  };
+}
+
+export interface LogEntry {
+  id: string;
+  timestamp: Date;
+  level: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'CRITICAL';
+  source: string; // e.g., "Kernel", "Symphony-Agent", "UI-Shell"
+  message: string;
+  metadata?: Record<string, any>; // For AI parsing
+  traceId?: string; // To link related events
 }
 
 export interface VaultPointer {

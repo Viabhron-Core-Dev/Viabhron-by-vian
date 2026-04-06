@@ -1,8 +1,8 @@
 import { Extension } from '../types';
 import { githubConnector, linearConnector, cqConnector, huggingFaceConnector, gmailConnector, slackConnector, symphonyModule } from '../extensions/connectors';
-import { globalPulseSkill, docForgeSkill, artifactSandboxSkill, codeHunterSkill, socialSentinelSkill } from '../extensions/skills';
+import { globalPulseSkill, docForgeSkill, artifactSandboxSkill, codeHunterSkill, socialSentinelSkill, githubSecurityAuditorSkill } from '../extensions/skills';
 import { headlessBrowserTool, pdfExtractorTool, codeParserTool } from '../extensions/tools';
-import { localDatabaseMcp, systemMetricsMcp, geminiApiDocsMcp } from '../extensions/mcp';
+import { localDatabaseMcp, systemMetricsMcp, geminiApiDocsMcp, googleWorkspaceMcp, openClawProtocol } from '../extensions/mcp';
 import { 
   agentTerminalModule, 
   systemMetricsModule, 
@@ -28,6 +28,7 @@ export const INITIAL_EXTENSIONS: Extension[] = [
   artifactSandboxSkill,
   codeHunterSkill,
   socialSentinelSkill,
+  githubSecurityAuditorSkill,
   
   // Tools
   headlessBrowserTool,
@@ -38,6 +39,8 @@ export const INITIAL_EXTENSIONS: Extension[] = [
   localDatabaseMcp,
   systemMetricsMcp,
   geminiApiDocsMcp,
+  googleWorkspaceMcp,
+  openClawProtocol,
 
   // Modules
   agentTerminalModule,

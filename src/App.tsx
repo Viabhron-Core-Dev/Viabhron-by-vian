@@ -51,7 +51,7 @@ import { EfficiencyDivision } from './components/MachineRoom/EfficiencyDivision'
 import { Hatchery } from './components/Shell/Hatchery';
 import { Logo } from './components/Shell/Logo';
 
-import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask } from './types';
+import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry } from './types';
 import { infra } from './lib/infraManager';
 import { db } from './lib/firebase';
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from 'firebase/firestore';
@@ -104,6 +104,36 @@ export default function App() {
   const [bridgedProjectId, setBridgedProjectId] = useState<string | null>(null);
   const [googleClientId, setGoogleClientId] = useState<string>('');
   const [geminiApiKey, setGeminiApiKey] = useState<string>('');
+  const [logs, setLogs] = useState<LogEntry[]>([
+    {
+      id: 'l1',
+      timestamp: new Date(Date.now() - 1000 * 60 * 10),
+      level: 'INFO',
+      source: 'Kernel',
+      message: 'VIABHRON OS Kernel initialized successfully.',
+      traceId: 'boot-001'
+    },
+    {
+      id: 'l2',
+      timestamp: new Date(Date.now() - 1000 * 60 * 5),
+      level: 'DEBUG',
+      source: 'Symphony-Agent',
+      message: 'Polling Linear API for workspace "VIABHRON-DEV"...',
+      metadata: { workspaceId: 'VIABHRON-DEV', status: 'polling' },
+      traceId: 'sym-124'
+    }
+  ]);
+
+  const addLog = (entry: Omit<LogEntry, 'id' | 'timestamp'>) => {
+    const newLog: LogEntry = {
+      ...entry,
+      id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+      timestamp: new Date()
+    };
+    setLogs(prev => [newLog, ...prev].slice(0, 500)); // Keep last 500 logs
+    console.log(`[${newLog.level}] [${newLog.source}] ${newLog.message}`, newLog.metadata || '');
+  };
+
   const [notifications, setNotifications] = useState<Notification[]>([
     { 
       id: 'n1', 
@@ -129,7 +159,19 @@ export default function App() {
       message: 'Symphony Orchestrator has detected a new ticket: "VIAB-124: Implement OAuth Bridge". Spawning Forge Sandbox...',
       type: 'info',
       timestamp: new Date(Date.now() - 1000 * 60 * 2),
-      read: false
+      read: false,
+      action: {
+        type: 'confirmation',
+        label: 'Approve Implementation Run',
+        onApprove: () => {
+          console.log('Symphony run approved for VIAB-124');
+          // In a real app, this would trigger the backend
+        },
+        onReject: () => {
+          console.log('Symphony run rejected for VIAB-124');
+        },
+        status: 'pending'
+      }
     }
   ]);
   const [systemMode, setSystemMode] = useState<SystemMode>('eco');
@@ -422,6 +464,25 @@ export default function App() {
 
   const handleHatch = async (data: any) => {
     if (!user) return;
+    if (isLockdown) {
+      addLog({
+        level: 'WARN',
+        source: 'Kernel',
+        message: 'Agent hatching blocked by active system lockdown.',
+        metadata: { type: data.type }
+      });
+      return;
+    }
+
+    const check = checkSovereignProcedures(`Hatch agent of type ${data.type} with role ${data.role}`, { data });
+    if (!check.allowed) {
+      addNotification({
+        title: 'Hatchery Blocked',
+        message: check.message || 'Action blocked by Sovereign Procedure.',
+        type: 'warning'
+      });
+      return;
+    }
     
     const agentId = `agent-${Date.now()}`;
     const newAgent: Agent = {
@@ -539,6 +600,120 @@ export default function App() {
     setExtensions(prev => [...prev, { ...ext, status: 'active' }]);
   };
 
+  const handleModeChange = (mode: SystemMode) => {
+    setSystemMode(mode);
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: `System Vibe-Mode changed to: ${mode.toUpperCase()}`,
+      metadata: { mode, timestamp: new Date().toISOString() }
+    });
+    
+    // Notify user
+    setNotifications(prev => [{
+      id: `mode-${Date.now()}`,
+      title: 'Vibe-Mode Updated',
+      message: `OS is now running in ${mode.toUpperCase()} mode.`,
+      type: 'system',
+      timestamp: new Date(),
+      read: false
+    }, ...prev]);
+  };
+
+  const handleLockdown = () => {
+    setIsLockdown(true);
+    setSystemMode('stealth');
+    
+    // Stop all background tasks
+    setBackgroundTasks(prev => prev.map(task => ({
+      ...task,
+      status: 'failed',
+      message: 'TERMINATED_BY_LOCKDOWN'
+    })));
+
+    addLog({
+      level: 'CRITICAL',
+      source: 'Kernel',
+      message: 'EMERGENCY LOCKDOWN INITIATED. ALL AGENT PROCESSES TERMINATED.',
+      metadata: { timestamp: new Date().toISOString(), initiator: 'Chairman' }
+    });
+
+    setNotifications(prev => [{
+      id: `lockdown-${Date.now()}`,
+      title: 'SYSTEM LOCKDOWN ACTIVE',
+      message: 'All autonomous processes have been terminated. Substrate is now in read-only hardened mode.',
+      type: 'security',
+      timestamp: new Date(),
+      read: false
+    }, ...prev]);
+  };
+
+  const checkSovereignProcedures = (action: string, metadata?: any) => {
+    const activeRules = securityRules.filter(r => r.active);
+    
+    for (const rule of activeRules) {
+      // Simple simulation: check if action description matches rule keywords
+      const keywords = rule.naturalLanguage.toLowerCase().replace(/[.,'"]/g, '').split(' ').filter(w => w.length > 3);
+      const isViolation = keywords.some(word => action.toLowerCase().includes(word));
+
+      if (isViolation) {
+        const isUrgent = action.toLowerCase().includes('force') || action.toLowerCase().includes('urgent');
+        
+        if (isUrgent && rule.urgencyLevel === 'critical') {
+           addLog({
+             level: 'CRITICAL',
+             source: 'Cloud-Manager',
+             message: `CHAIRMAN OVERRIDE: Procedure "${rule.name}" bypassed due to urgency.`,
+             metadata: { action, rule: rule.name, urgency: 'HIGH', ...metadata }
+           });
+           
+           setNotifications(prev => [{
+             id: `override-${Date.now()}`,
+             title: 'Sovereign Override Detected',
+             message: `Critical procedure "${rule.name}" was bypassed by Chairman demand.`,
+             type: 'security',
+             timestamp: new Date(),
+             read: false
+           }, ...prev]);
+           
+           return { allowed: true, message: 'Action allowed via Chairman override.' };
+        } else {
+           addLog({
+             level: 'WARN',
+             source: 'Cloud-Manager',
+             message: `Action blocked by procedure: ${rule.name}`,
+             metadata: { action, rule: rule.name, ...metadata }
+           });
+           
+           return { allowed: false, message: `Blocked by Sovereign Procedure: ${rule.name}` };
+        }
+      }
+    }
+    
+    return { allowed: true };
+  };
+
+  const handleUnlock = () => {
+    setIsLockdown(false);
+    setSystemMode('eco');
+    
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: 'Emergency lockdown lifted. Resuming normal operations.',
+      metadata: { timestamp: new Date().toISOString(), initiator: 'Chairman' }
+    });
+
+    setNotifications(prev => [{
+      id: `unlock-${Date.now()}`,
+      title: 'System Restored',
+      message: 'Lockdown has been lifted. You may now resume agent orchestration.',
+      type: 'system',
+      timestamp: new Date(),
+      read: false
+    }, ...prev]);
+  };
+
   const handleApplyPatch = (id: string) => {
     setEfficiencyPatches(prev => prev.map(p => p.id === id ? { ...p, applied: true } : p));
     addNotification({
@@ -580,15 +755,6 @@ export default function App() {
     setSecurityRules(prev => prev.filter(r => r.id !== id));
   };
 
-  const handleLockdown = () => {
-    setIsLockdown(true);
-    addNotification({
-      title: 'SOVEREIGN LOCKDOWN INITIATED',
-      message: 'All agent containers terminated. OS in Read-Only mode.',
-      type: 'security'
-    });
-  };
-
   const onQuickAction = (action: () => void) => {
     setIsSystemMenuOpen(false);
     setIsSidebarCollapsed(true);
@@ -628,6 +794,7 @@ export default function App() {
           onOpenHatchery={() => onQuickAction(() => handleAddTab('hatchery', 'The Hatchery'))}
           onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
           geminiApiKey={geminiApiKey}
+          systemMode={systemMode}
         />
 
         <div className="flex-1 flex flex-col min-w-0 relative">
@@ -645,6 +812,7 @@ export default function App() {
             <SystemHUD 
               onClearCache={() => console.log('Cache cleared')}
               onHibernateAll={() => tabs.forEach(t => handleShelveTab(t.id))}
+              isLockdown={isLockdown}
             />
 
             <AnimatePresence>
@@ -652,6 +820,22 @@ export default function App() {
                 <div className="absolute bottom-4 right-4 w-full max-w-lg h-64 z-[150]">
                   <Terminal onClose={() => setIsTerminalOpen(false)} />
                 </div>
+              )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {isLockdown && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 z-[200] pointer-events-none border-[4px] border-red-600/50 animate-pulse flex items-start justify-center pt-20"
+                >
+                  <div className="bg-red-600 text-white px-6 py-2 rounded-full font-bold text-xs uppercase tracking-[0.5em] shadow-2xl shadow-red-600/50 flex items-center gap-3">
+                    <Shield className="w-4 h-4 animate-bounce" />
+                    System Lockdown Active
+                  </div>
+                </motion.div>
               )}
             </AnimatePresence>
 
@@ -689,6 +873,8 @@ export default function App() {
                         setDoc(doc(db, 'users', user.uid, 'tabs', tab.id), { activeExtensionIds: ids }, { merge: true });
                       }
                     }}
+                    isLockdown={isLockdown}
+                    checkSovereignProcedures={checkSovereignProcedures}
                   />
                 ) : tab.type === 'discovery' && accessToken ? (
                   <Discovery 
@@ -725,9 +911,9 @@ export default function App() {
                 ) : tab.type === 'governance' ? (
                   <Governance />
                 ) : tab.type === 'forge' ? (
-                  <Forge />
+                  <Forge isLockdown={isLockdown} checkSovereignProcedures={checkSovereignProcedures} />
                 ) : tab.type === 'agent_cli' ? (
-                  <AgentCLI />
+                  <AgentCLI isLockdown={isLockdown} checkSovereignProcedures={checkSovereignProcedures} />
                 ) : tab.type === 'sentinel' ? (
                   <Sentinel 
                     backgroundTasks={backgroundTasks}
@@ -736,6 +922,23 @@ export default function App() {
                     onMarkRead={(id) => setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: !n.read } : n))}
                     onDelete={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
                     onClearAll={() => setNotifications([])}
+                    onAction={(id, status) => {
+                      setNotifications(prev => prev.map(n => {
+                        if (n.id === id && n.action) {
+                          if (status === 'approved') n.action.onApprove();
+                          if (status === 'rejected') n.action.onReject();
+                          return { ...n, action: { ...n.action, status } };
+                        }
+                        return n;
+                      }));
+                      addLog({
+                        level: 'INFO',
+                        source: 'UI-Shell',
+                        message: `Chairman ${status} action for notification: ${id}`,
+                        metadata: { notificationId: id, status }
+                      });
+                    }}
+                    logs={logs}
                   />
                 ) : tab.type === 'security' ? (
                   <SecurityDivision 
@@ -744,11 +947,13 @@ export default function App() {
                     onToggleRule={handleToggleRule}
                     onDeleteRule={handleDeleteRule}
                     onLockdown={handleLockdown}
+                    isLockdownActive={isLockdown}
+                    onUnlock={handleUnlock}
                   />
                 ) : tab.type === 'efficiency' ? (
                   <EfficiencyDivision 
                     mode={systemMode}
-                    onModeChange={setSystemMode}
+                    onModeChange={handleModeChange}
                     patches={efficiencyPatches}
                     onApplyPatch={handleApplyPatch}
                   />
@@ -1230,7 +1435,7 @@ export default function App() {
                       Agents cannot self-restart from this state.
                     </p>
                     <button 
-                      onClick={() => setIsLockdown(false)}
+                      onClick={handleUnlock}
                       className="w-full py-4 bg-red-600 hover:bg-red-500 text-white font-bold uppercase tracking-[0.2em] rounded-xl transition-all"
                     >
                       Perform Health Check & Reboot

@@ -102,6 +102,23 @@
         "engine": { "type": "string" }
       },
       "required": ["id", "fileName", "status", "threatLevel", "timestamp", "engine"]
+    },
+    "SecurityRule": {
+      "title": "Security Rule / Sovereign Procedure",
+      "description": "A natural language rule or procedure for the agent company.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "naturalLanguage": { "type": "string", "description": "The rule in plain English." },
+        "technicalBlock": { "type": "string", "description": "The technical implementation or regex." },
+        "type": { "type": "string", "enum": ["security", "operational", "fiscal"] },
+        "urgencyLevel": { "type": "string", "enum": ["standard", "critical"] },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "naturalLanguage", "type", "urgencyLevel", "active", "createdAt"]
     }
   },
   "firestore": {
@@ -136,6 +153,10 @@
     "/users/{userId}/sentinel/results/{resultId}": {
       "schema": "ScanResult",
       "description": "Threat detection history."
+    },
+    "/users/{userId}/security/rules/{ruleId}": {
+      "schema": "SecurityRule",
+      "description": "The Articles of Incorporation: Natural language rules for the agent company."
     }
   }
 }

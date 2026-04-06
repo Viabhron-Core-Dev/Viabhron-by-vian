@@ -75,6 +75,18 @@ service cloud.firestore {
     //   - timestamp: timestamp
     //   - engine: string (required)
     //
+    // Collection: users/{userId}/security/rules
+    // Document ID: {ruleId}
+    // Fields:
+    //   - id: string (required)
+    //   - name: string (required)
+    //   - naturalLanguage: string (required)
+    //   - technicalBlock: string (required)
+    //   - type: string (required, enum: security, operational, fiscal)
+    //   - urgencyLevel: string (required, enum: standard, critical)
+    //   - active: bool (required)
+    //   - createdAt: timestamp
+    //
     // ===============================================================
 
     // ===============================================================
@@ -128,6 +140,12 @@ service cloud.firestore {
              data.status in ['clean', 'suspicious', 'malicious'];
     }
 
+    function isValidSecurityRule(data) {
+      return data.keys().hasAll(['id', 'name', 'naturalLanguage', 'type', 'urgencyLevel', 'active', 'createdAt']) &&
+             data.type in ['security', 'operational', 'fiscal'] &&
+             data.urgencyLevel in ['standard', 'critical'];
+    }
+
     // ===============================================================
     // Rules
     // ===============================================================
@@ -177,6 +195,13 @@ service cloud.firestore {
       match /sentinel/results/{resultId} {
         allow read: if isOwner(userId);
         allow create: if isOwner(userId) && isValidScanResult(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /security/rules/{ruleId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidSecurityRule(request.resource.data);
+        allow update: if isOwner(userId) && isValidSecurityRule(request.resource.data);
         allow delete: if isOwner(userId);
       }
     }

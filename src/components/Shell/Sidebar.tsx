@@ -23,7 +23,7 @@ import {
   Egg
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Extension, ExtensionCategory } from '../../types';
+import { Extension, ExtensionCategory, SystemMode } from '../../types';
 import { User } from 'firebase/auth';
 import { Logo } from './Logo';
 
@@ -49,6 +49,7 @@ interface SidebarProps {
   onOpenHatchery: () => void;
   onOpenSettings: () => void;
   geminiApiKey?: string;
+  systemMode: SystemMode;
 }
 
 interface SectionProps {
@@ -144,7 +145,7 @@ const SidebarSection: React.FC<SectionProps> = ({ title, icon: Icon, items, isCo
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSentinel, onOpenSecurity, onOpenEfficiency, onOpenHatchery, onOpenSettings, geminiApiKey }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSentinel, onOpenSecurity, onOpenEfficiency, onOpenHatchery, onOpenSettings, geminiApiKey, systemMode }) => {
   const [openSections, setOpenSections] = useState<Record<ExtensionCategory, boolean>>({
     connector: true,
     skill: true,
@@ -192,7 +193,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extension
                 <Logo className="w-8 h-8" apiKey={geminiApiKey} />
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-bold text-white tracking-tight truncate">Viabhron</div>
-                  <div className="text-[8px] text-gray-500 uppercase tracking-widest font-medium">Core OS</div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="text-[8px] text-gray-500 uppercase tracking-widest font-medium">Core OS</div>
+                    <div className="w-1 h-1 rounded-full bg-gray-700" />
+                    <div className={`text-[8px] font-bold uppercase tracking-widest ${
+                      systemMode === 'turbo' ? 'text-blue-400' :
+                      systemMode === 'eco' ? 'text-green-400' : 'text-purple-400'
+                    }`}>
+                      {systemMode}
+                    </div>
+                  </div>
                 </div>
               </div>
 

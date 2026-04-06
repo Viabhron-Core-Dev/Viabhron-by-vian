@@ -21,7 +21,12 @@ A structured registry that manages the capabilities and power levels of the OS.
     *   **Tools**: Lightweight utility functions (e.g., PDF Extractor, Web Search).
     *   **Connectors**: Secure bridges to external data/services (e.g., Gmail, Slack, Hugging Face).
     *   **MCP Servers**: Standardized data/tool integration layers.
+        *   **Gemini Live Pulse**: Real-time access to Gemini API documentation to prevent stale training data hallucinations.
+        *   **Google Workspace Bridge**: CLI-based management of Docs, Sheets, and Drive data.
     *   **Modules**: Large-scale UI/UX features or complex workflows (e.g., Agent Terminal, Workflow Canvas).
+*   **Substrate Protocols**:
+    *   **OpenClaw**: A self-hosted agent framework for private, sovereign execution.
+    *   **Model Context Protocol (MCP)**: Native support for the industry-standard tool-to-agent communication layer.
 *   **Universal AI Port**: Support for importing external capabilities (Claude Skills, MCP Servers, Hugging Face Models/Spaces) into the private substrate.
     *   **External Skills**: Default to "Artisanal Wrapper" (Head Agent prompt overlay) with optional "Raw Mode."
     *   **MCP Servers**: Default to "User-Brought" (External URL) with "Sovereign Bridge" (WebSocket/HTTPS proxying).
@@ -82,7 +87,7 @@ The "Field" where the tent is pitched, using the user's **BYO Identity**.
 
 *   **Nervous System (Firebase)**: Real-time UI state, intercom, and live data streams.
 *   **Brain (Cloud Run)**: The scale-to-zero compute engine where the Resident Architect and Staff live.
-*   **Filing Cabinet (Google Drive)**: The Sovereign Vault for long-term memory, logs, and project files.
+*   **Filing Cabinet (Google Drive)**: The Sovereign Vault for long-term memory, logs, and project files. Enhanced by the **Google Workspace CLI** for active data management across the Workspace suite.
 *   **Sovereign Bridge (MCP)**: Secure proxying for MCP servers. Supports Cloud-to-Cloud (HTTPS) and Local Bridge (WebSocket to user's physical machine).
 *   **Open Intelligence (Hugging Face)**: Default connector for accessing the global hub of open-source AI models, datasets, and interactive Spaces.
 
@@ -110,6 +115,7 @@ The UI is a **Thin Client / Remote Screen**—a window into the Virtual Computer
 *   **BYO Identity**: OAuth-based access to the user's own cloud.
 *   **Zero-Knowledge**: No data or infrastructure access for the developers.
 *   **The Sentinel**: Real-time threat detection and logging of all agent actions.
+*   **The GitHub Security Auditor**: A Level 4 Consultant agent integrated into the Security Division for proactive adversarial auditing and vulnerability detection.
 *   **The Vault**: Encrypted storage in the user's own Google Drive.
 
 ---
@@ -179,3 +185,17 @@ As the global AI ecosystem evolves toward multi-agent orchestration and autonomo
 *   **The Symphony Conductor**: A Level 4 Consultant agent that converts tickets into autonomous implementation runs.
 *   **Isolated Forge Sandboxes**: Every Symphony run is executed in a dedicated, ephemeral Cloud Run container within the user's substrate.
 *   **PR Confirmation Gate**: Symphony prepares the code and passes tests, but the final submission requires explicit Chairman approval via the Sentinel Feed.
+
+### 7.6 Vibe-Assembly (Component Orchestrator)
+*   **The Polyglot Orchestration Layer**: A new coding paradigm for AI-driven development. Instead of writing raw, error-prone code, agents configure pre-validated "Hardened Blocks" (UI, Logic, Security) via a JSON-based manifest of intent.
+*   **AI-First Architecture**: Designed specifically for LLMs to reduce hallucination risk by using high-level component orchestration instead of low-level code generation.
+*   **Sovereign Interoperability**: Ensures seamless data flow between blocks (e.g., Python logic to React UI) through a standardized, secure serialization layer managed by the Head Agent.
+*   **The Manifest of Intent**: Extensions are defined as "Intent Manifests" that the Cloud Manager "compiles" into a functional sandbox environment.
+
+### 7.7 Sovereign-Script (SS): The Syntax of Intent
+*   **Declarative AI-Native Language**: A high-level, manifest-based language designed for agents to build extensions. It prioritizes "What" (Intent) over "How" (Imperative Logic).
+*   **Hardened Block Architecture**: SS code consists of references to pre-validated, secure "Substrate Blocks" (e.g., `UI: BentoGrid`, `Logic: DataCruncher`). The AI configures blocks rather than writing raw logic.
+*   **Integrated Security Shorthand**: Security parameters (Clearance, Network Access, Data Scoping) are mandatory syntax elements. The Cloud Manager rejects any script missing these definitions.
+*   **The Universal Data Bus**: A standardized serialization layer that allows different language blocks (Python, React, Rust) to communicate seamlessly without the AI managing data types.
+*   **Chairman-Readable Logic**: The syntax is designed to be human-auditable, allowing the Chairman to review the "Tactical Map" of an extension's logic before ratification.
+*   **Self-Healing Manifests**: The Architect Agent debugs extensions by analyzing the "Intent Manifest" rather than the underlying compiled code, allowing for rapid, error-free iteration.

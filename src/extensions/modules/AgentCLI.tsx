@@ -19,7 +19,12 @@ interface LogEntry {
   agent?: string;
 }
 
-export const AgentCLI: React.FC = () => {
+interface AgentCLIProps {
+  isLockdown?: boolean;
+  checkSovereignProcedures?: (action: string, metadata?: any) => { allowed: boolean; message?: string };
+}
+
+export const AgentCLI: React.FC<AgentCLIProps> = ({ isLockdown, checkSovereignProcedures }) => {
   const [logs, setLogs] = useState<LogEntry[]>([
     { id: '1', type: 'system', content: 'Viabhron Agent Execution Environment (v1.0.4) initialized.', timestamp: new Date() },
     { id: '2', type: 'system', content: 'Connected to Cloud Run Office (us-central1).', timestamp: new Date() },
@@ -38,12 +43,28 @@ export const AgentCLI: React.FC = () => {
 
   const handleExecute = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isLockdown) return;
+
+    const command = input;
+    
+    if (checkSovereignProcedures) {
+      const check = checkSovereignProcedures(`Execute CLI command: ${command}`, { type: 'cli' });
+      if (!check.allowed) {
+        setLogs(prev => [...prev, {
+          id: Date.now().toString(),
+          type: 'error',
+          content: check.message || 'Command blocked by Sovereign Procedure.',
+          timestamp: new Date()
+        }]);
+        setInput('');
+        return;
+      }
+    }
 
     const newLog: LogEntry = {
       id: Date.now().toString(),
       type: 'command',
-      content: input,
+      content: command,
       timestamp: new Date(),
       agent: 'User'
     };
@@ -86,12 +107,16 @@ export const AgentCLI: React.FC = () => {
         <div className="flex items-center gap-2">
           <button 
             onClick={() => setLogs([])}
-            className="p-2 text-gray-500 hover:text-red-400 transition-colors"
+            disabled={isLockdown}
+            className={`p-2 text-gray-500 hover:text-red-400 transition-colors ${isLockdown ? 'opacity-50 cursor-not-allowed' : ''}`}
             title="Clear Logs"
           >
             <Trash2 className="w-4 h-4" />
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20">
+          <button 
+            disabled={isLockdown}
+            className={`flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20 ${isLockdown ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
             <Play className="w-3.5 h-3.5" />
             Force Sync
           </button>
@@ -141,17 +166,18 @@ export const AgentCLI: React.FC = () => {
       {/* Input Area */}
       <form 
         onSubmit={handleExecute}
-        className="p-4 bg-gray-900/50 border-t border-white/5 flex items-center gap-3"
+        className={`p-4 bg-gray-900/50 border-t border-white/5 flex items-center gap-3 ${isLockdown ? 'opacity-50' : ''}`}
       >
-        <div className="p-2 bg-white/5 rounded-lg text-blue-500">
+        <div className={`p-2 bg-white/5 rounded-lg ${isLockdown ? 'text-red-500' : 'text-blue-500'}`}>
           <Command className="w-4 h-4" />
         </div>
         <input 
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter command for agent cluster..."
-          className="flex-1 bg-transparent border-none text-sm text-white focus:outline-none placeholder:text-gray-700"
+          disabled={isLockdown}
+          placeholder={isLockdown ? "COMMANDS BLOCKED BY LOCKDOWN..." : "Enter command for agent cluster..."}
+          className={`flex-1 bg-transparent border-none text-sm ${isLockdown ? 'text-red-500 placeholder:text-red-900' : 'text-white placeholder:text-gray-700'} focus:outline-none`}
         />
         <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg border border-white/5">
           <Bot className="w-3.5 h-3.5 text-gray-500" />
