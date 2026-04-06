@@ -16,7 +16,7 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals';
 
 export type SystemMode = 'turbo' | 'eco' | 'stealth';
 
@@ -197,4 +197,35 @@ export interface AgentLog {
   timestamp: Date;
   agentId?: string;
   tabId?: string;
+}
+
+export interface SOP {
+  id: string;
+  title: string;
+  description: string;
+  department: string;
+  leadAgentId: string;
+  supportAgentIds: string[];
+  requiredExtensionIds: string[];
+  manifest: string; // Sovereign-Script (SS)
+  status: 'active' | 'draft' | 'archived';
+  lastExecuted?: Date;
+}
+
+export interface RatificationProposal {
+  id: string;
+  title: string;
+  description: string;
+  type: 'department' | 'governance' | 'infrastructure';
+  impact: {
+    tokenCost: string;
+    computeCost: string;
+    benefit: string;
+  };
+  status: 'pending' | 'ratified' | 'shelved' | 'vetoed';
+  shadowModeAvailable: boolean;
+  sunsetClause?: {
+    reviewIntervalDays: number;
+  };
+  createdAt: Date;
 }

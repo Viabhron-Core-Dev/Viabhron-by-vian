@@ -1,6 +1,9 @@
 # Viabhron: Modular AI Operating System (MAOS)
 
-Viabhron is a persistent, agentic workspace designed as a "Virtual Office" for AI agents. It follows a unique "Tent Deployment" model where users own their infrastructure and intelligence.
+> [!WARNING]
+> **IN DEVELOPMENT:** This project is currently in a conceptualization and development phase. It is a prototype designed to explore the "Business-in-a-Box" paradigm for autonomous AI orchestration.
+
+Viabhron is a persistent, agentic workspace designed as a **"Business-in-a-Box"** for AI agents. It follows a unique "Tent Deployment" model where users own their infrastructure and intelligence, transforming private cloud resources into a high-performance corporate kernel.
 
 ## 🏛️ Core Concepts
 
@@ -24,6 +27,12 @@ Integrated with **Microsoft's Agent Governance Toolkit**, ensuring runtime secur
 
 ### 5. The Tent (BYO Infrastructure)
 Users "pitch their own tent" by connecting their own **Firebase** and **Google Cloud** projects. This ensures total data sovereignty and privacy.
+
+### 6. Business-in-a-Box (The Corporate Kernel)
+Viabhron formalizes AI workflows into **Standard Operating Procedures (SOPs)**. It is designed to be a "Turnkey" solution where departments (Security, Creative, R&D) are pre-configured and ready to scale.
+
+### 7. Progressive Governance (Anti-Bloat)
+The OS expands only as you need it. Through **Modular Ratification**, the system proposes structural upgrades (like a Treasury or Judicial branch) which you can **Ratify, Shelve, or Veto** based on your current needs and budget.
 
 ## 🐳 The "Tent" (Cloud Docker Architecture)
 

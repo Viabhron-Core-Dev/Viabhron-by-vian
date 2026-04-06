@@ -20,7 +20,9 @@ import {
   Bug,
   Shield,
   Cpu,
-  Egg
+  Egg,
+  Book,
+  FileText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Extension, ExtensionCategory, SystemMode } from '../../types';
@@ -47,6 +49,8 @@ interface SidebarProps {
   onOpenSecurity: () => void;
   onOpenEfficiency: () => void;
   onOpenHatchery: () => void;
+  onOpenSOPs: () => void;
+  onOpenProposals: () => void;
   onOpenSettings: () => void;
   geminiApiKey?: string;
   systemMode: SystemMode;
@@ -145,7 +149,7 @@ const SidebarSection: React.FC<SectionProps> = ({ title, icon: Icon, items, isCo
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSentinel, onOpenSecurity, onOpenEfficiency, onOpenHatchery, onOpenSettings, geminiApiKey, systemMode }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extensions, onConnectCloud, isCollapsed, onToggle, onOpenStore, onOpenCanvas, onOpenArtifacts, onOpenMetrics, onOpenSimulation, onOpenGovernance, onOpenForge, onOpenAgentCLI, onOpenSentinel, onOpenSecurity, onOpenEfficiency, onOpenHatchery, onOpenSOPs, onOpenProposals, onOpenSettings, geminiApiKey, systemMode }) => {
   const [openSections, setOpenSections] = useState<Record<ExtensionCategory, boolean>>({
     connector: true,
     skill: true,
@@ -381,6 +385,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, login, logout, extension
                   <div className="flex-1 text-left">
                     <div className="text-[10px] font-bold text-white uppercase tracking-widest">The Hatchery</div>
                     <div className="text-[8px] text-orange-400/60 font-medium uppercase tracking-tighter">Agent Onboarding</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* SOP Registry Section */}
+              <div className="mb-4">
+                <button 
+                  onClick={onOpenSOPs}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all group"
+                >
+                  <Book className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] font-bold text-white uppercase tracking-widest">SOP Registry</div>
+                    <div className="text-[8px] text-amber-400/60 font-medium uppercase tracking-tighter">Corporate Kernel SOPs</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Ratification Section */}
+              <div className="mb-4">
+                <button 
+                  onClick={onOpenProposals}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/40 transition-all group"
+                >
+                  <FileText className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] font-bold text-white uppercase tracking-widest">Ratification Registry</div>
+                    <div className="text-[8px] text-blue-400/60 font-medium uppercase tracking-tighter">System Expansion Ballot</div>
                   </div>
                 </button>
               </div>

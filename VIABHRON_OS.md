@@ -1,6 +1,17 @@
 # 🛡️ VIABHRON OS: Master Blueprint
 
-**Product Vision:** A private, portable Multi-Agent Operating System (MAOS) that lives in the user's own cloud infrastructure. It is a "Folded Tent"—easy to pitch, impossible to seize, and 100% sovereign.
+**Product Vision:** A private, portable Multi-Agent Operating System (MAOS) that lives in the user's own cloud infrastructure. It is a **"Business-in-a-Box"**—a turnkey, sovereign corporate kernel that is easy to pitch, impossible to seize, and 100% private.
+
+---
+
+## 0. The Corporate Charter (The Prime Directive)
+The Charter is the "Constitutional Layer" of the OS. It defines the **Evolutionary Purpose** and the **Antifragile Growth** mindset that prevents the system from becoming a rigid bureaucracy.
+
+*   **Sovereignty First**: The OS exists to serve the Chairman's intent while maintaining absolute data privacy.
+*   **Evolutionary Purpose**: The system is not a machine, but a living organism. Agents are encouraged to "sense" the environment and propose optimizations to the **SOP Registry**.
+*   **Antifragile Growth**: The OS is designed to get stronger from stress. Every security violation or efficiency failure is a "Learning Event" that triggers a kernel patch.
+*   **Intrapreneurship Protocol**: The **Forge** acts as an incubator where agents can experiment with new **Sovereign-Scripts** without disrupting production workflows.
+*   **Chairman Oversight**: The OS is a **Constitutional Monarchy**. The agents manage the "Government" (The Business), but the **Chairman (The User)** holds the ultimate veto and vision.
 
 ---
 
@@ -24,6 +35,7 @@ A structured registry that manages the capabilities and power levels of the OS.
         *   **Gemini Live Pulse**: Real-time access to Gemini API documentation to prevent stale training data hallucinations.
         *   **Google Workspace Bridge**: CLI-based management of Docs, Sheets, and Drive data.
     *   **Modules**: Large-scale UI/UX features or complex workflows (e.g., Agent Terminal, Workflow Canvas).
+        *   **Sovereign Creative Studio**: A visual IDE for orchestrating multi-step creative workflows via a spatial canvas.
 *   **Substrate Protocols**:
     *   **OpenClaw**: A self-hosted agent framework for private, sovereign execution.
     *   **Model Context Protocol (MCP)**: Native support for the industry-standard tool-to-agent communication layer.
@@ -63,6 +75,7 @@ The "Active Intelligence" that performs work within the office, managed by a **M
     *   **Role**: Integrated into the office to bring in outside expertise, managed via the Universal AI Port.
 5.  **Specialized Roles (Optional)**
     *   **The Librarian**: An optional agent dedicated to monitoring Hugging Face and GitHub for new "Eggs" (models, tools, datasets) that align with the Chairman's interests and project needs.
+    *   **The Creative Director**: A specialized agent role for assembling and managing multi-step creative workflows on the Sovereign Creative Studio canvas.
 
 ### 1.4 Protected Divisions (The Machine Room)
 The "Machine Room" contains the core infrastructure controls, isolated from agent interference.
@@ -199,3 +212,33 @@ As the global AI ecosystem evolves toward multi-agent orchestration and autonomo
 *   **The Universal Data Bus**: A standardized serialization layer that allows different language blocks (Python, React, Rust) to communicate seamlessly without the AI managing data types.
 *   **Chairman-Readable Logic**: The syntax is designed to be human-auditable, allowing the Chairman to review the "Tactical Map" of an extension's logic before ratification.
 *   **Self-Healing Manifests**: The Architect Agent debugs extensions by analyzing the "Intent Manifest" rather than the underlying compiled code, allowing for rapid, error-free iteration.
+
+### 7.8 Standard Operating Procedures (SOPs): The Corporate Kernel
+*   **Departmental Blueprints**: Pre-defined combinations of Agents, Tools, and Connectors formalized as Standard Operating Procedures (SOPs).
+*   **The Recipe Book**: A central registry of SOPs that the Chairman can activate to "spawn" specialized departments (e.g., Security Red-Team, Content Production House).
+*   **Sovereign-Script Manifests**: Every SOP is defined by a Sovereign-Script (SS) manifest, ensuring that the "wiring" between agents and tools is secure, audit-able, and scale-able.
+*   **Dynamic SOPs (Kaizen)**: SOPs are versioned manifests. Agents are programmed to look for "Waste" and propose optimizations (SOP-v2) to the Chairman.
+*   **Departmental Isolation**: SOPs run in their own ephemeral containers, preventing cross-departmental data leaks unless explicitly bridged by the Cloud Manager.
+*   **Business-Grade Orchestration**: Moves the OS from "Individual Tasks" to "Corporate Capabilities," allowing the Chairman to manage the OS as a collection of high-performance departments.
+
+---
+
+## 8. Progressive Governance & Modular Ratification
+The OS is designed to grow with the user, starting as a "Lean Startup" and expanding into a "Digital State" only when necessary and explicitly ratified by the Chairman.
+
+### 8.1 The Expansion Roadmap (Seed-to-Empire)
+*   **Phase 1: The Seed (Lean Startup)**: Direct command, minimal overhead, no complex governance.
+*   **Phase 2: The Growth (Mid-Sized Firm)**: Activation of specialized divisions (Security, Efficiency) via user ratification.
+*   **Phase 3: The Sovereign (Digital State)**: Full separation of powers, Treasury management, and Intelligence recon.
+
+### 8.2 Modular Ratification Protocol
+*   **The Ratification Proposal**: When growth triggers are met, the Cloud Manager presents a proposal in the Sentinel Feed.
+*   **Impact Statements**: Every proposal includes a cost/benefit analysis (Token/Compute cost vs. Operational Benefit).
+*   **The Chairman's Ballot**: The user can **Ratify** (Activate), **Shelve** (Save), or **Veto** (Reject) any structural upgrade.
+*   **Shadow Mode**: Governance layers can be run in a trial mode (logging only) before full activation.
+*   **Sunset Clauses**: Optional expiration dates for structural upgrades to prevent long-term bureaucratic bloat.
+
+### 8.3 Corporate Culture Presets
+*   **The Garage (Minimalist)**: Zero bloat, maximum speed, direct command.
+*   **The Scale-Up (Balanced)**: Automated efficiency, cost tracking, and soft governance.
+*   **The Fortress (Max-Gov)**: Full constitutional oversight, hard security gates, and audit trails.

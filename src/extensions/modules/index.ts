@@ -1,4 +1,4 @@
-import { Terminal, Activity, Bug, Shield, Plus } from 'lucide-react';
+import { Terminal, Activity, Bug, Shield, Plus, Palette } from 'lucide-react';
 import { Extension } from '../../types';
 
 export const agentTerminalModule: Extension = { 
@@ -69,4 +69,14 @@ export const sentinelGuardianModule: Extension = {
   status: 'active', 
   source: 'inbuilt', 
   description: 'Antivirus and threat detection for the MAOS Office' 
+};
+
+export const sovereignCreativeStudioModule: Extension = { 
+  id: 't11', 
+  name: 'Sovereign Creative Studio', 
+  category: 'module', 
+  icon: Palette, 
+  status: 'active', 
+  source: 'inbuilt', 
+  description: 'Visual canvas for multi-step creative workflows and orchestration' 
 };

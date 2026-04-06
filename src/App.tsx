@@ -49,9 +49,11 @@ import { Sentinel } from './extensions/modules/Sentinel';
 import { SecurityDivision } from './components/MachineRoom/SecurityDivision';
 import { EfficiencyDivision } from './components/MachineRoom/EfficiencyDivision';
 import { Hatchery } from './components/Shell/Hatchery';
+import { SOPRegistry } from './components/Shell/SOPRegistry';
+import { RatificationRegistry } from './components/Shell/RatificationRegistry';
 import { Logo } from './components/Shell/Logo';
 
-import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry } from './types';
+import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal } from './types';
 import { infra } from './lib/infraManager';
 import { db } from './lib/firebase';
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from 'firebase/firestore';
@@ -60,6 +62,8 @@ import { AIService } from './lib/aiService';
 import { useAuth } from './hooks/useAuth';
 import { useTabs } from './hooks/useTabs';
 import { INITIAL_EXTENSIONS } from './constants/extensions';
+import { INITIAL_SOPS } from './constants/sops';
+import { INITIAL_PROPOSALS } from './constants/proposals';
 
 declare global {
   interface Window {
@@ -70,6 +74,8 @@ declare global {
 export default function App() {
   const { user, isAuthReady, login, logout } = useAuth();
   const [extensions, setExtensions] = useState<Extension[]>(INITIAL_EXTENSIONS);
+  const [sops, setSops] = useState<SOP[]>(INITIAL_SOPS);
+  const [proposals, setProposals] = useState<RatificationProposal[]>(INITIAL_PROPOSALS);
   
   const { 
     tabs, 
@@ -747,6 +753,30 @@ export default function App() {
     });
   };
 
+  const handleRatifyProposal = (id: string) => {
+    setProposals(prev => prev.map(p => p.id === id ? { ...p, status: 'ratified' } : p));
+    const prop = proposals.find(p => p.id === id);
+    addNotification({
+      title: 'Structural Upgrade Ratified',
+      message: `The ${prop?.title} has been officially ratified by the Chairman.`,
+      type: 'system'
+    });
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: `MODULAR RATIFICATION: ${prop?.title} activated.`,
+      metadata: { proposalId: id, impact: prop?.impact }
+    });
+  };
+
+  const handleShelveProposal = (id: string) => {
+    setProposals(prev => prev.map(p => p.id === id ? { ...p, status: 'shelved' } : p));
+  };
+
+  const handleVetoProposal = (id: string) => {
+    setProposals(prev => prev.map(p => p.id === id ? { ...p, status: 'vetoed' } : p));
+  };
+
   const handleToggleRule = (id: string) => {
     setSecurityRules(prev => prev.map(r => r.id === id ? { ...r, active: !r.active } : r));
   };
@@ -792,6 +822,8 @@ export default function App() {
           onOpenSecurity={() => onQuickAction(() => handleAddTab('security', 'Security Division'))}
           onOpenEfficiency={() => onQuickAction(() => handleAddTab('efficiency', 'Efficiency Patches'))}
           onOpenHatchery={() => onQuickAction(() => handleAddTab('hatchery', 'The Hatchery'))}
+          onOpenSOPs={() => onQuickAction(() => handleAddTab('sops', 'SOP Registry'))}
+          onOpenProposals={() => onQuickAction(() => handleAddTab('proposals', 'Ratification Registry'))}
           onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
           geminiApiKey={geminiApiKey}
           systemMode={systemMode}
@@ -939,6 +971,15 @@ export default function App() {
                       });
                     }}
                     logs={logs}
+                  />
+                ) : tab.type === 'sops' ? (
+                  <SOPRegistry sops={sops} onExecute={(sop) => console.log('Executing SOP:', sop)} />
+                ) : tab.type === 'proposals' ? (
+                  <RatificationRegistry 
+                    proposals={proposals.filter(p => p.status === 'pending' || p.status === 'shelved')} 
+                    onRatify={handleRatifyProposal}
+                    onShelve={handleShelveProposal}
+                    onVeto={handleVetoProposal}
                   />
                 ) : tab.type === 'security' ? (
                   <SecurityDivision 

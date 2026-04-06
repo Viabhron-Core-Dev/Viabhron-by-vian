@@ -1,6 +1,6 @@
 import { Extension } from '../types';
 import { githubConnector, linearConnector, cqConnector, huggingFaceConnector, gmailConnector, slackConnector, symphonyModule } from '../extensions/connectors';
-import { globalPulseSkill, docForgeSkill, artifactSandboxSkill, codeHunterSkill, socialSentinelSkill, githubSecurityAuditorSkill } from '../extensions/skills';
+import { globalPulseSkill, docForgeSkill, artifactSandboxSkill, codeHunterSkill, socialSentinelSkill, githubSecurityAuditorSkill, creativeDirectorSkill } from '../extensions/skills';
 import { headlessBrowserTool, pdfExtractorTool, codeParserTool } from '../extensions/tools';
 import { localDatabaseMcp, systemMetricsMcp, geminiApiDocsMcp, googleWorkspaceMcp, openClawProtocol } from '../extensions/mcp';
 import { 
@@ -10,7 +10,8 @@ import {
   governanceToolkitModule, 
   vibeForgeModule, 
   agentCliModule, 
-  sentinelGuardianModule 
+  sentinelGuardianModule,
+  sovereignCreativeStudioModule,
 } from '../extensions/modules';
 
 export const INITIAL_EXTENSIONS: Extension[] = [
@@ -29,6 +30,7 @@ export const INITIAL_EXTENSIONS: Extension[] = [
   codeHunterSkill,
   socialSentinelSkill,
   githubSecurityAuditorSkill,
+  creativeDirectorSkill,
   
   // Tools
   headlessBrowserTool,
@@ -50,5 +52,6 @@ export const INITIAL_EXTENSIONS: Extension[] = [
   vibeForgeModule,
   agentCliModule,
   sentinelGuardianModule,
+  sovereignCreativeStudioModule,
   symphonyModule,
 ];
