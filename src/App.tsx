@@ -51,9 +51,10 @@ import { EfficiencyDivision } from './components/MachineRoom/EfficiencyDivision'
 import { Hatchery } from './components/Shell/Hatchery';
 import { SOPRegistry } from './components/Shell/SOPRegistry';
 import { RatificationRegistry } from './components/Shell/RatificationRegistry';
+import { Onboarding } from './components/Shell/Onboarding';
 import { Logo } from './components/Shell/Logo';
 
-import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client } from './types';
+import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client, OnboardingState } from './types';
 import { infra } from './lib/infraManager';
 import { db } from './lib/firebase';
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from 'firebase/firestore';
@@ -80,6 +81,10 @@ export default function App() {
   const [proposals, setProposals] = useState<RatificationProposal[]>(INITIAL_PROPOSALS);
   const [miniApps, setMiniApps] = useState<MiniApp[]>(INITIAL_MINI_APPS);
   const [clients, setClients] = useState<Client[]>(INITIAL_CLIENTS);
+  const [onboarding, setOnboarding] = useState<OnboardingState>({
+    step: 'choice',
+    completed: false
+  });
   
   const { 
     tabs, 
@@ -835,6 +840,16 @@ export default function App() {
     action();
   };
 
+  const handleOnboardingComplete = (state: OnboardingState) => {
+    setOnboarding(state);
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: `Onboarding completed. Intent: ${state.intent}, Hardware: ${state.hardwareProfile}`,
+      metadata: state
+    });
+  };
+
   if (!isAuthReady) {
     return (
       <div className="h-screen bg-gray-950 flex items-center justify-center">
@@ -845,6 +860,18 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100 overflow-hidden font-sans">
+      <AnimatePresence>
+        {user && !onboarding.completed && (
+          <Onboarding 
+            onComplete={handleOnboardingComplete}
+            onSkipToChat={() => setOnboarding(prev => ({ ...prev, completed: true }))}
+            onSkipToSettings={() => {
+              setOnboarding(prev => ({ ...prev, completed: true }));
+              setActiveTabId('security'); // Jump to Machine Room
+            }}
+          />
+        )}
+      </AnimatePresence>
       <div className="flex-1 flex overflow-hidden relative">
         <Sidebar 
           user={user}

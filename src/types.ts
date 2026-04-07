@@ -251,3 +251,12 @@ export interface RatificationProposal {
   };
   createdAt: Date;
 }
+
+export type OnboardingStep = 'choice' | 'questionnaire' | 'roadmap' | 'completed';
+
+export interface OnboardingState {
+  step: OnboardingStep;
+  intent?: 'coding' | 'business' | 'research' | 'personal' | 'enterprise';
+  hardwareProfile?: 'low' | 'medium' | 'high';
+  completed: boolean;
+}

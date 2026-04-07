@@ -314,7 +314,18 @@ The OS is designed to grow with the user, starting as a "Lean Startup" and expan
     *   **Normal Code (TS/Node)**: Full-power TypeScript/Node.js development within isolated **Contractor Sandboxes** for complex, high-performance logic.
 *   **The Sovereign SDK**: A standardized kernel API that provides all apps (SS or Normal) with secure access to Identity, Storage (Soul Core), Intelligence (Agents), and the Sentinel Feed. It acts as the **Hardened Bridge** for Normal Code, ensuring sandbox isolation is never breached.
 
-### 9. Automation & Workflow Substrate
+### 9. Onboarding & Intent Mapping (Phase 0)
+*   **The First Setup Choice**: Immediately following the initial cloud connection, the Chairman is presented with a "Path Selection" gate to prevent functional blind spots:
+    *   **Direct Exploration**: Immediate access to the Resident AI for natural language interaction.
+    *   **Machine Room (Settings)**: Direct access to the configuration layers for manual OS tuning.
+    *   **Intent Questionnaire**: A guided session to map the user's "Business Plan" and usage profile.
+*   **The Intent Questionnaire**: A structured dialogue designed to identify the user's primary goals (e.g., Coding, Research, Enterprise Management, Personal Archive).
+    *   **Usage Profiling**: Asks about hardware availability (to advise on Hybrid/Local substrates) and required departmental wings.
+    *   **Tailored Advice**: The Resident AI generates a **"Sovereign Roadmap"**, recommending specific SOPs, Extensions, and Substrate configurations based on the user's intent.
+    *   **Blind Spot Mitigation**: Proactively informs the user about advanced features they might otherwise overlook (e.g., advising a developer to activate the **Adversarial Auditor** and **Web Recon Shield**).
+*   **Resident AI Oracle Mode**: The Resident AI is permanently primed with the **"Kernel Manifest"** (a complete map of the OS architecture). It acts as a 24/7 guide, capable of explaining any UI element, substrate protocol, or security rule upon request.
+
+### 10. Automation & Workflow Substrate
 *   **Ghost Implementation (Shadow Workflows)**: Agents perform complex tasks in isolated **Shadow Sandboxes**. The Chairman reviews a **"Unified Ghost Diff"** (Before vs. After) and clicks **"Merge to Reality"** to commit changes, ensuring absolute control over autonomous work.
 *   **Event-Driven Sovereignty**: A trigger-based orchestration layer that connects the OS to real-world "Business Pulses" (via the **Sovereign Intercom**). It enables proactive SOP activation based on external events while maintaining ratified guardrails.
 *   **Recursive Kaizen (Self-Optimizing SOPs)**: An efficiency division protocol where agents audit their own **Sovereign-Script (SS)** manifests for waste or hallucination risks, proposing **"Efficiency Patches"** to the Chairman for ratification.

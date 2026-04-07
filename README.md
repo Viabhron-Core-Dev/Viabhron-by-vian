@@ -1,7 +1,13 @@
 # Viabhron: Modular AI Operating System (MAOS)
 
-> [!WARNING]
-> **IN DEVELOPMENT:** This project is currently in a conceptualization and development phase. It is a prototype designed to explore the "Business-in-a-Box" paradigm for autonomous AI orchestration.
+> [!IMPORTANT]
+> **PROJECT STATUS: CONCEPTUAL PROTOTYPE**
+> This project is a **work in progress** and serves as a **conceptualization of an idea** rather than a production-ready application. 
+> 
+> **CREATOR CONTEXT:**
+> The creator of Viabhron is developing this system using **Google AI Studio** as a primary collaborator. The creator does not have a formal coding background or the high-end hardware typically required to test such a complex architecture beyond basic functional verification. 
+> 
+> As such, Viabhron is an exploration of the **"Business-in-a-Box"** paradigm—a vision of how autonomous AI orchestration and digital sovereignty could be structured in a future where users own their intelligence and infrastructure.
 
 Viabhron is a persistent, agentic workspace designed as a **"Business-in-a-Box"** for AI agents. It follows a unique "Tent Deployment" model where users own their infrastructure and intelligence, transforming private cloud resources into a high-performance corporate kernel.
 
