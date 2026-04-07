@@ -1,6 +1,6 @@
 import { LucideIcon } from "lucide-react";
 
-export type ExtensionCategory = 'connector' | 'skill' | 'tool' | 'mcp' | 'module';
+export type ExtensionCategory = 'connector' | 'skill' | 'tool' | 'mcp' | 'module' | 'gaming' | 'testing';
 
 export type AgentRole = 'head' | 'executive' | 'contractor' | 'consultant' | 'specialized';
 
@@ -16,7 +16,7 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing';
 
 export type SystemMode = 'turbo' | 'eco' | 'stealth';
 
@@ -197,6 +197,59 @@ export interface AgentLog {
   timestamp: Date;
   agentId?: string;
   tabId?: string;
+}
+
+export interface SovereignBlock {
+  id: string;
+  type: string; // e.g., 'UI:BentoGrid', 'Logic:DataCruncher'
+  config: Record<string, any>; // Malleable configuration
+  inputs?: string[]; // IDs of other blocks
+  malleable: boolean; // Explicitly marked as malleable
+}
+
+export interface SovereignManifest {
+  kind: 'SovereignApp' | 'SovereignSOP';
+  metadata: {
+    name: string;
+    version: string;
+    creator: string;
+    description: string;
+  };
+  intent: {
+    goal: string;
+    constraints: string[];
+  };
+  security: {
+    clearance: AgentRole;
+    network: string;
+    dataScoping: string;
+  };
+  blocks: SovereignBlock[];
+  ratification: {
+    required: boolean;
+    gate: 'Chairman_Approval' | 'Guardian_Audit' | 'Auto_Ratify';
+  };
+}
+
+export interface AuditReport {
+  id: string;
+  extensionId: string;
+  status: 'passed' | 'failed' | 'warning';
+  guardianScore: number;
+  consultantAScore: number;
+  consultantBScore: number;
+  vulnerabilities: string[];
+  timestamp: Date;
+}
+
+export interface HatcheryProject {
+  id: string;
+  name: string;
+  description: string;
+  status: 'ideation' | 'development' | 'auditing' | 'staging' | 'production';
+  manifest?: SovereignManifest;
+  auditReport?: AuditReport;
+  createdAt: Date;
 }
 
 export interface SOP {

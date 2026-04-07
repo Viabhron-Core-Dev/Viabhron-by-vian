@@ -17,19 +17,29 @@
 
 Viabhron is a persistent, agentic workspace designed as a **"Business-in-a-Box"** for AI agents. It follows a unique "Tent Deployment" model where users own their infrastructure and intelligence, transforming private cloud resources into a high-performance corporate kernel.
 
+### 🎯 The Sovereign Generalist
+Viabhron is designed to be your private "Everything App." Its mission is to perform almost any task other AIs can do—coding, research, creative work, and complex analysis—but with **100% Privacy** as the non-negotiable priority. You trade a fraction of "frontier performance" for total digital sovereignty.
+
 ## 🏛️ Core Concepts
 
 ### 1. The Office (The Engine)
 The backend runs on **Google Cloud Run**, providing a 24/7 environment for agents to operate. It is the "building" where your AI workers live and perform tasks even when you are away.
 *   **Substrate Optimization**: Powered by **TurboQuant**, implementing 3-bit KV cache compression for 8x faster attention scoring and 60% reduced memory footprint, enabling massive context windows on standard cloud hardware.
 
-### 2. The Desk (The Generative UI)
-The frontend is your "window" into the office. It is a **Generative UI** that can be reconfigured by the **Head Agent** via natural language prompts.
+### 2. The Desk (The Dual-State UI)
+The frontend is your "window" into the office. It is a **Generative UI** that "projects" the substrate's text-driven data into a functional, interactive workspace.
+*   **The Projection**: The UI is a designed experience, not just a report. It can be reconfigured by the **Head Agent** via natural language prompts.
 *   **Default Desk**: A mobile-first, circular-tabbed interface.
 *   **Liquid Layout**: The UI can morph between focus modes, split screens, and canvas-first views.
 *   **Core Skeleton**: The **Workflow Canvas** and **Sandbox** are built-in infrastructure, providing a visual orchestrator and a virtual computer environment for all agents.
 
-### 3. The Head Agent (The Architect)
+### 3. The Sovereign Hatchery (The Factory)
+The OS builds its own tools through an autonomous pipeline:
+*   **Dual-Track Development**: The system uses **Sovereign Script (SS)** for rapid, secure-by-default tools and **Normal Code (TS/Node)** for complex, high-performance logic. The Chairman always has the final choice.
+*   **The Adversarial Audit**: Every new extension is "Red-Teamed" by a triple-check gauntlet (Internal Guardian + 2 External AI Consultants) before installation.
+*   **The Staging Area**: New tools are first "Hatched" into a **Testing Extensions** sidebar section for isolated verification before being promoted to production.
+
+### 4. The Head Agent (The Architect)
 A central, persistent agent that manages the system.
 *   **Least Privilege**: The Head Agent manages workers and UI but *cannot* see sensitive API keys or passwords.
 *   **Orchestration**: It delegates complex tasks to specialized Sub-Agents and Minor Agents.
@@ -43,30 +53,46 @@ Users "pitch their own tent" by connecting their own **Firebase** and **Google C
 *   **Passkey Sovereignty**: Access to the OS kernel is secured via passwordless biometric passkeys or physical security keys, ensuring the "Business-in-a-Box" is impossible to seize even if cloud credentials are compromised.
 *   **Mobile Command**: The **Sovereign Intercom Bridge** provides 24/7 oversight of the OS via private Telegram/Discord channels, allowing for live ratification of agent decisions from any device.
 
-### 6. Business-in-a-Box (The Corporate Kernel)
+### 6. Gaming & Entertainment
+A dedicated **Gaming Focused Extensions** section allows the OS to host private, agent-built entertainment and simulations, built using the **Game Forge** substrate.
+
+### 7. Business-in-a-Box (The Corporate Kernel)
 Viabhron formalizes AI workflows into **Standard Operating Procedures (SOPs)**. It is designed to be a "Turnkey" solution where departments (Security, Creative, R&D) are pre-configured and ready to scale.
 *   **Intelligence Manufacturing**: The **Mistral Sovereign Forge** allows enterprises to build custom, "frontier-grade" AI models using proprietary data from the Neural Archive, ensuring 100% data sovereignty.
 *   **Physics-Aware Creative**: **Project VOID** enables professional-grade video object erasure and scene manipulation, respecting physical interactions like collisions and splashes.
 *   **Visual Intelligence**: **MolmoWeb** integration allows agents to navigate the web by "seeing" screenshots, ensuring 100% success on dynamic sites without leaking data to external scrapers.
 
-### 7. Mini-App Ecosystem (The Mobile Desk)
+### 7. The Viabhronic Loader (The Sovereign App Store)
+The **Viabhronic Loader** is a PWA-based "Super App" shell (inspired by the J2ME Loader) that acts as your private application launcher.
+*   **Local Presence**: Mini-apps are stored locally on your device via the PWA, ensuring they launch instantly and remain accessible even with intermittent connectivity.
+*   **Toggled Visibility**: You can "Toggle" apps on or off from the sidebar. Active apps appear as dedicated icons on your **Mobile Desk**, while inactive ones stay hidden to keep your workspace clean.
+*   **Gaming Hub**: The loader is designed to host lightweight, private games (built via the **Game Forge**) that respect your data sovereignty.
+
+### 8. Sovereign Gems (Private Intelligence)
+Viabhron allows you to build your own version of "Gems" or "GPTs"—specialized, private agentic applications.
+*   **Private Knowledge**: Unlike public AI platforms, **Sovereign Gems** use your private data from the **Filing Cabinet (Google Drive)** and never leak it to external training sets.
+*   **Custom Brains**: Assign different LLMs to different Gems based on the task (e.g., a "Coding Gem" using Gemini Pro vs. a "Diary Gem" using a local Gemma model).
+*   **Human-Direct vs. Agent-Direct**: Simple utilities are handled by **Mini-Apps** (Human-Direct), while complex, multi-step missions are delegated to **Gems** via the **Main Terminal** (Agent-Direct).
+
+### 9. Mini-App Ecosystem (The Mobile Desk)
 The **Sovereign PWA Launcher** provides a collection of lightweight "Mini-Apps" (Notes, Expenses, News) that can be toggled on/off from the sidebar.
 *   **Hybrid Sync**: Choose between **Local Mode** (private, offline-first) and **Sovereign Mode** (fully cloud-integrated) for each mini-app.
 *   **Extension-Ready**: Add new mini-apps as extensions to your OS, expanding your mobile capabilities without bloating the kernel.
 
-### 8. Multi-Terminal Substrate (The Sovereign Nexus)
+### 10. Multi-Terminal Substrate (The Sovereign Nexus)
 Viabhron is a **Headless OS**. You can accredit multiple "Terminals" (Desktop, CLI, Browser) to connect to your private cloud.
 *   **Accreditation Control**: Manage client access and permissions from the sidebar.
 *   **Unified Brain**: All clients share the same **Soul Core**, ensuring your intelligence and data are consistent across every device.
 
-### 9. Progressive Governance (Anti-Bloat)
+### 11. Progressive Governance (Anti-Bloat)
 The OS expands only as you need it. Through **Modular Ratification**, the system proposes structural upgrades (like a **Pooled Treasury**, Judicial branch, or the **TurboQuant Substrate Patch**) which you can **Ratify, Shelve, or Veto** based on your current needs and budget.
 *   **Fiscal Sovereignty**: The **Pooled Treasury Protocol** eliminates per-seat fees, replacing them with task-based intelligence funding (e.g., $0.25 flat-fee code reviews).
 
-### 9. Sovereign Script (SS): The Syntax of Intent
+### 12. Sovereign Script (SS): The Syntax of Intent
 Viabhron introduces **Sovereign Script (SS)**, a declarative, AI-native syntax designed to bridge the gap between human intent and machine execution. 
 *   **Manifest of Intent**: SS is not a traditional programming language; it is a "Manifest of Purpose." Instead of writing imperative logic, the AI defines goals (e.g., `Goal: Secure_Vault_Backup`) and constraints.
-*   **Hardened Blocks**: SS operates by orchestrating pre-validated, secure "Hardened Blocks" (like LEGO bricks) rather than generating raw, error-prone code. This eliminates the risk of AI "hallucinating" security vulnerabilities.
+*   **Malleable Blocks**: SS operates by orchestrating pre-validated, secure "Malleable Blocks" (like LEGO bricks that can change shape). These blocks are not fixed; they can be adapted, extended, and reconfigured by the Resident AI or the Chairman to fit the exact needs of a mission, while maintaining the underlying security "Hardening" that prevents hallucinations and vulnerabilities. **To maintain system integrity, these blocks are only modified when strictly necessary, avoiding any unnecessary changes to the core OS structure.**
+*   **Evolutionary Logging**: Every block's formation, structure, and performance is recorded in a "Black Box" registry, allowing the Sovereign Script substrate to learn and improve from every mission.
 *   **Human-Auditable**: The syntax is designed to be readable by the **Chairman**, allowing for a clear understanding of the "Tactical Map" of any autonomous workflow without requiring coding knowledge.
 *   **Self-Healing**: When a workflow fails, the Resident AI re-evaluates the "Intent Manifest" rather than debugging code, allowing the system to re-wire itself to achieve the goal.
 

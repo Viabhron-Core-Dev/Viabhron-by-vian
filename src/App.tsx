@@ -452,6 +452,27 @@ export default function App() {
     });
   }, [user]);
 
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    });
+  }, []);
+
+  const handleInstallPWA = async () => {
+    if (!deferredPrompt) {
+      alert("PWA installation is not available. It might already be installed or your browser doesn't support it.");
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+    }
+  };
+
   const handleAddAgent = async () => {
     if (!user || !newAgentName || !newAgentKey) return;
     const provider = AIService.recognizeProvider(newAgentKey);
@@ -1290,7 +1311,14 @@ export default function App() {
                         </div>
 
                         <div className="bg-gray-900 border border-white/5 rounded-2xl p-6 space-y-4 text-center">
-                          <p className="text-xs text-gray-500">Viabhron Shell v1.0.4-alpha</p>
+                          <p className="text-xs text-gray-500 mb-2">Viabhron Shell v1.0.4-alpha</p>
+                          <button 
+                            onClick={handleInstallPWA}
+                            className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                          >
+                            <Download className="w-4 h-4 text-blue-400" />
+                            Install Viabhronic Application (PWA)
+                          </button>
                         </div>
                       </div>
                     </div>

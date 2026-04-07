@@ -23,13 +23,21 @@ import {
   Egg,
   Book,
   FileText,
-  Layout
+  Layout,
+  FlaskConical,
+  Monitor,
+  Gamepad2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Extension, ExtensionCategory, SystemMode, MiniApp, Client, SecurityRule, EfficiencyPatch } from '../../types';
 import { User } from 'firebase/auth';
 import { Logo } from './Logo';
 import * as Icons from 'lucide-react';
+import { SidebarSection } from './Sidebar/SidebarSection';
+import { MachineRoomSection } from './Sidebar/MachineRoomSection';
+import { MiniAppSection } from './Sidebar/MiniAppSection';
+import { ClientSection } from './Sidebar/ClientSection';
+import { TestingSection } from './Sidebar/TestingSection';
 
 interface SidebarProps {
   user: User | null;
@@ -66,98 +74,6 @@ interface SidebarProps {
   systemMode: SystemMode;
 }
 
-interface SectionProps {
-  title: string;
-  icon: React.ElementType;
-  items: Extension[];
-  isCollapsed: boolean;
-  isOpen: boolean;
-  onToggle: () => void;
-  onAdd?: () => void;
-}
-
-const SidebarSection: React.FC<SectionProps> = ({ title, icon: Icon, items, isCollapsed, isOpen, onToggle, onAdd }) => {
-  if (isCollapsed) {
-    return (
-      <div className="flex flex-col items-center gap-4 py-2">
-        <div className="p-2 text-gray-500" title={title}>
-          <Icon className="w-5 h-5" />
-        </div>
-        {items.map(item => (
-          <div 
-            key={item.id} 
-            className="p-2 rounded-md hover:bg-white/5 text-gray-400 hover:text-white transition-all cursor-pointer"
-            title={item.name}
-          >
-            <item.icon className="w-4 h-4" />
-          </div>
-        ))}
-        {onAdd && (
-          <button 
-            onClick={onAdd}
-            className="p-2 rounded-md hover:bg-white/5 text-gray-500 hover:text-white transition-all cursor-pointer"
-            title={`Add ${title}`}
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-1">
-      <button 
-        onClick={onToggle}
-        className="w-full flex items-center justify-between px-2 py-2 text-gray-500 hover:text-gray-300 transition-colors group"
-      >
-        <div className="flex items-center gap-2">
-          <Icon className="w-3.5 h-3.5" />
-          <span className="text-[10px] font-bold uppercase tracking-widest">{title}</span>
-        </div>
-        {isOpen ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-      </button>
-      
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden space-y-0.5 ml-2 border-l border-white/5 pl-2"
-          >
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 cursor-pointer transition-all"
-              >
-                <div className={`p-1.5 rounded bg-gray-800/50 text-gray-400 group-hover:text-blue-400 transition-colors`}>
-                  <item.icon className="w-3.5 h-3.5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-medium text-gray-300 truncate">{item.name}</div>
-                  <div className="text-[9px] text-gray-500 flex items-center gap-1">
-                    <div className={`w-1 h-1 rounded-full ${item.status === 'active' ? 'bg-green-500' : 'bg-gray-600'}`} />
-                    {item.status}
-                  </div>
-                </div>
-              </div>
-            ))}
-            {onAdd && (
-              <button 
-                onClick={onAdd}
-                className="w-full flex items-center gap-2 px-2 py-1.5 text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
-              >
-                <Plus className="w-3 h-3" />
-                Add Extension
-              </button>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
   user, 
@@ -198,14 +114,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
     skill: false,
     tool: false,
     mcp: false,
+    module: false,
+    gaming: false,
+    testing: false,
     miniapp: false,
     client: false,
     security: false,
     efficiency: false,
-    testing: false
+    testing_debug: false
   });
 
-  const toggleSection = (category: ExtensionCategory | 'miniapp' | 'client' | 'security' | 'efficiency' | 'testing') => {
+  const toggleSection = (category: ExtensionCategory | 'miniapp' | 'client' | 'security' | 'efficiency' | 'testing_debug') => {
     setOpenSections(prev => ({ ...prev, [category]: !prev[category] }));
   };
 
@@ -213,6 +132,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const skills = extensions.filter(e => e.category === 'skill');
   const tools = extensions.filter(e => e.category === 'tool');
   const mcpServers = extensions.filter(e => e.category === 'mcp');
+  const gamingExtensions = extensions.filter(e => e.category === 'gaming');
+  const testingExtensions = extensions.filter(e => e.category === 'testing');
 
   return (
     <motion.div 
@@ -274,6 +195,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <Bot className="w-4 h-4 text-blue-400" />
                 <span>Agent Orchestrator</span>
+              </button>
+
+              {/* Main Terminal Placeholder */}
+              <button
+                onClick={() => {}}
+                className="w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white rounded-lg px-4 py-2 text-sm font-medium transition-all border border-white/10"
+                title="Main Terminal"
+              >
+                <TerminalIcon className="w-4 h-4 text-cyan-400" />
+                <span>Main Terminal</span>
               </button>
             </div>
 
@@ -390,136 +321,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </button>
               </div>
 
-              {/* Machine Room Header */}
-              <div className="px-3 py-2 mb-2">
-                <div className="text-[9px] font-bold text-gray-600 uppercase tracking-[0.3em]">Protected Divisions</div>
-              </div>
-
-              {/* Security Division Section */}
-              <div className="space-y-1">
-                <button 
-                  onClick={() => toggleSection('security')}
-                  className="w-full flex items-center justify-between px-2 py-2 text-gray-500 hover:text-gray-300 transition-colors group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Shield className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Security Division</span>
-                  </div>
-                  {openSections.security ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                </button>
-                
-                <AnimatePresence initial={false}>
-                  {openSections.security && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden space-y-0.5 ml-2 border-l border-white/5 pl-2"
-                    >
-                      {securityRules.map((rule) => (
-                        <div
-                          key={rule.id}
-                          className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all"
-                        >
-                          <div className={`p-1.5 rounded bg-gray-800/50 ${rule.active ? 'text-green-400' : 'text-gray-500'} transition-colors`}>
-                            <Shield className="w-3.5 h-3.5" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className={`text-xs font-medium truncate ${rule.active ? 'text-gray-200' : 'text-gray-500'}`}>
-                              {rule.name}
-                            </div>
-                            <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                              {rule.type} • {rule.urgencyLevel}
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => onToggleRule(rule.id)}
-                            className={`
-                              w-7 h-4 rounded-full relative transition-all duration-200
-                              ${rule.active ? 'bg-green-600' : 'bg-gray-700'}
-                            `}
-                          >
-                            <div className={`
-                              absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all duration-200
-                              ${rule.active ? 'left-3.5' : 'left-0.5'}
-                            `} />
-                          </button>
-                        </div>
-                      ))}
-                      <button 
-                        onClick={onOpenSecurity}
-                        className="w-full flex items-center gap-2 px-2 py-1.5 text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
-                      >
-                        <Plus className="w-3 h-3" />
-                        Manage Rules
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Efficiency Division Section */}
-              <div className="space-y-1">
-                <button 
-                  onClick={() => toggleSection('efficiency')}
-                  className="w-full flex items-center justify-between px-2 py-2 text-gray-500 hover:text-gray-300 transition-colors group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Cpu className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Efficiency Patches</span>
-                  </div>
-                  {openSections.efficiency ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                </button>
-                
-                <AnimatePresence initial={false}>
-                  {openSections.efficiency && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden space-y-0.5 ml-2 border-l border-white/5 pl-2"
-                    >
-                      {efficiencyPatches.map((patch) => (
-                        <div
-                          key={patch.id}
-                          className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all"
-                        >
-                          <div className={`p-1.5 rounded bg-gray-800/50 ${patch.applied ? 'text-blue-400' : 'text-gray-500'} transition-colors`}>
-                            <Cpu className="w-3.5 h-3.5" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className={`text-xs font-medium truncate ${patch.applied ? 'text-gray-200' : 'text-gray-500'}`}>
-                              {patch.name}
-                            </div>
-                            <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                              v{patch.version} • +{patch.metrics.speedBoost}%
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => onTogglePatch(patch.id)}
-                            className={`
-                              w-7 h-4 rounded-full relative transition-all duration-200
-                              ${patch.applied ? 'bg-blue-600' : 'bg-gray-700'}
-                            `}
-                          >
-                            <div className={`
-                              absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all duration-200
-                              ${patch.applied ? 'left-3.5' : 'left-0.5'}
-                            `} />
-                          </button>
-                        </div>
-                      ))}
-                      <button 
-                        onClick={onOpenEfficiency}
-                        className="w-full flex items-center gap-2 px-2 py-1.5 text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
-                      >
-                        <Plus className="w-3 h-3" />
-                        Optimize Engine
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <MachineRoomSection 
+                securityRules={securityRules}
+                efficiencyPatches={efficiencyPatches}
+                onToggleRule={onToggleRule}
+                onTogglePatch={onTogglePatch}
+                onOpenSecurity={onOpenSecurity}
+                onOpenEfficiency={onOpenEfficiency}
+                isOpenSecurity={openSections.security}
+                isOpenEfficiency={openSections.efficiency}
+                onToggleSecurity={() => toggleSection('security')}
+                onToggleEfficiency={() => toggleSection('efficiency')}
+              />
 
               {/* Hatchery Section */}
               <div className="mb-4">
@@ -600,378 +413,46 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onAdd={onOpenStore}
               />
 
-              {/* Mini-Apps Section */}
-              <div className="space-y-1">
-                <button 
-                  onClick={() => toggleSection('miniapp')}
-                  className="w-full flex items-center justify-between px-2 py-2 text-gray-500 hover:text-gray-300 transition-colors group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Layout className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Clients & Mini-Apps</span>
-                  </div>
-                  {openSections.miniapp ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                </button>
-                
-                <AnimatePresence initial={false}>
-                  {openSections.miniapp && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden space-y-0.5 ml-2 border-l border-white/5 pl-2"
-                    >
-                      {miniApps.map((app) => {
-                        const Icon = (Icons as any)[app.icon] || Layout;
-                        return (
-                          <div
-                            key={app.id}
-                            className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all"
-                          >
-                            <div className={`p-1.5 rounded bg-gray-800/50 ${app.enabled ? 'text-blue-400' : 'text-gray-500'} transition-colors`}>
-                              <Icon className="w-3.5 h-3.5" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className={`text-xs font-medium truncate ${app.enabled ? 'text-gray-200' : 'text-gray-500'}`}>
-                                {app.name}
-                              </div>
-                              <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                                {app.type} • {app.category}
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => onToggleMiniApp(app.id)}
-                              className={`
-                                w-7 h-4 rounded-full relative transition-all duration-200
-                                ${app.enabled ? 'bg-blue-600' : 'bg-gray-700'}
-                              `}
-                            >
-                              <div className={`
-                                absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all duration-200
-                                ${app.enabled ? 'left-3.5' : 'left-0.5'}
-                              `} />
-                            </button>
-                          </div>
-                        );
-                      })}
-                      <button 
-                        onClick={onOpenStore}
-                        className="w-full flex items-center gap-2 px-2 py-1.5 text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
-                      >
-                        <Plus className="w-3 h-3" />
-                        Add Mini-App
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <MiniAppSection 
+                miniApps={miniApps}
+                onToggleMiniApp={onToggleMiniApp}
+                onOpenStore={onOpenStore}
+                isOpen={openSections.miniapp}
+                onToggle={() => toggleSection('miniapp')}
+              />
 
-              {/* Sovereign Clients Section */}
-              <div className="space-y-1">
-                <button 
-                  onClick={() => toggleSection('client')}
-                  className="w-full flex items-center justify-between px-2 py-2 text-gray-500 hover:text-gray-300 transition-colors group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Icons.Monitor className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Sovereign Clients</span>
-                  </div>
-                  {openSections.client ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                </button>
-                
-                <AnimatePresence initial={false}>
-                  {openSections.client && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden space-y-0.5 ml-2 border-l border-white/5 pl-2"
-                    >
-                      {clients.map((client) => {
-                        const Icon = (Icons as any)[client.icon] || Icons.Monitor;
-                        return (
-                          <div
-                            key={client.id}
-                            className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all"
-                          >
-                            <div className={`p-1.5 rounded bg-gray-800/50 ${client.enabled ? 'text-purple-400' : 'text-gray-500'} transition-colors`}>
-                              <Icon className="w-3.5 h-3.5" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className={`text-xs font-medium truncate ${client.enabled ? 'text-gray-200' : 'text-gray-500'}`}>
-                                {client.name}
-                              </div>
-                              <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                                {client.type} • {client.accreditationId}
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => onToggleClient(client.id)}
-                              className={`
-                                w-7 h-4 rounded-full relative transition-all duration-200
-                                ${client.enabled ? 'bg-purple-600' : 'bg-gray-700'}
-                              `}
-                            >
-                              <div className={`
-                                absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all duration-200
-                                ${client.enabled ? 'left-3.5' : 'left-0.5'}
-                              `} />
-                            </button>
-                          </div>
-                        );
-                      })}
-                      <button 
-                        onClick={onOpenStore}
-                        className="w-full flex items-center gap-2 px-2 py-1.5 text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
-                      >
-                        <Plus className="w-3 h-3" />
-                        Accredit New Client
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <ClientSection 
+                clients={clients}
+                onToggleClient={onToggleClient}
+                onOpenStore={onOpenStore}
+                isOpen={openSections.client}
+                onToggle={() => toggleSection('client')}
+              />
 
-              {/* Testing & Debugging Section */}
-              <div className="space-y-1">
-                <button 
-                  onClick={() => toggleSection('testing')}
-                  className="w-full flex items-center justify-between px-2 py-2 text-gray-500 hover:text-gray-300 transition-colors group"
-                >
-                  <div className="flex items-center gap-2">
-                    <Icons.FlaskConical className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Testing & Debugging</span>
-                  </div>
-                  {openSections.testing ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-                </button>
-                
-                <AnimatePresence initial={false}>
-                  {openSections.testing && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden space-y-0.5 ml-2 border-l border-white/5 pl-2"
-                    >
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-orange-400">
-                          <Icons.Code className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Sovereign Script (SS)
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            DSL Testing • Debug Mode
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-orange-500/10 border border-orange-500/20 text-[8px] text-orange-400 font-bold uppercase">
-                          Beta
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-purple-400">
-                          <Icons.Monitor className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            SS-Studio (Forge IDE)
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Intent-Based IDE • Manifest Editor
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-[8px] text-purple-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-green-400">
-                          <Icons.Cpu className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Deep Execution
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Goose-Substrate • Shell Sandbox
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-green-500/10 border border-green-500/20 text-[8px] text-green-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-blue-400">
-                          <Icons.Database className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Advanced Memory
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Shannon-Graph • Neural Archive
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[8px] text-blue-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-yellow-400">
-                          <Icons.Briefcase className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Global Skill Pack
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Hardened Blocks • Agent Skills
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-yellow-500/10 border border-yellow-500/20 text-[8px] text-yellow-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-red-400">
-                          <Icons.ShieldAlert className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Adversarial Auditor
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Red-Team Agent • Security Auditor
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-[8px] text-red-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-emerald-400">
-                          <Icons.Globe className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Web Recon Shield
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Anti-Cloaking • Zero-Trust Scraping
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[8px] text-emerald-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-indigo-400">
-                          <Icons.Bot className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Advanced OpenClaw
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            SS-Manifest • Visual Perception
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-[8px] text-indigo-400 font-bold uppercase">
-                          Optional
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-pink-400">
-                          <Icons.Egg className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            App Hatchery
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Private Marketplace • SS/Normal
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-pink-500/10 border border-pink-500/20 text-[8px] text-pink-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-cyan-400">
-                          <Icons.Puzzle className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Sovereign SDK
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Kernel API • Unified Backend
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-[8px] text-cyan-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-orange-400">
-                          <Icons.Layout className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Client Manager
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Client-as-App • Scoped Access
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-orange-500/10 border border-orange-500/20 text-[8px] text-orange-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-purple-400">
-                          <Icons.Zap className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Ghost Implementation
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Shadow Sandbox • Merge-to-Reality
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-[8px] text-purple-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <div className="group flex items-center gap-3 px-2 py-2 rounded-md hover:bg-white/5 transition-all">
-                        <div className="p-1.5 rounded bg-gray-800/50 text-blue-400">
-                          <Icons.Activity className="w-3.5 h-3.5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium truncate text-gray-200">
-                            Workflow Chronos
-                          </div>
-                          <div className="text-[8px] text-gray-600 uppercase tracking-tighter">
-                            Time-Travel Debug • Replay
-                          </div>
-                        </div>
-                        <div className="px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[8px] text-blue-400 font-bold uppercase">
-                          Alpha
-                        </div>
-                      </div>
-                      <button 
-                        onClick={onOpenForge}
-                        className="w-full flex items-center gap-2 px-2 py-1.5 text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
-                      >
-                        <Plus className="w-3 h-3" />
-                        Open Script Runner
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <SidebarSection 
+                title="Gaming Focused Extensions" 
+                icon={Gamepad2} 
+                items={gamingExtensions} 
+                isCollapsed={false} 
+                isOpen={openSections.gaming}
+                onToggle={() => toggleSection('gaming')}
+                onAdd={onOpenStore}
+              />
+
+              <SidebarSection 
+                title="Testing Extensions" 
+                icon={Egg} 
+                items={testingExtensions} 
+                isCollapsed={false} 
+                isOpen={openSections.testing}
+                onToggle={() => toggleSection('testing')}
+                onAdd={onOpenStore}
+              />
+
+              <TestingSection 
+                isOpen={openSections.testing_debug}
+                onToggle={() => toggleSection('testing_debug')}
+              />
             </div>
 
             {/* Footer */}
