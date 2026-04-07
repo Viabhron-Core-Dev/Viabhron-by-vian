@@ -26,7 +26,8 @@ import {
   Layout,
   FlaskConical,
   Monitor,
-  Gamepad2
+  Gamepad2,
+  Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Extension, ExtensionCategory, SystemMode, MiniApp, Client, SecurityRule, EfficiencyPatch } from '../../types';
@@ -70,6 +71,8 @@ interface SidebarProps {
   onOpenSOPs: () => void;
   onOpenProposals: () => void;
   onOpenSettings: () => void;
+  onOpenVhatsAppening: () => void;
+  onOpenPlaceholderClient: () => void;
   geminiApiKey?: string;
   systemMode: SystemMode;
 }
@@ -106,6 +109,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenSOPs, 
   onOpenProposals, 
   onOpenSettings, 
+  onOpenVhatsAppening,
+  onOpenPlaceholderClient,
   geminiApiKey, 
   systemMode 
 }) => {
@@ -205,6 +210,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <TerminalIcon className="w-4 h-4 text-cyan-400" />
                 <span>Main Terminal</span>
+              </button>
+
+              {/* Celestial Client: VhatsAppeningAi */}
+              <button
+                onClick={() => onOpenVhatsAppening()}
+                className="w-full flex items-center justify-center gap-2 bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-400 rounded-lg px-4 py-2 text-sm font-bold transition-all border border-indigo-500/20 shadow-lg shadow-indigo-500/5"
+                title="VhatsAppeningAi"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>VhatsAppeningAi</span>
+              </button>
+
+              {/* Future Flagship Client Placeholder */}
+              <button
+                onClick={() => onOpenPlaceholderClient()}
+                className="w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-gray-500 rounded-lg px-4 py-2 text-sm font-medium transition-all border border-white/5 opacity-60"
+                title="Flagship Client (Coming Soon)"
+              >
+                <Monitor className="w-4 h-4" />
+                <span>Flagship Client</span>
               </button>
             </div>
 

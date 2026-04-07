@@ -25,7 +25,9 @@ import {
   HardDrive,
   Server,
   Activity,
-  Database
+  Database,
+  Monitor,
+  Sparkles
 } from 'lucide-react';
 
 import { Tabs } from './components/Shell/Tabs';
@@ -53,6 +55,7 @@ import { SOPRegistry } from './components/Shell/SOPRegistry';
 import { RatificationRegistry } from './components/Shell/RatificationRegistry';
 import { Onboarding } from './components/Shell/Onboarding';
 import { Logo } from './components/Shell/Logo';
+import { CelestialClient } from "./components/Celestial/CelestialClient";
 
 import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client, OnboardingState } from './types';
 import { infra } from './lib/infraManager';
@@ -925,6 +928,8 @@ export default function App() {
           onOpenSOPs={() => onQuickAction(() => handleAddTab('sops', 'SOP Registry'))}
           onOpenProposals={() => onQuickAction(() => handleAddTab('proposals', 'Ratification Registry'))}
           onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
+          onOpenVhatsAppening={() => onQuickAction(() => handleAddTab('vhatsappening', 'VhatsAppeningAi'))}
+          onOpenPlaceholderClient={() => onQuickAction(() => handleAddTab('placeholder_client', 'Flagship Client'))}
           geminiApiKey={geminiApiKey}
           systemMode={systemMode}
         />
@@ -1321,6 +1326,19 @@ export default function App() {
                           </button>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                ) : tab.type === 'vhatsappening' ? (
+                  <CelestialClient />
+                ) : tab.type === 'placeholder_client' ? (
+                  <div className="h-full bg-gray-950 flex flex-col items-center justify-center space-y-4 p-8 text-center">
+                    <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center">
+                      <Monitor className="w-10 h-10 text-gray-600" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white uppercase tracking-tighter">Flagship Client</h2>
+                    <p className="text-gray-500 max-w-xs">This slot is reserved for the next major application in the Viabhron ecosystem.</p>
+                    <div className="px-4 py-1.5 rounded-full bg-blue-600/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold uppercase tracking-widest">
+                      Status: Reserved
                     </div>
                   </div>
                 ) : null}

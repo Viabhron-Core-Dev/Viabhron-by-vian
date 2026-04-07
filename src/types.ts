@@ -16,9 +16,228 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client';
 
 export type SystemMode = 'turbo' | 'eco' | 'stealth';
+
+// --- Celestial Specific Types ---
+export type CelestialViewType = "home" | "chat" | "settings" | "auth" | "agent-detail" | "channel-detail" | "canopy" | "contacts" | "select-contact" | "cloud-setup" | "backup" | "marketplace" | "omega-config" | "workflow-canvas" | "debate-chat";
+
+export interface CelestialNode {
+  id: string;
+  name: string;
+  type: "star" | "local" | "cloud" | "agent" | "llm" | "council" | "gmail";
+  provider: "local" | "google" | "github" | "codeberg" | "omega" | "nexus" | "perplexity" | "slack" | "discord" | "notion" | "trello";
+  model?: string;
+  logo?: string;
+  icon?: string;
+  desc?: string;
+  relayType?: "firebase" | "telegram" | "gmail";
+  relayId?: string;
+  secretKey?: string;
+  relayProfileId?: string;
+  gitProfileId?: string;
+  councilNodes?: string[];
+  chairNodeId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  baseUrl?: string;
+  apiKeyEncrypted?: string;
+  skillIds?: string[];
+  mcpServerIds?: string[];
+}
+
+export interface CelestialChat {
+  id: string;
+  nodeId?: string;
+  name?: string;
+  type: "direct" | "council" | "individual" | "workflow" | "debate" | "agent" | "gmail";
+  messages: Message[];
+  updatedAt: number | string;
+  lastMessage?: string;
+  nodeIds?: string[]; // For councils
+  dirty?: boolean;
+  relayType?: "firebase" | "telegram" | "gmail";
+  chairNodeId?: string;
+  workflowId?: string;
+  debateId?: string;
+}
+
+export interface RelayProfile {
+  id: string;
+  name: string;
+  type: "telegram" | "gmail" | "firebase";
+  token?: string;
+  user?: string;
+  password?: string;
+  createdAt: string;
+}
+
+export interface GitProfile {
+  id: string;
+  name: string;
+  forge: "github" | "codeberg";
+  type?: string;
+  owner?: string;
+  token: string;
+  user: string;
+  createdAt: string;
+}
+
+export interface NexusSeed {
+  id: string;
+  authorId: string;
+  authorName: string;
+  authorPhoto?: string;
+  title: string;
+  desc?: string;
+  content: string;
+  tags?: string[];
+  forks?: number;
+  createdAt: string;
+  nodeId?: string;
+}
+
+export interface NexusFork {
+  id: string;
+  seedId: string;
+  authorId: string;
+  authorName: string;
+  content: string;
+  createdAt: string;
+  parentForkId?: string;
+  title?: string;
+}
+
+export interface NexusComment {
+  id: string;
+  targetId: string;
+  authorId: string;
+  authorName: string;
+  content: string;
+  createdAt: string;
+  nodeId?: string;
+}
+
+export interface OfficialUpdate {
+  id: string;
+  title: string;
+  brief: string;
+  content: string;
+  type: "models" | "offers" | "prompts" | "official" | "ai_tech";
+  priority: number;
+  createdAt: string;
+}
+
+export interface Skill {
+  id: string;
+  name: string;
+  description: string;
+  type: "builtin" | "recipe" | "action" | "connector";
+  provider: string;
+  isEnabled: boolean;
+  createdAt: string;
+  recipe?: any;
+  action?: any;
+  status?: string;
+}
+
+export interface MCPServer {
+  id: string;
+  name: string;
+  url: string;
+  createdAt: string;
+  status?: string;
+  isEnabled?: boolean;
+}
+
+export interface AIChannel {
+  id: string;
+  name: string;
+  provider: string;
+  logo: string;
+  followers: string;
+  latest: string;
+  description: string;
+  models: {
+    id: string;
+    name: string;
+    date: string;
+    desc: string;
+    type: string;
+  }[];
+}
+
+export interface WorkflowNode {
+  id: string;
+  type: "agent" | "mcp" | "skill" | "connector" | "input" | "output" | "trigger" | "logic" | "data" | "prompt";
+  name: string;
+  x: number;
+  y: number;
+  data?: any;
+}
+
+export interface WorkflowConnection {
+  id: string;
+  fromNodeId: string;
+  toNodeId: string;
+  fromPin: string;
+  toPin: string;
+}
+
+export interface Workflow {
+  id: string;
+  name: string;
+  nodes: WorkflowNode[];
+  connections: WorkflowConnection[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Debate {
+  id: string;
+  name: string;
+  agentIds: string[];
+  messages: Message[];
+  status: "active" | "resolved";
+  createdAt: string;
+  updatedAt: string;
+  consensus?: string;
+}
+
+export interface Job {
+  id: string;
+  nodeId: string;
+  content: string;
+  status: "pending" | "completed" | "error";
+  createdAt: string;
+  error?: string;
+  chatId?: string;
+}
+
+export interface GitForgeConfig {
+  githubToken?: string;
+  githubUser?: string;
+  codebergToken?: string;
+  codebergUser?: string;
+}
+
+export interface OmegaConfig {
+  apiKey?: string;
+  personality?: string;
+  coreKnowledge?: string;
+  isGlobalAssistantEnabled: boolean;
+  model: string;
+}
+
+export interface AppSettings {
+  globalGeminiKey?: string;
+  isEncryptionEnabled: boolean;
+  activeFilters: string[];
+  relayNodes: string[];
+  theme: "light" | "dark" | "celestial";
+  lastBackupAt?: string;
+}
 
 export interface SecurityRule {
   id: string;
@@ -112,7 +331,24 @@ export interface Message {
   id: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
-  timestamp: Date;
+  timestamp: Date | string;
+  status?: "sent" | "delivered" | "pending" | "error" | "completed";
+  jobId?: string;
+  nodeId?: string;
+  type?: "text" | "email-metadata";
+  metadata?: {
+    from?: string;
+    subject?: string;
+    date?: string;
+    emailId?: string;
+    snippet?: string;
+    sender?: string;
+  };
+  emailMetadata?: {
+    from: string;
+    subject: string;
+    date: string;
+  };
   toolCalls?: {
     name: string;
     args: any;

@@ -151,6 +151,13 @@ The UI is a **Thin Client / Remote Screen**—a window into the Virtual Computer
 *   **Instruction Hierarchy (OpenAI IH-Challenge)**: The Architect is programmed to prioritize the Chairman's commands as "System Level" and ignore conflicting "Lower-Tier" requests from sub-agents.
 *   **The Dashboard**: The UI is for the Chairman to look at **Artifacts** (documents/results) and grant **Permissions**. [DONE]
 *   **The Machine Room UI**: A visually distinct "Industrial" interface (Terminal-Core aesthetic) for Security and Efficiency controls. [DONE]
+*   **The Celestial Client (VhatsAppeningAi)**: A high-performance, mobile-first "AI Orchestration" interface inspired by modern messengers (WhatsApp). It serves as the primary consumer-facing UI for the OS, acting as the flagship "Application" layer. [DONE]
+    *   **Celestial Dark Theme**: A premium, glassmorphic UI designed for high-density information and fluid motion.
+    *   **Star Nodes (Contacts)**: Agents are presented as "Contacts" in a messenger, enabling direct messaging and "Council" collaboration.
+    *   **The Omega Assistant (FAB)**: A persistent, high-level AI assistant accessible via a specialized Floating Action Button (FAB) for system-wide control.
+    *   **Celestial Marketplace**: A user-friendly front-end for the **Hatchery** and **SOP Registry**, allowing one-tap "Hatching" of new intelligence.
+    *   **Local-First Substrate**: Leverages **Dexie.js** for instant local data persistence, synced to the **Soul Core** (Firestore) for cross-device consistency.
+*   **Flagship Client Placeholder**: A reserved slot in the sidebar for the next major application in the Viabhron ecosystem, ensuring the OS remains a multi-client platform. [DONE]
 *   **The Sentinel Feed**: A central notification hub for security logs, policy violations, and system-level "Patch" notifications. [DONE]
     *   **Background Task Monitoring**: Real-time tracking of long-running agent operations (e.g., adversarial reviews, model downloads).
     *   **External Pulses**: Logging of incoming data from accredited external agents via the **Secure Intercom (Webhook Receiver)**.
