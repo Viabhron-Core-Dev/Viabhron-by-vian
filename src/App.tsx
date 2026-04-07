@@ -53,7 +53,7 @@ import { SOPRegistry } from './components/Shell/SOPRegistry';
 import { RatificationRegistry } from './components/Shell/RatificationRegistry';
 import { Logo } from './components/Shell/Logo';
 
-import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal } from './types';
+import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client } from './types';
 import { infra } from './lib/infraManager';
 import { db } from './lib/firebase';
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from 'firebase/firestore';
@@ -64,6 +64,8 @@ import { useTabs } from './hooks/useTabs';
 import { INITIAL_EXTENSIONS } from './constants/extensions';
 import { INITIAL_SOPS } from './constants/sops';
 import { INITIAL_PROPOSALS } from './constants/proposals';
+import { INITIAL_MINI_APPS } from './constants/miniapps';
+import { INITIAL_CLIENTS } from './constants/clients';
 
 declare global {
   interface Window {
@@ -76,6 +78,8 @@ export default function App() {
   const [extensions, setExtensions] = useState<Extension[]>(INITIAL_EXTENSIONS);
   const [sops, setSops] = useState<SOP[]>(INITIAL_SOPS);
   const [proposals, setProposals] = useState<RatificationProposal[]>(INITIAL_PROPOSALS);
+  const [miniApps, setMiniApps] = useState<MiniApp[]>(INITIAL_MINI_APPS);
+  const [clients, setClients] = useState<Client[]>(INITIAL_CLIENTS);
   
   const { 
     tabs, 
@@ -777,8 +781,48 @@ export default function App() {
     setProposals(prev => prev.map(p => p.id === id ? { ...p, status: 'vetoed' } : p));
   };
 
+  const handleToggleMiniApp = (id: string) => {
+    setMiniApps(prev => prev.map(app => app.id === id ? { ...app, enabled: !app.enabled, status: !app.enabled ? 'active' : 'inactive' } : app));
+    const app = miniApps.find(a => a.id === id);
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: `Mini-App "${app?.name}" ${!app?.enabled ? 'enabled' : 'disabled'}.`,
+      metadata: { appId: id, enabled: !app?.enabled }
+    });
+  };
+
+  const handleToggleClient = (id: string) => {
+    setClients(prev => prev.map(client => client.id === id ? { ...client, enabled: !client.enabled, status: !client.enabled ? 'active' : 'inactive' } : client));
+    const client = clients.find(c => c.id === id);
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: `Sovereign Client "${client?.name}" ${!client?.enabled ? 'enabled' : 'disabled'}.`,
+      metadata: { clientId: id, enabled: !client?.enabled }
+    });
+  };
+
   const handleToggleRule = (id: string) => {
     setSecurityRules(prev => prev.map(r => r.id === id ? { ...r, active: !r.active } : r));
+    const rule = securityRules.find(r => r.id === id);
+    addLog({
+      level: 'INFO',
+      source: 'Security',
+      message: `Security Rule "${rule?.name}" ${!rule?.active ? 'activated' : 'deactivated'}.`,
+      metadata: { ruleId: id, active: !rule?.active }
+    });
+  };
+
+  const handleTogglePatch = (id: string) => {
+    setEfficiencyPatches(prev => prev.map(p => p.id === id ? { ...p, applied: !p.applied } : p));
+    const patch = efficiencyPatches.find(p => p.id === id);
+    addLog({
+      level: 'INFO',
+      source: 'Efficiency',
+      message: `Efficiency Patch "${patch?.name}" ${!patch?.applied ? 'applied' : 'removed'}.`,
+      metadata: { patchId: id, applied: !patch?.applied }
+    });
   };
 
   const handleDeleteRule = (id: string) => {
@@ -807,6 +851,14 @@ export default function App() {
           login={login}
           logout={logout}
           extensions={extensions} 
+          miniApps={miniApps}
+          clients={clients}
+          securityRules={securityRules}
+          efficiencyPatches={efficiencyPatches}
+          onToggleMiniApp={handleToggleMiniApp}
+          onToggleClient={handleToggleClient}
+          onToggleRule={handleToggleRule}
+          onTogglePatch={handleTogglePatch}
           onConnectCloud={handleConnectCloud} 
           isCollapsed={isSidebarCollapsed}
           onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}

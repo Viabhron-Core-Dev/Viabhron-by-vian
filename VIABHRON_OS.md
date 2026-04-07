@@ -8,6 +8,7 @@
 The Charter is the "Constitutional Layer" of the OS. It defines the **Evolutionary Purpose** and the **Antifragile Growth** mindset that prevents the system from becoming a rigid bureaucracy.
 
 *   **Sovereignty First**: The OS exists to serve the Chairman's intent while maintaining absolute data privacy.
+*   **Passkey Sovereignty**: Access to the OS kernel is secured via passwordless biometric passkeys or physical security keys, ensuring the "Business-in-a-Box" is impossible to seize even if cloud credentials are compromised.
 *   **Evolutionary Purpose**: The system is not a machine, but a living organism. Agents are encouraged to "sense" the environment and propose optimizations to the **SOP Registry**.
 *   **Antifragile Growth**: The OS is designed to get stronger from stress. Every security violation or efficiency failure is a "Learning Event" that triggers a kernel patch.
 *   **Intrapreneurship Protocol**: The **Forge** acts as an incubator where agents can experiment with new **Sovereign-Scripts** without disrupting production workflows.
@@ -36,15 +37,20 @@ A structured registry that manages the capabilities and power levels of the OS.
         *   **Google Workspace Bridge**: CLI-based management of Docs, Sheets, and Drive data.
     *   **Modules**: Large-scale UI/UX features or complex workflows (e.g., Agent Terminal, Workflow Canvas).
         *   **Sovereign Creative Studio**: A visual IDE for orchestrating multi-step creative workflows via a spatial canvas.
+            *   **Project VOID Integration**: Physics-aware video object erasure and scene manipulation, enabling professional-grade video editing within the private substrate.
 *   **Substrate Protocols**:
     *   **OpenClaw**: A self-hosted agent framework for private, sovereign execution.
     *   **Model Context Protocol (MCP)**: Native support for the industry-standard tool-to-agent communication layer.
+    *   **Visual Web Navigation (MolmoWeb)**: A "Seeing" agent protocol that navigates websites via screenshots, enabling interaction with complex, dynamic, or obfuscated web apps without parsing HTML.
 *   **Universal AI Port**: Support for importing external capabilities (Claude Skills, MCP Servers, Hugging Face Models/Spaces) into the private substrate.
     *   **External Skills**: Default to "Artisanal Wrapper" (Head Agent prompt overlay) with optional "Raw Mode."
     *   **MCP Servers**: Default to "User-Brought" (External URL) with "Sovereign Bridge" (WebSocket/HTTPS proxying).
     *   **Hugging Face Hub**: Default source for open-source models, datasets, and Spaces. Supports both Public (no key) and Private (User Token) access.
     *   **Agent "Hatching" Protocol (Internal Staff)**: For agents with source code (GitHub/Source). Cloned into a Forge Sandbox, containerized on Cloud Run, and wrapped in a Sovereign prompt. 100% private.
     *   **Agent "Accreditation" Protocol (External Consultants)**: For cloud-hosted agents (OpenAI, Genspark, Mistral, Claude). Established via an **Ambassador Bridge** (API/OAuth). Reports via a **Secure Intercom** (Webhook Receiver).
+    *   **Sovereign Intercom Bridge (Mobile Command)**: A private, encrypted webhook receiver that bridges the OS to Telegram or Discord. Enables the Chairman to oversee live **Forge** sessions and issue ratified commands from any mobile device.
+    *   **Mistral Sovereign Forge (Intelligence Manufacturing)**: A specialized extension for fine-tuning frontier-grade models using proprietary data from the Neural Archive. It allows the OS to "Forge" custom brains that are 100% private and Charter-compliant.
+    *   **Substrate Deployment (Helm/Gradle)**: Advanced deployment capabilities for "Hatching" enterprise-grade software. Supports Helm Chart registries and Java Gradle dependency scanning for secure, fleet-scale infrastructure management.
     *   **External Intelligence Plugins (Consultants)**:
         *   **Codex Integration**: Integrates OpenAI's Codex via the `Codex-plugin-cc` model.
         *   **Consultant Role**: Codex acts as a Level 4 Consultant for adversarial reviews and correctness checks.
@@ -84,6 +90,7 @@ The "Machine Room" contains the core infrastructure controls, isolated from agen
     *   **Agent Access**: **Read-Only**. Agents can follow rules but cannot modify them.
     *   **Natural Language Rule Builder**: The Chairman can describe rules in plain English; the OS translates them into hard technical blocks.
     *   **Emergency Lockdown (The Red Switch)**: A high-security protocol to instantly terminate all agent containers and revoke API keys.
+    *   **Device Intelligence (Fingerprint MCP)**: A hardware-level security layer that verifies the Chairman's device identity. It prevents fraud and session hijacking by ensuring sensitive agent actions are only triggered from "Ratified Hardware."
 *   **Efficiency Patches Division**:
     *   **Role**: Manages improvements to the Engine (Orchestration) and Skeleton (Infrastructure).
     *   **Agent Access**: **Read-Only**.
@@ -92,6 +99,12 @@ The "Machine Room" contains the core infrastructure controls, isolated from agen
         *   **Turbo Mode**: Maximum speed and reasoning depth.
         *   **Eco Mode**: Maximum cost-efficiency.
         *   **Stealth Mode**: Minimal footprint and maximum privacy.
+    *   **TurboQuant Substrate Patch**: A high-performance optimization layer that implements 3-bit KV cache compression. It provides 8x faster attention scoring and 60% reduced memory footprint without accuracy loss, enabling massive context windows on standard hardware.
+*   **Fiscal Division (The Treasury)**:
+    *   **Role**: Manages the "Pooled Credit" allocation and task-based intelligence funding.
+    *   **Pooled Treasury Protocol**: Replaces per-agent/per-seat fees with a unified credit pool. Credits are dynamically allocated to agents based on task priority and complexity.
+    *   **Task-Based Intelligence**: Enables flat-fee agentic services (e.g., $0.25 Code Reviews, $0.10 Security Scans) to provide predictable operational costs.
+    *   **Chairman Oversight**: The Chairman sets the "Burn Rate" and "Credit Ceiling" to prevent runaway costs.
 
 ---
 
@@ -102,6 +115,7 @@ The "Field" where the tent is pitched, using the user's **BYO Identity**.
 *   **Brain (Cloud Run)**: The scale-to-zero compute engine where the Resident Architect and Staff live.
 *   **Filing Cabinet (Google Drive)**: The Sovereign Vault for long-term memory, logs, and project files. Enhanced by the **Google Workspace CLI** for active data management across the Workspace suite.
 *   **Sovereign Bridge (MCP)**: Secure proxying for MCP servers. Supports Cloud-to-Cloud (HTTPS) and Local Bridge (WebSocket to user's physical machine).
+*   **Sovereign API Gateway (Multi-Client)**: A secure, authenticated "Front Door" for any accredited app or device. It manages client sessions and ensures all interactions are Charter-compliant.
 *   **Open Intelligence (Hugging Face)**: Default connector for accessing the global hub of open-source AI models, datasets, and interactive Spaces.
 
 ---
@@ -120,6 +134,13 @@ The UI is a **Thin Client / Remote Screen**—a window into the Virtual Computer
 *   **Confirmation Gates**: The "Safety Switch." The Chairman grants permission; the Head Agent manages the Toolbox.
 *   **Agent Settings (The 3-Dots Menu)**: A dedicated configuration layer within the Chat interface for the Chairman to manage agent-specific logic, external plugins, and security gates without leaving the conversation.
 *   **The "Hatchery" UI**: A specialized interface for importing GitHub repos or API endpoints to onboard new agents into the Staff Hierarchy.
+*   **Mobile Desk (PWA Launcher)**: A lightweight, portable window into the OS. It hosts a collection of **Mini-Apps** (Notes, Auditor, Pulse) that can operate in two modes:
+    *   **Local Mode**: Private, offline-first data storage (e.g., local notes) with optional manual sync to the Sovereign Cloud.
+    *   **Sovereign Mode**: Fully integrated cloud-powered apps that leverage the OS's agents and infrastructure in real-time.
+*   **Sovereign Multi-Terminal Substrate**: A management layer for **Accredited Clients** (Desktop, CLI, Browser Extension). It allows the Chairman to:
+    *   **Accredit Terminals**: Generate unique Client IDs and Secrets for hardware-verified access.
+    *   **Scope Access**: Define granular permissions for each client (e.g., "CLI can access Forge but not Vault").
+    *   **Unified State**: Ensure all clients share the same **Soul Core** (Firestore) for instant cross-device synchronization.
 *   **Lockdown Recovery**: A manual, multi-step "System Health Check" required by the Chairman to reboot the OS after an emergency lockdown.
 
 ---
@@ -229,7 +250,7 @@ The OS is designed to grow with the user, starting as a "Lean Startup" and expan
 ### 8.1 The Expansion Roadmap (Seed-to-Empire)
 *   **Phase 1: The Seed (Lean Startup)**: Direct command, minimal overhead, no complex governance.
 *   **Phase 2: The Growth (Mid-Sized Firm)**: Activation of specialized divisions (Security, Efficiency) via user ratification.
-*   **Phase 3: The Sovereign (Digital State)**: Full separation of powers, Treasury management, and Intelligence recon.
+*   **Phase 3: The Sovereign (Digital State)**: Full separation of powers, **Pooled Treasury Protocol** management, and Intelligence recon.
 
 ### 8.2 Modular Ratification Protocol
 *   **The Ratification Proposal**: When growth triggers are met, the Cloud Manager presents a proposal in the Sentinel Feed.
@@ -242,3 +263,59 @@ The OS is designed to grow with the user, starting as a "Lean Startup" and expan
 *   **The Garage (Minimalist)**: Zero bloat, maximum speed, direct command.
 *   **The Scale-Up (Balanced)**: Automated efficiency, cost tracking, and soft governance.
 *   **The Fortress (Max-Gov)**: Full constitutional oversight, hard security gates, and audit trails.
+
+---
+
+## Technical Implementation & Methodology
+
+### 1. Architecture: The Sovereign Kernel
+*   **React + Vite + TypeScript**: The core substrate for high-performance, type-safe UI development.
+*   **Tailwind CSS + Lucide Icons**: A utility-first styling approach combined with a consistent, technical iconography set.
+*   **Motion (Framer Motion)**: Used for "Fluid UI" transitions, staggered entrances, and micro-interactions that reinforce the OS's "living" feel.
+
+### 2. State Management: The Soul Core
+*   **Firebase Firestore**: Acts as the persistent "Soul Core" for real-time, cross-client synchronization.
+*   **React State Hooks**: Used for ephemeral, high-frequency UI state (e.g., sidebar collapse, active tabs).
+*   **Context API (Auth)**: Manages the "Chairman's" identity and session across the entire application.
+
+### 3. Design Language: The "Command Center" Aesthetic
+*   **Bento Grid Layouts**: Used in dashboards to present dense information in a readable, modular format.
+*   **Glassmorphism & Neon Accents**: A dark-mode first design with high-contrast accents (Purple for Clients, Green for Security, Blue for Efficiency) to distinguish system divisions.
+*   **Collapsible Hierarchy**: A "Machine Room" sidebar pattern that hides complexity until needed, using `AnimatePresence` for smooth transitions.
+
+### 4. Intelligence Integration: The Agentic Layer
+*   **Gemini 3.1 Pro/Flash**: The primary reasoning engine for agents, utilizing "Thinking" levels for complex tasks.
+*   **Tool-Hybrid Mode**: Combining function calling with Google Search/Maps grounding for real-time, verified intelligence.
+*   **Sovereign-Script (SS)**: A domain-specific language (DSL) for defining Standard Operating Procedures (SOPs) and autonomous workflows.
+
+### 5. Security & Governance
+*   **Ratification Registry**: A formal proposal/veto system for structural OS upgrades, preventing "feature creep" without user consent.
+*   **Security Division (Kernel Rules)**: A natural-language-to-technical-block mapping for enforcing system-wide constraints.
+*   **Efficiency Division (Patches)**: A modular patching system for optimizing speed, memory, and cost.
+
+### 6. Testing & Debugging (Optional)
+*   **Sovereign Script Runner**: An optional, isolated environment for testing and debugging Sovereign Scripts (SS) without impacting the main OS.
+*   **SS-Studio (Sovereign Forge IDE)**: A dedicated, intent-based IDE for developing and orchestrating Sovereign Scripts. It features a Manifest Explorer, Block Canvas, and Shadow Sandbox Emulator for safe, autonomous workflow development. It serves as the primary authoring environment for the **App Hatchery**.
+*   **Debug Mode**: Enables verbose logging and agent "thought" visualization for deeper inspection.
+
+### 7. Future Substrate Upgrades
+*   **Deep Execution Substrate (The Hands)**: A "Manager-Contractor" model where the **Resident AI (Head Agent)** orchestrates a Level 3 Contractor (e.g., Goose) in an ephemeral Forge Sandbox. Enables autonomous shell execution, file editing, and self-healing code within a hardened environment.
+*   **Advanced Memory Substrate (The Neural Archive)**: A relational Knowledge Graph managed by a Level 2 **Librarian Agent**. Transforms the Sovereign Vault into a context-aware archive with "Resonance Scoring" to prioritize relevant business intelligence and project history.
+*   **Global Skill Pack (The Toolbox Layer)**: A library of modular, pre-validated functions (inspired by `agent-skills`) "Hatched" into the OS as **Hardened Blocks**. Allows Sovereign Scripts (SS) to call common agentic capabilities (Search, Wikipedia, etc.) without writing raw code, ensuring reliability and speed.
+*   **Adversarial Auditor (Level 4 Consultant)**: A specialized security agent that "Red Teams" shell commands and scripts generated by other agents. It monitors for industry vulnerabilities (e.g., the 51+ subcommand bypass) and enforces "Command Hygiene" at the substrate level, preventing unauthorized system access via complex or obfuscated payloads.
+*   **Web Reconnaissance Shield**: A security substrate designed to mitigate AI-targeted web attacks (e.g., dynamic cloaking, indirect prompt injection). It features a "Human-Agent Diff" to highlight hidden instructions in web content and enforces "Air-Gapped Scraping" in zero-trust sandboxes to prevent data exfiltration traps.
+*   **Advanced OpenClaw Substrate (Optional)**: A high-clearance implementation engine that transforms standard agent loops into a "Manager-Contractor" model. It uses **Sovereign-Script (SS)** manifests for secure, auditable execution and features "Visual Perception" (MolmoWeb) for debugging complex web and UI tasks.
+
+### 8. The Sovereign App Ecosystem
+*   **Sovereign Client-as-App Architecture**: Specialized clients (Desktop, Mobile, CLI) are treated as functionally-scoped applications. Each client is "Accredited" with specific data scopes and clearances, ensuring that a compromised field terminal cannot access the entire OS kernel.
+*   **The App Hatchery**: A private marketplace within the OS for "Hatching" custom tools. Users can build their own apps or import manifests from trusted sources, with all apps undergoing a mandatory **Resident AI Security Audit** (leveraging the **Adversarial Auditor**) before ratification.
+*   **Backend Development Choice**: Support for two distinct development paths for custom app backends:
+    *   **Sovereign Script (SS)**: AI-native, declarative manifests for rapid, secure-by-default tool creation using "Hardened Blocks."
+    *   **Normal Code (TS/Node)**: Full-power TypeScript/Node.js development within isolated **Contractor Sandboxes** for complex, high-performance logic.
+*   **The Sovereign SDK**: A standardized kernel API that provides all apps (SS or Normal) with secure access to Identity, Storage (Soul Core), Intelligence (Agents), and the Sentinel Feed. It acts as the **Hardened Bridge** for Normal Code, ensuring sandbox isolation is never breached.
+
+### 9. Automation & Workflow Substrate
+*   **Ghost Implementation (Shadow Workflows)**: Agents perform complex tasks in isolated **Shadow Sandboxes**. The Chairman reviews a **"Unified Ghost Diff"** (Before vs. After) and clicks **"Merge to Reality"** to commit changes, ensuring absolute control over autonomous work.
+*   **Event-Driven Sovereignty**: A trigger-based orchestration layer that connects the OS to real-world "Business Pulses" (via the **Sovereign Intercom**). It enables proactive SOP activation based on external events while maintaining ratified guardrails.
+*   **Recursive Kaizen (Self-Optimizing SOPs)**: An efficiency division protocol where agents audit their own **Sovereign-Script (SS)** manifests for waste or hallucination risks, proposing **"Efficiency Patches"** to the Chairman for ratification.
+*   **Workflow Chronos (Time-Travel Debugging)**: A visual timeline of all autonomous actions stored in the **Soul Core**. It allows the Chairman to "Rewind" a failed workflow to a specific thought/action, modify instructions, and **"Replay"** from that point.

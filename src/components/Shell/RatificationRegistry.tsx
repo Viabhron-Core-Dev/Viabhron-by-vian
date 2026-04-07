@@ -21,7 +21,7 @@ export const RatificationRegistry: React.FC<RatificationRegistryProps> = ({ prop
   };
 
   return (
-    <div className="flex-1 overflow-y-auto p-8 bg-[#0a0a0a] text-gray-300 font-sans">
+    <div className="h-full overflow-y-auto p-8 bg-[#0a0a0a] text-gray-300 font-sans">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-12">
           <div>

@@ -92,7 +92,7 @@ export const Hatchery: React.FC<HatcheryProps> = ({ onHatch }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-950 overflow-hidden">
+    <div className="h-full flex flex-col bg-gray-950 overflow-hidden">
       {/* Header */}
       <div className="h-20 border-b border-white/5 flex items-center justify-between px-8 bg-gray-900/50 backdrop-blur-xl shrink-0">
         <div className="flex items-center gap-4">

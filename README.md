@@ -9,6 +9,7 @@ Viabhron is a persistent, agentic workspace designed as a **"Business-in-a-Box"*
 
 ### 1. The Office (The Engine)
 The backend runs on **Google Cloud Run**, providing a 24/7 environment for agents to operate. It is the "building" where your AI workers live and perform tasks even when you are away.
+*   **Substrate Optimization**: Powered by **TurboQuant**, implementing 3-bit KV cache compression for 8x faster attention scoring and 60% reduced memory footprint, enabling massive context windows on standard cloud hardware.
 
 ### 2. The Desk (The Generative UI)
 The frontend is your "window" into the office. It is a **Generative UI** that can be reconfigured by the **Head Agent** via natural language prompts.
@@ -27,12 +28,28 @@ Integrated with **Microsoft's Agent Governance Toolkit**, ensuring runtime secur
 
 ### 5. The Tent (BYO Infrastructure)
 Users "pitch their own tent" by connecting their own **Firebase** and **Google Cloud** projects. This ensures total data sovereignty and privacy.
+*   **Passkey Sovereignty**: Access to the OS kernel is secured via passwordless biometric passkeys or physical security keys, ensuring the "Business-in-a-Box" is impossible to seize even if cloud credentials are compromised.
+*   **Mobile Command**: The **Sovereign Intercom Bridge** provides 24/7 oversight of the OS via private Telegram/Discord channels, allowing for live ratification of agent decisions from any device.
 
 ### 6. Business-in-a-Box (The Corporate Kernel)
 Viabhron formalizes AI workflows into **Standard Operating Procedures (SOPs)**. It is designed to be a "Turnkey" solution where departments (Security, Creative, R&D) are pre-configured and ready to scale.
+*   **Intelligence Manufacturing**: The **Mistral Sovereign Forge** allows enterprises to build custom, "frontier-grade" AI models using proprietary data from the Neural Archive, ensuring 100% data sovereignty.
+*   **Physics-Aware Creative**: **Project VOID** enables professional-grade video object erasure and scene manipulation, respecting physical interactions like collisions and splashes.
+*   **Visual Intelligence**: **MolmoWeb** integration allows agents to navigate the web by "seeing" screenshots, ensuring 100% success on dynamic sites without leaking data to external scrapers.
 
-### 7. Progressive Governance (Anti-Bloat)
-The OS expands only as you need it. Through **Modular Ratification**, the system proposes structural upgrades (like a Treasury or Judicial branch) which you can **Ratify, Shelve, or Veto** based on your current needs and budget.
+### 7. Mini-App Ecosystem (The Mobile Desk)
+The **Sovereign PWA Launcher** provides a collection of lightweight "Mini-Apps" (Notes, Expenses, News) that can be toggled on/off from the sidebar.
+*   **Hybrid Sync**: Choose between **Local Mode** (private, offline-first) and **Sovereign Mode** (fully cloud-integrated) for each mini-app.
+*   **Extension-Ready**: Add new mini-apps as extensions to your OS, expanding your mobile capabilities without bloating the kernel.
+
+### 8. Multi-Terminal Substrate (The Sovereign Nexus)
+Viabhron is a **Headless OS**. You can accredit multiple "Terminals" (Desktop, CLI, Browser) to connect to your private cloud.
+*   **Accreditation Control**: Manage client access and permissions from the sidebar.
+*   **Unified Brain**: All clients share the same **Soul Core**, ensuring your intelligence and data are consistent across every device.
+
+### 9. Progressive Governance (Anti-Bloat)
+The OS expands only as you need it. Through **Modular Ratification**, the system proposes structural upgrades (like a **Pooled Treasury**, Judicial branch, or the **TurboQuant Substrate Patch**) which you can **Ratify, Shelve, or Veto** based on your current needs and budget.
+*   **Fiscal Sovereignty**: The **Pooled Treasury Protocol** eliminates per-seat fees, replacing them with task-based intelligence funding (e.g., $0.25 flat-fee code reviews).
 
 ## 🐳 The "Tent" (Cloud Docker Architecture)
 
@@ -49,6 +66,9 @@ The **Agent CLI** and **Vibe Forge** interact with a Dockerized backend. This al
 
 ### 3. Cloud-Only Compilation
 100% of the Docker build process happens in **GitHub Actions**. Your phone just sends the "Push" command.
+
+### 4. Multi-Client Substrate
+The **Sovereign API Gateway** allows you to "Authorize a Terminal" (Mobile, Desktop, CLI) to connect to your private OS. This ensures your intelligence follows you across every device while keeping your keys and data hidden in the "Tent."
 
 ### 🧠 The "Soul-Link" (AI Second Brain Architecture)
 
@@ -68,6 +88,7 @@ Viabhron is a **Multi-Agent Operating System (MAOS)** running on a private, virt
 #### 🛡️ The Sentinel & Guardian (Security Layer)
 *   **System-Wide Protection**: Sentinel scans **all** files brought into or built within the MAOS, not just those in the Forge.
 *   **The Guardian Agent**: Acts as the "Security Kernel," monitoring the "Gate" between the isolated Sandbox and the live "Root" environment.
+*   **Device Intelligence**: Powered by the **Fingerprint MCP server**, providing hardware-verified access control and fraud prevention for all sensitive agentic operations.
 *   **Dangerous Commands**: The Tiny LLM Head is authorized to issue "Dangerous" or system-level commands to Sub-Agents to maintain the OS, provided they are executed within the Forge Sandbox or verified by the Guardian.
 
 ### 🛠️ Specialized Intelligence Tools

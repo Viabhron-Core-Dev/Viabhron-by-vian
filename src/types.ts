@@ -212,6 +212,28 @@ export interface SOP {
   lastExecuted?: Date;
 }
 
+export interface MiniApp {
+  id: string;
+  name: string;
+  description: string;
+  icon: string; // Lucide icon name
+  enabled: boolean;
+  type: 'local' | 'sovereign';
+  category: 'utility' | 'creative' | 'security' | 'intelligence';
+  status: 'active' | 'inactive' | 'error';
+}
+
+export interface Client {
+  id: string;
+  name: string;
+  description: string;
+  icon: string; // Lucide icon name
+  enabled: boolean;
+  type: 'native' | 'web' | 'cli' | 'ambient';
+  status: 'active' | 'inactive' | 'error';
+  accreditationId: string;
+}
+
 export interface RatificationProposal {
   id: string;
   title: string;
