@@ -11,7 +11,7 @@
 > This project was made possible by the cutting-edge capabilities of **Google AI Studio**. I would like to extend my sincere gratitude to Google for the generous token quota that allowed me to explore, iterate, and concretize this vision. While this project is a conceptualization of an idea and may not become anything "big," it has been a deeply rewarding experience to build it.
 > 
 > **Build Timeline:**
-> Architected and concretized within **one week** of intensive dialogue and iteration (and continuing).
+> Architected and concretized within **one week** of intensive dialogue and iteration (Started around **April 1st, 2026** and continuing).
 > 
 > As such, Viabhron is an exploration of the **"Business-in-a-Box"** paradigm—a vision of how autonomous AI orchestration and digital sovereignty could be structured in a future where users own their intelligence and infrastructure.
 
@@ -201,17 +201,45 @@ Viabhron is designed with a **"Compliance-by-Design"** philosophy:
 
 ## 📜 Third-Party Attributions
 
-This project leverages several industry-leading open-source technologies and services. We extend our gratitude to the following projects and their contributors:
+Viabhron is a sovereign orchestrator that integrates and builds upon the incredible work of the global AI and open-source communities. We extend our gratitude to the following projects, researchers, and organizations:
 
-*   **Google AI Studio & Gemini API**: For providing the frontier-grade intelligence substrate. (Governed by [Google Generative AI Terms of Service](https://ai.google.dev/terms))
+### 🛠️ Core Technologies & Substrates
+*   **Google AI Studio & Gemini API**: For the frontier-grade intelligence substrate. (Governed by [Google Generative AI Terms of Service](https://ai.google.dev/terms))
 *   **Firebase & Google Cloud Platform**: For the secure, scalable infrastructure substrate. (Governed by [GCP Terms of Service](https://cloud.google.com/terms))
 *   **Capacitor (Ionic)**: For the cross-platform native bridge. (Licensed under MIT)
 *   **React & Vite**: For the high-performance frontend framework and build tool. (Licensed under MIT)
 *   **Tailwind CSS**: For the utility-first styling engine. (Licensed under MIT)
 *   **Lucide React**: For the beautiful, consistent iconography. (Licensed under ISC)
 *   **Motion (Framer Motion)**: For the fluid, purposeful animations. (Licensed under MIT)
-*   **Mistral AI**: Conceptual integration for the Sovereign Forge. (Models governed by Mistral AI licenses)
-*   **Allen Institute for AI (AI2)**: Conceptual integration of **Molmo** for visual web navigation. (Licensed under Apache 2.0)
+*   **GitHub Actions**: For the cloud-only build and deployment pipeline. (Governed by GitHub Terms of Service)
+*   **Docker & Kubernetes**: For the underlying containerization and orchestration logic. (Licensed under Apache 2.0)
+*   **Ollama, LocalAI, & LM Studio**: Conceptual integration for the future **Local Substrate** (The Bunker).
+*   **PouchDB & IndexedDB**: Conceptual integration for the local, offline-first nervous system.
+*   **Tauri & Electron**: Conceptual integration for the future desktop shell.
+*   **Helm & Gradle**: For enterprise-grade substrate deployment and dependency management.
+
+### 🧠 Intelligence & Agentic Frameworks
+*   **Anthropic**: For the **Model Context Protocol (MCP)** open standard and the **Claude Code** orchestration patterns. (Licensed under MIT)
+*   **Block (Square)**: For the **Goose** open-source agent integration. (Licensed under Apache 2.0)
+*   **Genspark**: Conceptual integration for external consultant accreditation.
+*   **Cursor**: Conceptual integration of specialized external AI agents.
+*   **Meta (Llama), Microsoft (Phi), & Google (Gemma)**: For the open-weights models that power the Resident and Executive Staff. (Governed by their respective community licenses)
+*   **Mistral AI**: For the **Mistral Sovereign Forge** conceptual integration. (Models governed by Mistral AI licenses)
+*   **Allen Institute for AI (AI2)**: For the **Molmo** visual navigation protocol (MolmoWeb). (Licensed under Apache 2.0)
+*   **OpenAI**: For the **Codex** integration and the **Instruction Hierarchy (IH)** challenge research. (Governed by OpenAI Terms of Use)
+*   **Hugging Face**: For the **Universal AI Port** and open intelligence hub integration. (Governed by Hugging Face Terms of Service)
+*   **Microsoft**: For the **Agent Governance Toolkit** and multi-agent orchestration research.
+*   **Mozilla.ai**: For the **cq** (Collective Intelligence Protocol) open-source knowledge-sharing system.
+*   **Linear & Jira**: Conceptual integration for the **Symphony Orchestration** bridge.
+
+### 🛡️ Security & Research Integrations
+*   **VirusTotal**: For the **Sentinel Guardian** security scanning integration. (Governed by VirusTotal Terms of Service)
+*   **TurboQuant**: Conceptual integration of 3-bit KV cache compression techniques for substrate optimization.
+*   **Project VOID**: Conceptual integration of physics-aware video object erasure and scene manipulation.
+*   **OpenClaw**: Conceptual integration of the self-hosted agent framework for private execution.
+*   **Adversarial Auditor Research**: Inspired by security research into AI command hygiene and the "51+ subcommand bypass."
+*   **Web Reconnaissance Shield**: Inspired by research into mitigating AI-targeted web attacks (indirect prompt injection, dynamic cloaking).
+*   **Telegram & Discord**: For the **Sovereign Intercom Bridge** mobile command integration.
 
 ---
 *Built with privacy, modularity, and persistence at its core.*
