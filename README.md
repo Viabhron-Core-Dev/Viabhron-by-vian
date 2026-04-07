@@ -188,6 +188,31 @@ Viabhron is built with a **"Zero-Local-Build"** philosophy, specifically optimiz
     *   GitHub Actions will automatically generate the **PWA** and **Android APK**.
     *   Download the APK from the "Actions" tab or access the PWA via GitHub Pages.
 
+## ⚠️ Disclaimer
+
+This project is a **conceptual prototype** and is provided **"as-is"** without any warranties of any kind, express or implied. The creator and contributors are not responsible for any data loss, security breaches, or cloud costs incurred through the use of this software. Users are responsible for managing their own cloud infrastructure, API keys, and compliance with local laws and service provider terms.
+
+## ⚖️ Legal & Compliance
+
+Viabhron is designed with a **"Compliance-by-Design"** philosophy:
+*   **Data Sovereignty (GDPR/CCPA)**: Because the OS runs on the user's private infrastructure and the developer has zero access to the data, the system is inherently compliant with major privacy regulations. The user is the sole Data Controller and Data Processor.
+*   **AI Governance**: Integrated principles from **Microsoft's Agent Governance Toolkit** ensure that autonomous actions are logged, auditable, and compliant with emerging frameworks like the **EU AI Act**.
+*   **No Unauthorized Access**: The system does not request or use "Dangerous" Android permissions (like background location or system setting modification) unless explicitly enabled by the user for the "Hardware Key" functionality.
+
+## 📜 Third-Party Attributions
+
+This project leverages several industry-leading open-source technologies and services. We extend our gratitude to the following projects and their contributors:
+
+*   **Google AI Studio & Gemini API**: For providing the frontier-grade intelligence substrate. (Governed by [Google Generative AI Terms of Service](https://ai.google.dev/terms))
+*   **Firebase & Google Cloud Platform**: For the secure, scalable infrastructure substrate. (Governed by [GCP Terms of Service](https://cloud.google.com/terms))
+*   **Capacitor (Ionic)**: For the cross-platform native bridge. (Licensed under MIT)
+*   **React & Vite**: For the high-performance frontend framework and build tool. (Licensed under MIT)
+*   **Tailwind CSS**: For the utility-first styling engine. (Licensed under MIT)
+*   **Lucide React**: For the beautiful, consistent iconography. (Licensed under ISC)
+*   **Motion (Framer Motion)**: For the fluid, purposeful animations. (Licensed under MIT)
+*   **Mistral AI**: Conceptual integration for the Sovereign Forge. (Models governed by Mistral AI licenses)
+*   **Allen Institute for AI (AI2)**: Conceptual integration of **Molmo** for visual web navigation. (Licensed under Apache 2.0)
+
 ---
 *Built with privacy, modularity, and persistence at its core.*
 
