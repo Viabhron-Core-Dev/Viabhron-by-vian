@@ -5,7 +5,13 @@
 > This project is a **work in progress** and serves as a **conceptualization of an idea** rather than a production-ready application. 
 > 
 > **CREATOR CONTEXT:**
-> The creator of Viabhron is developing this system using **Google AI Studio** as a primary collaborator. The creator does not have a formal coding background or the high-end hardware typically required to test such a complex architecture beyond basic functional verification. 
+> The creator of Viabhron, **Schuyler Vianney Lewis**, is developing this system using **Google AI Studio** as the sole primary collaborator. The creator does not have a formal coding background or the high-end hardware typically required to test such a complex architecture beyond basic functional verification. 
+> 
+> **A Note of Gratitude:**
+> This project was made possible by the cutting-edge capabilities of **Google AI Studio**. I would like to extend my sincere gratitude to Google for the generous token quota that allowed me to explore, iterate, and concretize this vision. While this project is a conceptualization of an idea and may not become anything "big," it has been a deeply rewarding experience to build it.
+> 
+> **Build Timeline:**
+> Architected and concretized within **one week** of intensive dialogue and iteration (and continuing).
 > 
 > As such, Viabhron is an exploration of the **"Business-in-a-Box"** paradigm—a vision of how autonomous AI orchestration and digital sovereignty could be structured in a future where users own their intelligence and infrastructure.
 
@@ -56,6 +62,13 @@ Viabhron is a **Headless OS**. You can accredit multiple "Terminals" (Desktop, C
 ### 9. Progressive Governance (Anti-Bloat)
 The OS expands only as you need it. Through **Modular Ratification**, the system proposes structural upgrades (like a **Pooled Treasury**, Judicial branch, or the **TurboQuant Substrate Patch**) which you can **Ratify, Shelve, or Veto** based on your current needs and budget.
 *   **Fiscal Sovereignty**: The **Pooled Treasury Protocol** eliminates per-seat fees, replacing them with task-based intelligence funding (e.g., $0.25 flat-fee code reviews).
+
+### 9. Sovereign Script (SS): The Syntax of Intent
+Viabhron introduces **Sovereign Script (SS)**, a declarative, AI-native syntax designed to bridge the gap between human intent and machine execution. 
+*   **Manifest of Intent**: SS is not a traditional programming language; it is a "Manifest of Purpose." Instead of writing imperative logic, the AI defines goals (e.g., `Goal: Secure_Vault_Backup`) and constraints.
+*   **Hardened Blocks**: SS operates by orchestrating pre-validated, secure "Hardened Blocks" (like LEGO bricks) rather than generating raw, error-prone code. This eliminates the risk of AI "hallucinating" security vulnerabilities.
+*   **Human-Auditable**: The syntax is designed to be readable by the **Chairman**, allowing for a clear understanding of the "Tactical Map" of any autonomous workflow without requiring coding knowledge.
+*   **Self-Healing**: When a workflow fails, the Resident AI re-evaluates the "Intent Manifest" rather than debugging code, allowing the system to re-wire itself to achieve the goal.
 
 ## 🐳 The "Tent" (Cloud Docker Architecture)
 
@@ -177,3 +190,5 @@ Viabhron is built with a **"Zero-Local-Build"** philosophy, specifically optimiz
 
 ---
 *Built with privacy, modularity, and persistence at its core.*
+
+**License:** This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)** license. This allows for forking and community improvement while ensuring the project remains non-commercial and attributed to the original creator. See the [LICENSE](LICENSE) file for details.

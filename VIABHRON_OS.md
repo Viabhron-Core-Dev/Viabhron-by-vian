@@ -1,5 +1,8 @@
 # 🛡️ VIABHRON OS: Master Blueprint
 
+**Creator:** Schuyler Vianney Lewis
+**Collaborator:** Google AI Studio
+
 **Product Vision:** A private, portable Multi-Agent Operating System (MAOS) that lives in the user's own cloud infrastructure. It is a **"Business-in-a-Box"**—a turnkey, sovereign corporate kernel that is easy to pitch, impossible to seize, and 100% private.
 
 ---
