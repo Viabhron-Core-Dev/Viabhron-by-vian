@@ -27,8 +27,8 @@ export function useTabs(user: User | null, extensions: Extension[]) {
         const defaultExtensionIds = extensions.filter(e => e.status === 'active').map(e => e.id);
         const initialTab: Tab = { 
           id: '1', 
-          title: 'Sandbox', 
-          type: 'canvas', 
+          title: 'VhatsAppeningAi', 
+          type: 'vhatsappening', 
           active: true,
           status: 'active',
           activeExtensionIds: defaultExtensionIds,
@@ -55,8 +55,8 @@ export function useTabs(user: User | null, extensions: Extension[]) {
         const defaultExtensionIds = extensions.filter(e => e.status === 'active').map(e => e.id);
         setDoc(doc(tabsRef, newTabId), {
           id: newTabId,
-          title: 'Sandbox',
-          type: 'canvas',
+          title: 'VhatsAppeningAi',
+          type: 'vhatsappening',
           active: true,
           status: 'active',
           activeExtensionIds: defaultExtensionIds,

@@ -13,6 +13,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { UIMode } from '../../types';
 
 interface SimulationAgent {
   id: string;
@@ -22,7 +23,7 @@ interface SimulationAgent {
   logs: string[];
 }
 
-export function Simulation() {
+export function Simulation({ uiMode }: { uiMode?: UIMode }) {
   const [isRunning, setIsRunning] = useState(false);
   const [agents, setAgents] = useState<SimulationAgent[]>([
     { id: 'sa1', name: 'UI Critic', role: 'Design Auditor', status: 'idle', logs: [] },
@@ -47,7 +48,7 @@ export function Simulation() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-950 overflow-hidden">
+    <div className={`h-full flex flex-col bg-gray-950 overflow-hidden ${uiMode === 'browser' ? 'pb-32 md:pb-0' : ''}`}>
       <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-gray-900/50 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-purple-600/20 flex items-center justify-center">

@@ -51,7 +51,7 @@ export interface CelestialChat {
   id: string;
   nodeId?: string;
   name?: string;
-  type: "direct" | "council" | "individual" | "workflow" | "debate" | "agent" | "gmail";
+  type: "direct" | "council" | "individual" | "workflow" | "debate" | "agent" | "gmail" | "sentinel";
   messages: Message[];
   updatedAt: number | string;
   lastMessage?: string;
@@ -61,6 +61,8 @@ export interface CelestialChat {
   chairNodeId?: string;
   workflowId?: string;
   debateId?: string;
+  isSentinel?: boolean;
+  isHeadAgent?: boolean;
 }
 
 export interface RelayProfile {
@@ -119,6 +121,15 @@ export interface NexusComment {
   nodeId?: string;
 }
 
+export interface SentinelLog {
+  id: string;
+  level: "info" | "warn" | "error" | "success";
+  message: string;
+  timestamp: string;
+  source: string;
+  metadata?: any;
+}
+
 export interface OfficialUpdate {
   id: string;
   title: string;
@@ -127,6 +138,23 @@ export interface OfficialUpdate {
   type: "models" | "offers" | "prompts" | "official" | "ai_tech";
   priority: number;
   createdAt: string;
+  isUrgent?: boolean;
+}
+
+export interface NewsCard {
+  id: string;
+  title: string;
+  summary: string;
+  fullContent: string;
+  source: string;
+  timestamp: string;
+  category: string;
+  imageUrl?: string;
+}
+
+export interface NewsFilter {
+  prompt: string;
+  lastUpdated: string;
 }
 
 export interface Skill {
@@ -283,6 +311,8 @@ export interface Agent {
   capabilities: string[];
   lastActive: Date;
 }
+
+export type UIMode = 'vaa' | 'browser';
 
 export interface UIConfig {
   theme: 'dark' | 'light' | 'custom';

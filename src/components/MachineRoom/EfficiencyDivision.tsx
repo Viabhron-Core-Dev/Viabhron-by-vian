@@ -14,20 +14,22 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { SystemMode, EfficiencyPatch } from '../../types';
+import { SystemMode, EfficiencyPatch, UIMode } from '../../types';
 
 interface EfficiencyDivisionProps {
   mode: SystemMode;
   onModeChange: (mode: SystemMode) => void;
   patches: EfficiencyPatch[];
   onApplyPatch: (id: string) => void;
+  uiMode?: UIMode;
 }
 
 export const EfficiencyDivision: React.FC<EfficiencyDivisionProps> = ({
   mode,
   onModeChange,
   patches,
-  onApplyPatch
+  onApplyPatch,
+  uiMode
 }) => {
   const modes = [
     { 
@@ -60,7 +62,7 @@ export const EfficiencyDivision: React.FC<EfficiencyDivisionProps> = ({
   ];
 
   return (
-    <div className="h-full bg-black text-blue-500 font-mono p-8 overflow-y-auto selection:bg-blue-500/30">
+    <div className={`h-full bg-black text-blue-500 font-mono p-8 overflow-y-auto selection:bg-blue-500/30 ${uiMode === 'browser' ? 'pb-32 md:pb-8' : 'pb-8'}`}>
       {/* Industrial Header */}
       <div className="border-b border-blue-900/50 pb-6 mb-8 flex items-center justify-between">
         <div>

@@ -20,7 +20,7 @@ import {
   Trash2,
   Filter
 } from 'lucide-react';
-import { Notification, BackgroundTask, LogEntry } from '../../types';
+import { Notification, BackgroundTask, LogEntry, UIMode } from '../../types';
 
 interface SentinelProps {
   backgroundTasks?: BackgroundTask[];
@@ -31,6 +31,7 @@ interface SentinelProps {
   onClearAll: () => void;
   onAction?: (id: string, status: 'approved' | 'rejected') => void;
   logs?: LogEntry[];
+  uiMode?: UIMode;
 }
 
 export const Sentinel: React.FC<SentinelProps> = ({ 
@@ -41,7 +42,8 @@ export const Sentinel: React.FC<SentinelProps> = ({
   onDelete,
   onClearAll,
   onAction,
-  logs = []
+  logs = [],
+  uiMode
 }) => {
   const [activeTab, setActiveTab] = useState<'feed' | 'logs'>('feed');
   const [isScanning, setIsScanning] = useState(false);
@@ -77,7 +79,7 @@ export const Sentinel: React.FC<SentinelProps> = ({
   };
 
   return (
-    <div className="h-full bg-[#050508] flex flex-col font-sans overflow-hidden">
+    <div className={`h-full bg-[#050508] flex flex-col font-sans overflow-hidden ${uiMode === 'browser' ? 'pb-32 md:pb-0' : ''}`}>
       {/* Header HUD */}
       <div className="h-16 bg-gray-900/50 border-b border-white/5 flex items-center justify-between px-6 backdrop-blur-xl shrink-0">
         <div className="flex items-center gap-8">

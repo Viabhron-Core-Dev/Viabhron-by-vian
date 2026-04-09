@@ -1,16 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { FileText, CheckCircle, XCircle, Clock, Shield, Activity, Cpu, Zap } from 'lucide-react';
-import { RatificationProposal } from '../../types';
+import { RatificationProposal, UIMode } from '../../types';
 
 interface RatificationRegistryProps {
   proposals: RatificationProposal[];
   onRatify: (id: string) => void;
   onShelve: (id: string) => void;
   onVeto: (id: string) => void;
+  uiMode?: UIMode;
 }
 
-export const RatificationRegistry: React.FC<RatificationRegistryProps> = ({ proposals, onRatify, onShelve, onVeto }) => {
+export const RatificationRegistry: React.FC<RatificationRegistryProps> = ({ proposals, onRatify, onShelve, onVeto, uiMode }) => {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'governance': return <Shield className="w-5 h-5 text-blue-400" />;
@@ -21,7 +22,7 @@ export const RatificationRegistry: React.FC<RatificationRegistryProps> = ({ prop
   };
 
   return (
-    <div className="h-full overflow-y-auto p-8 bg-[#0a0a0a] text-gray-300 font-sans">
+    <div className={`h-full overflow-y-auto p-8 bg-[#0a0a0a] text-gray-300 font-sans ${uiMode === 'browser' ? 'pb-32 md:pb-8' : 'pb-8'}`}>
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-12">
           <div>

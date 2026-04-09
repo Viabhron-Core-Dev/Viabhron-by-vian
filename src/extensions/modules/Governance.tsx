@@ -12,6 +12,7 @@ import {
   Key
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { UIMode } from '../../types';
 
 interface Policy {
   id: string;
@@ -21,7 +22,11 @@ interface Policy {
   severity: 'low' | 'medium' | 'high';
 }
 
-export const Governance: React.FC = () => {
+interface GovernanceProps {
+  uiMode?: UIMode;
+}
+
+export const Governance: React.FC<GovernanceProps> = ({ uiMode }) => {
   const [activePolicies, setActivePolicies] = useState<Policy[]>([
     { id: 'p1', name: 'Skeleton Integrity', description: 'Prevent unauthorized modifications to core OS files', status: 'active', severity: 'high' },
     { id: 'p2', name: 'PII Scrubbing', description: 'Automatically remove personal data before cloud API calls', status: 'active', severity: 'medium' },
@@ -36,7 +41,7 @@ export const Governance: React.FC = () => {
   ]);
 
   return (
-    <div className="h-full bg-gray-950 p-8 pb-32 md:pb-8 overflow-y-auto no-scrollbar">
+    <div className={`h-full bg-gray-950 p-8 ${uiMode === 'browser' ? 'pb-32 md:pb-8' : 'pb-8'} overflow-y-auto no-scrollbar`}>
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">

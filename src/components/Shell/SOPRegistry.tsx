@@ -1,14 +1,15 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Book, Play, Shield, Palette, Search, Activity, Terminal, Plus } from 'lucide-react';
-import { SOP } from '../../types';
+import { SOP, UIMode } from '../../types';
 
 interface SOPRegistryProps {
   sops: SOP[];
   onExecute: (sop: SOP) => void;
+  uiMode?: UIMode;
 }
 
-export const SOPRegistry: React.FC<SOPRegistryProps> = ({ sops, onExecute }) => {
+export const SOPRegistry: React.FC<SOPRegistryProps> = ({ sops, onExecute, uiMode }) => {
   const getDepartmentIcon = (department: string) => {
     switch (department) {
       case 'Security Division': return <Shield className="w-5 h-5 text-red-400" />;
@@ -19,7 +20,7 @@ export const SOPRegistry: React.FC<SOPRegistryProps> = ({ sops, onExecute }) => 
   };
 
   return (
-    <div className="h-full overflow-y-auto p-8 bg-[#0a0a0a] text-gray-300 font-sans">
+    <div className={`h-full overflow-y-auto p-8 bg-[#0a0a0a] text-gray-300 font-sans ${uiMode === 'browser' ? 'pb-32 md:pb-8' : 'pb-8'}`}>
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-12">
           <div>

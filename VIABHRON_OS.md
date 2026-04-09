@@ -42,6 +42,13 @@ A structured registry that manages the capabilities and power levels of the OS.
     *   **Modules**: Large-scale UI/UX features or complex workflows (e.g., Agent Terminal, Workflow Canvas).
         *   **Gaming Focused Extensions**: A dedicated sidebar section for private entertainment and simulations. [DONE]
         *   **Testing Extensions (The Staging Area)**: A sandbox section where newly "Hatched" extensions are tested in isolation before being promoted to production. [DONE]
+        *   **Extra Processor (Edge Intelligence)**: A specialized section for offloading heavy compute tasks to edge providers like Cloudflare. [DONE]
+            *   **Consultant Knockout Window**: A dedicated, high-density workspace for configuring edge logic (Workers, R2, Tunnels).
+            *   **Resident AI Oracle**: A built-in chatbot within the knockout window that provides pre-configured, Viabhron-optimized code and step-by-step setup guidance.
+        *   **Branches & Mission (Distributed Nodes)**: A management layer for the "Vine" architecture, allowing the OS to spread across multiple devices and clouds. [DONE]
+            *   **Sovereign Cells**: Individual branches that act as independent "Branch Offices" with their own local data and tasks.
+            *   **Mission Scoping**: Branches are deployed with specific "Missions" (e.g., Research, Security, Coding) rather than the full OS kernel.
+            *   **Resource Sharing (Internal Market)**: Branches can "Contract" tasks to each other based on available hardware firepower.
         *   **Viabhronic Loader**: A PWA-based "Super App" shell (like a J2ME Loader) that hosts and toggles "Mini-Apps" or "Sovereign Gems". It provides a local, offline-first presence for your private tools. [DONE]
         *   **Sovereign Gems**: Private, agentic applications (similar to GPTs/Gems) built within the OS. They leverage the **SOP Registry** and **Neural Archive** to provide specialized intelligence without compromising privacy. [DONE]
         *   **Sovereign Creative Studio**: A visual IDE for orchestrating multi-step creative workflows via a spatial canvas.
@@ -87,7 +94,11 @@ The "Active Intelligence" that performs work within the office, managed by a **M
     *   **Status**: Cross-Platform.
     *   **Brain**: Third-party (e.g., Cursor 3 agents, specialized external AI, imported Claude Skills).
     *   **Role**: Integrated into the office to bring in outside expertise, managed via the Universal AI Port.
-5.  **Specialized Roles (Optional)**
+5.  **Branch Sub-Manager (Distributed Resident)** [DONE]
+    *   **Status**: Local/Branch-Specific.
+    *   **Brain**: Tiny LLM (Gemma/Phi).
+    *   **Role**: A Resident AI that manages a specific branch's mission. It can proactively request "Mission Promotions" from the Chairman if it detects sufficient local hardware resources.
+6.  **Specialized Roles (Optional)**
     *   **The Librarian**: An optional agent dedicated to monitoring Hugging Face and GitHub for new "Eggs" (models, tools, datasets) that align with the Chairman's interests and project needs. [DONE]
     *   **The Creative Director**: A specialized agent role for assembling and managing multi-step creative workflows on the Sovereign Creative Studio canvas.
 
@@ -98,6 +109,8 @@ The "Machine Room" contains the core infrastructure controls, isolated from agen
     *   **Agent Access**: **Read-Only**. Agents can follow rules but cannot modify them.
     *   **Natural Language Rule Builder**: The Chairman can describe rules in plain English; the OS translates them into hard technical blocks.
     *   **Emergency Lockdown (The Red Switch)**: A high-security protocol to instantly terminate all agent containers and revoke API keys.
+    *   **Vine Revocation**: A global signal that propagates through the distributed network to instantly kill and wipe all "Orphan" or compromised branches.
+    *   **Late-Binding Key Injection**: A security protocol where sensitive API tokens (e.g., Cloudflare, OpenAI) are only provided by the Chairman *after* the Resident AI has finished building and auditing the integration code.
     *   **Device Intelligence (Fingerprint MCP)**: A hardware-level security layer that verifies the Chairman's device identity. It prevents fraud and session hijacking by ensuring sensitive agent actions are only triggered from "Ratified Hardware."
 *   **Efficiency Patches Division**: [DONE]
     *   **Role**: Manages improvements to the Engine (Orchestration) and Skeleton (Infrastructure).
@@ -117,7 +130,7 @@ The "Machine Room" contains the core infrastructure controls, isolated from agen
 ---
 
 ### 1.5 The Sovereign Hatchery (The Factory) [DONE]
-The Hatchery is the internal production line where the OS builds its own tools.
+The Hatchery is the internal production line where the OS builds its own tools and expands its reach.
 *   **The Development Pipeline**:
     1.  **Orchestration**: The Head Agent (Manager) delegates a task to the Coder Agent.
     2.  **Dual-Track Choice**: The system defaults to **Sovereign Script (SS)** for simple tools and **Normal Code (TS/Node)** for complex logic. The Chairman can override this choice.
@@ -125,6 +138,10 @@ The Hatchery is the internal production line where the OS builds its own tools.
         *   **Guardian Audit**: Internal stability and privacy scan.
         *   **Consultant Audit A**: External AI (e.g., OpenAI) logic and backdoor audit.
         *   **Consultant Audit B**: Second external AI (e.g., Claude) "Red Team" attack simulation.
+*   **Branch Hatching (The Vine Expansion)**:
+    *   **Setup Kit Generation**: The Hatchery can generate "Kernel Seeds"—pre-configured Docker images or ISO files for new branches.
+    *   **Sovereign Seed Delivery**: The Chairman can choose between **Physical Hatching** (USB/Local Download) or **Encrypted Expedition** (Email/Link).
+    *   **Sovereign Link Protocol**: Emailed seeds are delivered via a self-destructing, encrypted link that requires **Passkey (Biometric)** or **Phone Verification** to unlock, ensuring the seed is only "Sprouted" by the Chairman.
 *   **Audit Sensitivity Slider**: The Chairman can adjust the depth of checking (Paranoid, Standard, Experimental) to balance speed vs. security.
 *   **Malleable Block Library**: Newly created blocks are added to a library. They are not fixed; they can be adapted and reconfigured for future missions, with every change logged in the **Evolutionary Registry**.
 
@@ -144,18 +161,38 @@ The "Field" where the tent is pitched, using the user's **BYO Identity**.
 The UI is a **Thin Client / Remote Screen**—a window into the Virtual Computer.
 
 ### 3.1 The Dual-State UI (The Projection) [DONE]
+*   **The Default: VhatsAppeningAi (VAA)**: A standalone, mobile-first "AI Orchestration" interface. When active, all "Expert Mode" elements (Sidebar, Tab Bar, System HUD) are completely hidden, providing a focused, messenger-like experience for the Chairman.
+*   **The Expert Mode: Browser UI**: A high-density, technical interface for "Architect Mode" work (Machine Room, Forge, Governance). It reveals the full OS shell, including the Sidebar and Tab management system.
+*   **The Portal Toggle**: A seamless mechanism for switching between these two top-level shells.
+    *   **In VAA**: Tapping the "VhatsAppeningAi" title in the top bar instantly morphs the UI into the Browser UI.
+    *   **In Browser UI**: Tapping the "Viabhron" logo in the sidebar instantly collapses the shell back into the clean VAA interface.
+    *   **Consistency**: Both shells share the same core data, active workflows, and agent states. Switching is a "Context Shift" of the viewing lens, not a restart of the OS.
 *   **The Substrate (Reality)**: A complex, text-driven infrastructure optimized for AI processing (JSON, manifests, logs).
-*   **The Client (Projection)**: A human-designed, interactive interface. It is a **Generative UI** projected from the substrate, presenting data not just as a report, but as a functional, designed workspace.
 
 *   **The Chairman (The Human)**: Sits at the top of the hierarchy. Does not do the "Work" (coding, searching, processing).
 *   **Instruction Hierarchy (OpenAI IH-Challenge)**: The Architect is programmed to prioritize the Chairman's commands as "System Level" and ignore conflicting "Lower-Tier" requests from sub-agents.
 *   **The Dashboard**: The UI is for the Chairman to look at **Artifacts** (documents/results) and grant **Permissions**. [DONE]
 *   **The Machine Room UI**: A visually distinct "Industrial" interface (Terminal-Core aesthetic) for Security and Efficiency controls. [DONE]
-*   **The Celestial Client (VhatsAppeningAi)**: A high-performance, mobile-first "AI Orchestration" interface inspired by modern messengers (WhatsApp). It serves as the primary consumer-facing UI for the OS, acting as the flagship "Application" layer. [DONE]
+*   **The Celestial Client (VhatsAppeningAi)**: The flagship default UI for the OS. [DONE]
     *   **Celestial Dark Theme**: A premium, glassmorphic UI designed for high-density information and fluid motion.
+    *   **Tab Structure**:
+        *   **Chats**: The primary communication hub.
+            *   **The "+" Menu**: A unified entry point for initiating **Normal Chat**, **Group Chat** (multi-agent), and **Debate**.
+            *   **Debate Modes**: Choice of **Parallel** (side-by-side comparison) or **Interagent** (agents talking to each other).
+        *   **News (formerly Updates)**: A dedicated feed for external AI news and global intelligence.
+            *   **Urgent Briefing**: The Resident AI prioritizes news that directly impacts the Chairman's current OS state or defined interests.
+            *   **Perplexity-Style Swipe**: Tapping "Show More" opens a high-density, vertical swipe card view for deep-dive reading.
+            *   **Resource Optimized**: Cards use lazy-loading and summarized previews to minimize token and memory consumption.
+            *   **Share to Agent**: Ability to instantly share a news card to the Head Agent or a specific council for analysis or action.
+            *   **Intelligence Filter**: A prompt-based filter (managed in settings) that dictates the Resident AI's "Editorial Mandate" for the news feed.
+        *   **Workflow**: A dedicated tab for the **Workflow Canvas**, providing direct access to visual orchestration of agentic logic.
+        *   **HQ Extensions Vault (formerly Manager)**: A management area for the OS's capabilities.
+            *   **Unified Registry**: Mirrors the full Browser UI sidebar hierarchy (Connectors, Skills, Tools, MCP, Gaming, Testing, Extra Processor, Branches & Mission, Viabhronic Loader, Sovereign Gems).
+            *   **GitHub Hatchery Integration**: The `+` button in each section pulls directly from the `extensions/` folder of the official Viabhron GitHub repository.
+            *   **Clean Industrial Design**: No "Marketplace" or "Build" buttons; it is a pure, collapsible registry of ratified power.
     *   **Star Nodes (Contacts)**: Agents are presented as "Contacts" in a messenger, enabling direct messaging and "Council" collaboration.
     *   **The Omega Assistant (FAB)**: A persistent, high-level AI assistant accessible via a specialized Floating Action Button (FAB) for system-wide control.
-    *   **Celestial Marketplace**: A user-friendly front-end for the **Hatchery** and **SOP Registry**, allowing one-tap "Hatching" of new intelligence.
+    *   **The Hatchery**: A user-friendly front-end for onboarding new intelligence via the GitHub factory. [DONE]
     *   **Local-First Substrate**: Leverages **Dexie.js** for instant local data persistence, synced to the **Soul Core** (Firestore) for cross-device consistency.
 *   **Flagship Client Placeholder**: A reserved slot in the sidebar for the next major application in the Viabhron ecosystem, ensuring the OS remains a multi-client platform. [DONE]
 *   **The Sentinel Feed**: A central notification hub for security logs, policy violations, and system-level "Patch" notifications. [DONE]
@@ -358,6 +395,7 @@ The OS is designed to grow with the user, starting as a "Lean Startup" and expan
     *   **Intent Questionnaire**: A guided session to map the user's "Business Plan" and usage profile.
 *   **The Intent Questionnaire**: A structured dialogue designed to identify the user's primary goals (e.g., Coding, Research, Enterprise Management, Personal Archive).
     *   **Usage Profiling**: Asks about hardware availability (to advise on Hybrid/Local substrates) and required departmental wings.
+    *   **Expansion Intent**: Asks if the Chairman intends to grow a "Vine" of distributed branches, enabling the **Branches & Mission** and **Extra Processor** sections if ratified.
     *   **Tailored Advice**: The Resident AI generates a **"Sovereign Roadmap"**, recommending specific SOPs, Extensions, and Substrate configurations based on the user's intent.
     *   **Blind Spot Mitigation**: Proactively informs the user about advanced features they might otherwise overlook (e.g., advising a developer to activate the **Adversarial Auditor** and **Web Recon Shield**).
 *   **Resident AI Oracle Mode**: The Resident AI is permanently primed with the **"Kernel Manifest"** (a complete map of the OS architecture). It acts as a 24/7 guide, capable of explaining any UI element, substrate protocol, or security rule upon request.
@@ -367,6 +405,7 @@ The OS is designed to grow with the user, starting as a "Lean Startup" and expan
 *   **Event-Driven Sovereignty**: A trigger-based orchestration layer that connects the OS to real-world "Business Pulses" (via the **Sovereign Intercom**). It enables proactive SOP activation based on external events while maintaining ratified guardrails. [DONE]
 *   **Recursive Kaizen (Self-Optimizing SOPs)**: An efficiency division protocol where agents audit their own **Sovereign-Script (SS)** manifests for waste or hallucination risks, proposing **"Efficiency Patches"** to the Chairman for ratification.
 *   **Workflow Chronos (Time-Travel Debugging)**: A visual timeline of all autonomous actions stored in the **Soul Core**. It allows the Chairman to "Rewind" a failed workflow to a specific thought/action, modify instructions, and **"Replay"** from that point.
+*   **Mission Promotion Requests**: A proactive protocol where **Branch Sub-Managers** analyze local hardware telemetry and request mission upgrades (e.g., "Promote to Coding Branch") via a Ratification Proposal in the Sentinel Feed.
 
 ### 11. Future Plans: The Sovereign Shortcut Protocol (Mobile Integration)
 The "J2ME Loader" evolution for mobile devices, allowing Mini-Apps and Sovereign Gems to break out of the shell and live on the user's home screen.

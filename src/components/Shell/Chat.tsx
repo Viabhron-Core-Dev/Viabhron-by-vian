@@ -32,7 +32,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Message, Extension, Agent, ExternalPlugin } from '../../types';
+import { Message, Extension, Agent, ExternalPlugin, UIMode } from '../../types';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -59,6 +59,7 @@ interface ChatProps {
   onUpdateExtensions: (ids: string[]) => void;
   isLockdown?: boolean;
   checkSovereignProcedures?: (action: string, metadata?: any) => { allowed: boolean; message?: string };
+  uiMode?: UIMode;
 }
 
 export const Chat: React.FC<ChatProps> = ({ 
@@ -73,7 +74,8 @@ export const Chat: React.FC<ChatProps> = ({
   onUpdateExternalPlugins,
   onUpdateExtensions,
   isLockdown,
-  checkSovereignProcedures
+  checkSovereignProcedures,
+  uiMode
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -391,7 +393,7 @@ export const Chat: React.FC<ChatProps> = ({
         </div>
 
         {/* Input Area */}
-        <div className="p-4 md:p-8 pb-32 md:pb-12 bg-gradient-to-t from-gray-950 via-gray-950 to-transparent z-20">
+        <div className={`p-4 md:p-8 ${uiMode === 'browser' ? 'pb-32 md:pb-12' : 'pb-12'} bg-gradient-to-t from-gray-950 via-gray-950 to-transparent z-20`}>
           <div className="max-w-3xl mx-auto relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-[32px] blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
             <div className="relative bg-gray-900/80 backdrop-blur-xl border border-white/10 rounded-[32px] overflow-hidden shadow-2xl">

@@ -71,7 +71,6 @@ interface SidebarProps {
   onOpenSOPs: () => void;
   onOpenProposals: () => void;
   onOpenSettings: () => void;
-  onOpenVhatsAppening: () => void;
   onOpenPlaceholderClient: () => void;
   geminiApiKey?: string;
   systemMode: SystemMode;
@@ -108,8 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenHatchery, 
   onOpenSOPs, 
   onOpenProposals, 
-  onOpenSettings, 
-  onOpenVhatsAppening,
+  onOpenSettings,
   onOpenPlaceholderClient,
   geminiApiKey, 
   systemMode 
@@ -167,7 +165,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             {/* BYOI Header */}
             <div className="p-4 border-b border-white/10 space-y-3">
-              <div className="flex items-center gap-3 mb-2 px-1">
+              <div 
+                className="flex items-center gap-3 mb-2 px-1 cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={() => window.dispatchEvent(new CustomEvent('viabhron:toggle-ui'))}
+              >
                 <Logo className="w-8 h-8" apiKey={geminiApiKey} />
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-bold text-white tracking-tight truncate">Viabhron</div>
@@ -214,7 +215,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Celestial Client: VhatsAppeningAi */}
               <button
-                onClick={() => onOpenVhatsAppening()}
+                onClick={() => window.dispatchEvent(new CustomEvent('viabhron:toggle-ui'))}
                 className="w-full flex items-center justify-center gap-2 bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-400 rounded-lg px-4 py-2 text-sm font-bold transition-all border border-indigo-500/20 shadow-lg shadow-indigo-500/5"
                 title="VhatsAppeningAi"
               >

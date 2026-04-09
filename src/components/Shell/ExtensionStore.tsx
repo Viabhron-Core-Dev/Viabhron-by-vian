@@ -21,14 +21,15 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Extension, ExtensionCategory } from '../../types';
+import { Extension, ExtensionCategory, UIMode } from '../../types';
 
 interface ExtensionStoreProps {
   onInstall: (extension: Extension) => void;
   installedIds: string[];
+  uiMode?: UIMode;
 }
 
-export const ExtensionStore: React.FC<ExtensionStoreProps> = ({ onInstall, installedIds }) => {
+export const ExtensionStore: React.FC<ExtensionStoreProps> = ({ onInstall, installedIds, uiMode }) => {
   const [importUrl, setImportUrl] = useState('');
   const [isImporting, setIsImporting] = useState(false);
 
@@ -68,7 +69,7 @@ export const ExtensionStore: React.FC<ExtensionStoreProps> = ({ onInstall, insta
   };
 
   return (
-    <div className="h-full bg-gray-950 p-8 pb-32 md:pb-8 overflow-y-auto no-scrollbar">
+    <div className={`h-full bg-gray-950 p-8 ${uiMode === 'browser' ? 'pb-32 md:pb-8' : 'pb-8'} overflow-y-auto no-scrollbar`}>
       <div className="max-w-4xl mx-auto space-y-12">
         {/* Header */}
         <div className="space-y-4">

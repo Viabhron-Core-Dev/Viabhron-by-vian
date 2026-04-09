@@ -20,13 +20,14 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { AgentRole } from '../../types';
+import { AgentRole, UIMode } from '../../types';
 
 interface HatcheryProps {
   onHatch: (data: any) => void;
+  uiMode?: UIMode;
 }
 
-export const Hatchery: React.FC<HatcheryProps> = ({ onHatch }) => {
+export const Hatchery: React.FC<HatcheryProps> = ({ onHatch, uiMode }) => {
   const [mode, setMode] = useState<'hatch' | 'accredit' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -92,7 +93,7 @@ export const Hatchery: React.FC<HatcheryProps> = ({ onHatch }) => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-950 overflow-hidden">
+    <div className={`h-full flex flex-col bg-gray-950 overflow-hidden ${uiMode === 'browser' ? 'pb-32 md:pb-0' : ''}`}>
       {/* Header */}
       <div className="h-20 border-b border-white/5 flex items-center justify-between px-8 bg-gray-900/50 backdrop-blur-xl shrink-0">
         <div className="flex items-center gap-4">

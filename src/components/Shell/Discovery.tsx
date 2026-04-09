@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { infra } from '../../lib/infraManager';
+import { UIMode } from '../../types';
 
 interface Project {
   projectId: string;
@@ -26,6 +27,7 @@ interface Project {
 interface DiscoveryProps {
   accessToken: string;
   onProjectSelected: (projectId: string, config: any) => void;
+  uiMode?: UIMode;
 }
 
 interface ProvisioningStep {
@@ -35,7 +37,7 @@ interface ProvisioningStep {
   icon: any;
 }
 
-export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSelected }) => {
+export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSelected, uiMode }) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -117,7 +119,7 @@ export const Discovery: React.FC<DiscoveryProps> = ({ accessToken, onProjectSele
   );
 
   return (
-    <div className="flex flex-col h-full bg-gray-950 text-gray-100 p-8 pb-32 md:pb-8 overflow-y-auto no-scrollbar">
+    <div className={`flex flex-col h-full bg-gray-950 text-gray-100 p-8 ${uiMode === 'browser' ? 'pb-32 md:pb-8' : 'pb-8'} overflow-y-auto no-scrollbar`}>
       <div className="max-w-4xl mx-auto w-full space-y-8">
         {/* Header */}
         <div className="space-y-2">

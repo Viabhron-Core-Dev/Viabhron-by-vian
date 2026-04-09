@@ -11,6 +11,7 @@ import {
   Component
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { UIMode } from '../../types';
 
 interface Artifact {
   id: string;
@@ -21,7 +22,7 @@ interface Artifact {
   timestamp: Date;
 }
 
-export function Artifacts({ tabId, userId }: { tabId: string, userId?: string }) {
+export function Artifacts({ tabId, userId, uiMode }: { tabId: string, userId?: string, uiMode?: UIMode }) {
   const [activeArtifact, setActiveArtifact] = useState<Artifact | null>(null);
   const [viewMode, setViewMode] = useState<'preview' | 'code'>('preview');
   const [artifacts, setArtifacts] = useState<Artifact[]>([
@@ -145,7 +146,7 @@ export function Artifacts({ tabId, userId }: { tabId: string, userId?: string })
             )}
           </AnimatePresence>
 
-          <button className="absolute bottom-6 right-6 w-10 h-10 rounded-2xl bg-gray-900 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all shadow-2xl">
+          <button className={`absolute ${uiMode === 'browser' ? 'bottom-32 md:bottom-6' : 'bottom-6'} right-6 w-10 h-10 rounded-2xl bg-gray-900 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all shadow-2xl`}>
             <Maximize2 className="w-4 h-4" />
           </button>
         </main>

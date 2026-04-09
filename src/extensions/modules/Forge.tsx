@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { UIMode } from '../../types';
 import { 
   FileCode, 
   Save, 
@@ -22,9 +23,10 @@ interface FileEntry {
 interface ForgeProps {
   isLockdown?: boolean;
   checkSovereignProcedures?: (action: string, metadata?: any) => { allowed: boolean; message?: string };
+  uiMode?: UIMode;
 }
 
-export const Forge: React.FC<ForgeProps> = ({ isLockdown, checkSovereignProcedures }) => {
+export const Forge: React.FC<ForgeProps> = ({ isLockdown, checkSovereignProcedures, uiMode }) => {
   const [files, setFiles] = useState<FileEntry[]>([
     { name: 'main.py', content: 'print("Hello from Viabhron Forge")', language: 'python' },
     { name: 'utils.js', content: 'export const add = (a, b) => a + b;', language: 'javascript' }
@@ -49,7 +51,7 @@ export const Forge: React.FC<ForgeProps> = ({ isLockdown, checkSovereignProcedur
   };
 
   return (
-    <div className="h-full bg-gray-950 flex flex-col md:flex-row overflow-hidden font-mono">
+    <div className={`h-full bg-gray-950 flex flex-col md:flex-row overflow-hidden font-mono ${uiMode === 'browser' ? 'pb-32 md:pb-0' : ''}`}>
       {/* File Explorer Sidebar */}
       <div className="w-full md:w-64 bg-gray-900 border-r border-white/5 flex flex-col shrink-0">
         <div className="p-4 border-b border-white/5 flex items-center justify-between">

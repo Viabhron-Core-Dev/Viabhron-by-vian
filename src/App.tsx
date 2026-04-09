@@ -57,7 +57,7 @@ import { Onboarding } from './components/Shell/Onboarding';
 import { Logo } from './components/Shell/Logo';
 import { CelestialClient } from "./components/Celestial/CelestialClient";
 
-import { Extension, TabType, Agent, UIConfig, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client, OnboardingState } from './types';
+import { Extension, TabType, Agent, UIConfig, UIMode, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client, OnboardingState } from './types';
 import { infra } from './lib/infraManager';
 import { db } from './lib/firebase';
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from 'firebase/firestore';
@@ -70,6 +70,8 @@ import { INITIAL_SOPS } from './constants/sops';
 import { INITIAL_PROPOSALS } from './constants/proposals';
 import { INITIAL_MINI_APPS } from './constants/miniapps';
 import { INITIAL_CLIENTS } from './constants/clients';
+
+import { useClickOutside } from './hooks/useClickOutside';
 
 declare global {
   interface Window {
@@ -100,8 +102,13 @@ export default function App() {
   } = useTabs(user, extensions);
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
+  const [uiMode, setUiMode] = useState<UIMode>('vaa');
   const [isTabSwitcherOpen, setIsTabSwitcherOpen] = useState(false);
   const [isSystemMenuOpen, setIsSystemMenuOpen] = useState(false);
+  const systemMenuRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(systemMenuRef, () => setIsSystemMenuOpen(false));
+
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [confirmationRequest, setConfirmationRequest] = useState<{
     isOpen: boolean;
@@ -588,6 +595,21 @@ export default function App() {
     };
   }, [googleClientId]);
 
+  useEffect(() => {
+    const handleToggleUI = () => {
+      setUiMode(prev => {
+        const next = prev === 'vaa' ? 'browser' : 'vaa';
+        if (next === 'vaa') {
+          setActiveTabId('vaa');
+        }
+        return next;
+      });
+    };
+
+    window.addEventListener('viabhron:toggle-ui', handleToggleUI);
+    return () => window.removeEventListener('viabhron:toggle-ui', handleToggleUI);
+  }, []);
+
   const handleConnectCloud = async () => {
     if (!window.google) {
       alert("Google Identity Services SDK not loaded yet. Please wait a moment.");
@@ -897,46 +919,65 @@ export default function App() {
         )}
       </AnimatePresence>
       <div className="flex-1 flex overflow-hidden relative">
-        <Sidebar 
-          user={user}
-          login={login}
-          logout={logout}
-          extensions={extensions} 
-          miniApps={miniApps}
-          clients={clients}
-          securityRules={securityRules}
-          efficiencyPatches={efficiencyPatches}
-          onToggleMiniApp={handleToggleMiniApp}
-          onToggleClient={handleToggleClient}
-          onToggleRule={handleToggleRule}
-          onTogglePatch={handleTogglePatch}
-          onConnectCloud={handleConnectCloud} 
-          isCollapsed={isSidebarCollapsed}
-          onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          onOpenStore={() => onQuickAction(() => handleAddTab('store', 'Extension Store'))}
-          onOpenCanvas={() => onQuickAction(() => handleAddTab('canvas', 'Visual Workflow'))}
-          onOpenArtifacts={() => onQuickAction(() => handleAddTab('artifacts', 'Generative Artifacts'))}
-          onOpenMetrics={() => onQuickAction(() => handleAddTab('metrics', 'System Metrics'))}
-          onOpenSimulation={() => onQuickAction(() => handleAddTab('simulation', 'Simulation Engine'))}
-          onOpenGovernance={() => onQuickAction(() => handleAddTab('governance', 'Agent Governance Toolkit'))}
-          onOpenForge={() => onQuickAction(() => handleAddTab('forge', 'Vibe Forge (AI IDE)'))}
-          onOpenAgentCLI={() => onQuickAction(() => handleAddTab('agent_cli', 'Agent CLI'))}
-          onOpenSentinel={() => onQuickAction(() => handleAddTab('sentinel', 'Sentinel Guardian'))}
-          onOpenSecurity={() => onQuickAction(() => handleAddTab('security', 'Security Division'))}
-          onOpenEfficiency={() => onQuickAction(() => handleAddTab('efficiency', 'Efficiency Patches'))}
-          onOpenHatchery={() => onQuickAction(() => handleAddTab('hatchery', 'The Hatchery'))}
-          onOpenSOPs={() => onQuickAction(() => handleAddTab('sops', 'SOP Registry'))}
-          onOpenProposals={() => onQuickAction(() => handleAddTab('proposals', 'Ratification Registry'))}
-          onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
-          onOpenVhatsAppening={() => onQuickAction(() => handleAddTab('vhatsappening', 'VhatsAppeningAi'))}
-          onOpenPlaceholderClient={() => onQuickAction(() => handleAddTab('placeholder_client', 'Flagship Client'))}
-          geminiApiKey={geminiApiKey}
-          systemMode={systemMode}
-        />
+        {uiMode === 'browser' && (
+          <Sidebar 
+            user={user}
+            login={login}
+            logout={logout}
+            extensions={extensions} 
+            miniApps={miniApps}
+            clients={clients}
+            securityRules={securityRules}
+            efficiencyPatches={efficiencyPatches}
+            onToggleMiniApp={handleToggleMiniApp}
+            onToggleClient={handleToggleClient}
+            onToggleRule={handleToggleRule}
+            onTogglePatch={handleTogglePatch}
+            onConnectCloud={handleConnectCloud} 
+            isCollapsed={isSidebarCollapsed}
+            onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            onOpenStore={() => onQuickAction(() => handleAddTab('store', 'Extension Store'))}
+            onOpenCanvas={() => onQuickAction(() => handleAddTab('canvas', 'Visual Workflow'))}
+            onOpenArtifacts={() => onQuickAction(() => handleAddTab('artifacts', 'Generative Artifacts'))}
+            onOpenMetrics={() => onQuickAction(() => handleAddTab('metrics', 'System Metrics'))}
+            onOpenSimulation={() => onQuickAction(() => handleAddTab('simulation', 'Simulation Engine'))}
+            onOpenGovernance={() => onQuickAction(() => handleAddTab('governance', 'Agent Governance Toolkit'))}
+            onOpenForge={() => onQuickAction(() => handleAddTab('forge', 'Vibe Forge (AI IDE)'))}
+            onOpenAgentCLI={() => onQuickAction(() => handleAddTab('agent_cli', 'Agent CLI'))}
+            onOpenSentinel={() => onQuickAction(() => handleAddTab('sentinel', 'Sentinel Guardian'))}
+            onOpenSecurity={() => onQuickAction(() => handleAddTab('security', 'Security Division'))}
+            onOpenEfficiency={() => onQuickAction(() => handleAddTab('efficiency', 'Efficiency Patches'))}
+            onOpenHatchery={() => onQuickAction(() => handleAddTab('hatchery', 'The Hatchery'))}
+            onOpenSOPs={() => onQuickAction(() => handleAddTab('sops', 'SOP Registry'))}
+            onOpenProposals={() => onQuickAction(() => handleAddTab('proposals', 'Ratification Registry'))}
+            onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
+            onOpenPlaceholderClient={() => onQuickAction(() => handleAddTab('placeholder_client', 'Flagship Client'))}
+            geminiApiKey={geminiApiKey}
+            systemMode={systemMode}
+          />
+        )}
 
         <div className="flex-1 flex flex-col min-w-0 relative">
-          <div className="flex-1 relative overflow-hidden pb-32 md:pb-0">
-            {(!isSidebarCollapsed || isSystemMenuOpen) && (
+          {uiMode === 'browser' && (
+            <div className="hidden md:block">
+              <Tabs 
+                tabs={tabs}
+                activeTabId={activeTabId || ''}
+                onAddTab={() => onQuickAction(() => handleAddTab())}
+                onCloseTab={handleCloseTab}
+                onSwitchTab={(id) => onQuickAction(() => {
+                  const tab = tabs.find(t => t.id === id);
+                  if (tab?.status === 'shelved') {
+                    handleWakeTab(id);
+                  } else {
+                    setActiveTabId(id);
+                  }
+                })}
+              />
+            </div>
+          )}
+          <div className={`flex-1 relative overflow-hidden ${uiMode === 'browser' ? 'pb-32 md:pb-0' : ''}`}>
+            {uiMode === 'browser' && (!isSidebarCollapsed || isSystemMenuOpen) && (
               <div 
                 className="absolute inset-0 z-[80] bg-black/20 backdrop-blur-[2px]"
                 onClick={() => {
@@ -946,14 +987,16 @@ export default function App() {
               />
             )}
 
-            <SystemHUD 
-              onClearCache={() => console.log('Cache cleared')}
-              onHibernateAll={() => tabs.forEach(t => handleShelveTab(t.id))}
-              isLockdown={isLockdown}
-            />
+            {uiMode === 'browser' && (
+              <SystemHUD 
+                onClearCache={() => console.log('Cache cleared')}
+                onHibernateAll={() => tabs.forEach(t => handleShelveTab(t.id))}
+                isLockdown={isLockdown}
+              />
+            )}
 
             <AnimatePresence>
-              {isTerminalOpen && (
+              {uiMode === 'browser' && isTerminalOpen && (
                 <div className="absolute bottom-4 right-4 w-full max-w-lg h-64 z-[150]">
                   <Terminal onClose={() => setIsTerminalOpen(false)} />
                 </div>
@@ -989,124 +1032,136 @@ export default function App() {
             />
 
             <div className="flex-1 relative h-full">
-              {tabs.map((tab) => (
-                <div 
-                  key={tab.id}
-                  className={`absolute inset-0 transition-opacity duration-300 ${tab.id === activeTabId && tab.status === 'active' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
-                >
-                {tab.type === 'chat' ? (
-                  <Chat 
-                    tabId={tab.id} 
-                    userId={user?.uid} 
-                    agentId={tab.agentId}
-                    isBridged={!!bridgedProjectId}
-                    geminiApiKey={geminiApiKey}
-                    availableExtensions={extensions}
-                    activeExtensionIds={tab.activeExtensionIds || []}
-                    externalPlugins={externalPlugins}
-                    onUpdateExternalPlugins={setExternalPlugins}
-                    onUpdateExtensions={(ids) => {
-                      if (user) {
-                        setDoc(doc(db, 'users', user.uid, 'tabs', tab.id), { activeExtensionIds: ids }, { merge: true });
-                      }
-                    }}
-                    isLockdown={isLockdown}
-                    checkSovereignProcedures={checkSovereignProcedures}
-                  />
-                ) : tab.type === 'discovery' && accessToken ? (
-                  <Discovery 
-                    accessToken={accessToken} 
-                    onProjectSelected={handleProjectSelected} 
-                  />
-                ) : tab.type === 'store' ? (
-                  <ExtensionStore 
-                    onInstall={handleInstallExtension} 
-                    installedIds={extensions.map(e => e.id)} 
-                  />
-                ) : tab.type === 'canvas' ? (
-                  <Canvas 
-                    tabId={tab.id}
-                    userId={user?.uid}
-                    initialData={tab.canvasData}
-                    viewMode={canvasViewMode}
-                    onViewModeChange={setCanvasViewMode}
-                    onUpdate={(data) => {
-                      if (user) {
-                        setDoc(doc(db, 'users', user.uid, 'tabs', tab.id), { canvasData: data }, { merge: true });
-                      }
-                    }}
-                  />
-                ) : tab.type === 'artifacts' ? (
-                  <Artifacts 
-                    tabId={tab.id}
-                    userId={user?.uid}
-                  />
-                ) : tab.type === 'metrics' ? (
-                  <SystemMetrics />
-                ) : tab.type === 'simulation' ? (
-                  <Simulation />
-                ) : tab.type === 'governance' ? (
-                  <Governance />
-                ) : tab.type === 'forge' ? (
-                  <Forge isLockdown={isLockdown} checkSovereignProcedures={checkSovereignProcedures} />
-                ) : tab.type === 'agent_cli' ? (
-                  <AgentCLI isLockdown={isLockdown} checkSovereignProcedures={checkSovereignProcedures} />
-                ) : tab.type === 'sentinel' ? (
-                  <Sentinel 
-                    backgroundTasks={backgroundTasks}
-                    onRescue={handleCodexRescue}
-                    notifications={notifications}
-                    onMarkRead={(id) => setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: !n.read } : n))}
-                    onDelete={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
-                    onClearAll={() => setNotifications([])}
-                    onAction={(id, status) => {
-                      setNotifications(prev => prev.map(n => {
-                        if (n.id === id && n.action) {
-                          if (status === 'approved') n.action.onApprove();
-                          if (status === 'rejected') n.action.onReject();
-                          return { ...n, action: { ...n.action, status } };
+              {uiMode === 'vaa' ? (
+                <CelestialClient agents={agents} />
+              ) : (
+                tabs.map((tab) => (
+                  <div 
+                    key={tab.id}
+                    className={`absolute inset-0 transition-opacity duration-300 ${tab.id === activeTabId && tab.status === 'active' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                  >
+                  {tab.type === 'chat' ? (
+                    <Chat 
+                      tabId={tab.id} 
+                      userId={user?.uid} 
+                      agentId={tab.agentId}
+                      isBridged={!!bridgedProjectId}
+                      geminiApiKey={geminiApiKey}
+                      availableExtensions={extensions}
+                      activeExtensionIds={tab.activeExtensionIds || []}
+                      externalPlugins={externalPlugins}
+                      onUpdateExternalPlugins={setExternalPlugins}
+                      onUpdateExtensions={(ids) => {
+                        if (user) {
+                          setDoc(doc(db, 'users', user.uid, 'tabs', tab.id), { activeExtensionIds: ids }, { merge: true });
                         }
-                        return n;
-                      }));
-                      addLog({
-                        level: 'INFO',
-                        source: 'UI-Shell',
-                        message: `Chairman ${status} action for notification: ${id}`,
-                        metadata: { notificationId: id, status }
-                      });
-                    }}
-                    logs={logs}
-                  />
-                ) : tab.type === 'sops' ? (
-                  <SOPRegistry sops={sops} onExecute={(sop) => console.log('Executing SOP:', sop)} />
-                ) : tab.type === 'proposals' ? (
-                  <RatificationRegistry 
-                    proposals={proposals.filter(p => p.status === 'pending' || p.status === 'shelved')} 
-                    onRatify={handleRatifyProposal}
-                    onShelve={handleShelveProposal}
-                    onVeto={handleVetoProposal}
-                  />
-                ) : tab.type === 'security' ? (
-                  <SecurityDivision 
-                    rules={securityRules}
-                    onAddRule={handleAddRule}
-                    onToggleRule={handleToggleRule}
-                    onDeleteRule={handleDeleteRule}
-                    onLockdown={handleLockdown}
-                    isLockdownActive={isLockdown}
-                    onUnlock={handleUnlock}
-                  />
-                ) : tab.type === 'efficiency' ? (
-                  <EfficiencyDivision 
-                    mode={systemMode}
-                    onModeChange={handleModeChange}
-                    patches={efficiencyPatches}
-                    onApplyPatch={handleApplyPatch}
-                  />
-                ) : tab.type === 'hatchery' ? (
-                  <Hatchery onHatch={handleHatch} />
-                ) : tab.type === 'settings' ? (
-                  <div className="h-full bg-gray-950 p-8 pb-32 md:pb-8 overflow-y-auto no-scrollbar">
+                      }}
+                      isLockdown={isLockdown}
+                      checkSovereignProcedures={checkSovereignProcedures}
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'discovery' && accessToken ? (
+                    <Discovery 
+                      accessToken={accessToken} 
+                      onProjectSelected={handleProjectSelected} 
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'store' ? (
+                    <ExtensionStore 
+                      onInstall={handleInstallExtension} 
+                      installedIds={extensions.map(e => e.id)} 
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'canvas' ? (
+                    <Canvas 
+                      tabId={tab.id}
+                      userId={user?.uid}
+                      initialData={tab.canvasData}
+                      viewMode={canvasViewMode}
+                      onViewModeChange={setCanvasViewMode}
+                      onUpdate={(data) => {
+                        if (user) {
+                          setDoc(doc(db, 'users', user.uid, 'tabs', tab.id), { canvasData: data }, { merge: true });
+                        }
+                      }}
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'artifacts' ? (
+                    <Artifacts 
+                      tabId={tab.id}
+                      userId={user?.uid}
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'metrics' ? (
+                    <SystemMetrics uiMode={uiMode} />
+                  ) : tab.type === 'simulation' ? (
+                    <Simulation uiMode={uiMode} />
+                  ) : tab.type === 'governance' ? (
+                    <Governance uiMode={uiMode} />
+                  ) : tab.type === 'forge' ? (
+                    <Forge isLockdown={isLockdown} checkSovereignProcedures={checkSovereignProcedures} uiMode={uiMode} />
+                  ) : tab.type === 'agent_cli' ? (
+                    <AgentCLI isLockdown={isLockdown} checkSovereignProcedures={checkSovereignProcedures} uiMode={uiMode} />
+                  ) : tab.type === 'sentinel' ? (
+                    <Sentinel 
+                      backgroundTasks={backgroundTasks}
+                      onRescue={handleCodexRescue}
+                      notifications={notifications}
+                      onMarkRead={(id) => setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: !n.read } : n))}
+                      onDelete={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
+                      onClearAll={() => setNotifications([])}
+                      onAction={(id, status) => {
+                        setNotifications(prev => prev.map(n => {
+                          if (n.id === id && n.action) {
+                            if (status === 'approved') n.action.onApprove();
+                            if (status === 'rejected') n.action.onReject();
+                            return { ...n, action: { ...n.action, status } };
+                          }
+                          return n;
+                        }));
+                        addLog({
+                          level: 'INFO',
+                          source: 'UI-Shell',
+                          message: `Chairman ${status} action for notification: ${id}`,
+                          metadata: { notificationId: id, status }
+                        });
+                      }}
+                      logs={logs}
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'sops' ? (
+                    <SOPRegistry sops={sops} onExecute={(sop) => console.log('Executing SOP:', sop)} uiMode={uiMode} />
+                  ) : tab.type === 'proposals' ? (
+                    <RatificationRegistry 
+                      proposals={proposals.filter(p => p.status === 'pending' || p.status === 'shelved')} 
+                      onRatify={handleRatifyProposal}
+                      onShelve={handleShelveProposal}
+                      onVeto={handleVetoProposal}
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'security' ? (
+                    <SecurityDivision 
+                      rules={securityRules}
+                      onAddRule={handleAddRule}
+                      onToggleRule={handleToggleRule}
+                      onDeleteRule={handleDeleteRule}
+                      onLockdown={handleLockdown}
+                      isLockdownActive={isLockdown}
+                      onUnlock={handleUnlock}
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'efficiency' ? (
+                    <EfficiencyDivision 
+                      mode={systemMode}
+                      onModeChange={handleModeChange}
+                      patches={efficiencyPatches}
+                      onApplyPatch={handleApplyPatch}
+                      uiMode={uiMode}
+                    />
+                  ) : tab.type === 'hatchery' ? (
+                    <Hatchery onHatch={handleHatch} uiMode={uiMode} />
+                  ) : tab.type === 'settings' ? (
+                    <div className={`h-full bg-gray-950 p-8 ${uiMode === 'browser' ? 'pb-32 md:pb-8' : 'pb-8'} overflow-y-auto no-scrollbar`}>
                     <div className="max-w-2xl mx-auto space-y-8">
                       <div className="flex items-center gap-4 mb-8">
                         <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center">
@@ -1329,7 +1384,7 @@ export default function App() {
                     </div>
                   </div>
                 ) : tab.type === 'vhatsappening' ? (
-                  <CelestialClient />
+                  <CelestialClient agents={agents} />
                 ) : tab.type === 'placeholder_client' ? (
                   <div className="h-full bg-gray-950 flex flex-col items-center justify-center space-y-4 p-8 text-center">
                     <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center">
@@ -1343,50 +1398,51 @@ export default function App() {
                   </div>
                 ) : null}
               </div>
-            ))}
+            )))}
           </div>
 
-          <div className="md:hidden relative z-[100]">
-            <BottomNavigation 
-              tabs={tabs}
-              activeTabId={activeTabId || ''}
-              isSidebarOpen={!isSidebarCollapsed}
-              onTabSelect={(id) => onQuickAction(() => {
-                const tab = tabs.find(t => t.id === id);
-                if (tab?.status === 'shelved') {
-                  handleWakeTab(id);
-                } else {
-                  setActiveTabId(id);
-                }
-              })}
-              onTabClose={handleCloseTab}
-              onAddTab={() => onQuickAction(() => handleAddTab())}
-              onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-              onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
-              onOpenTabSwitcher={() => setIsTabSwitcherOpen(true)}
-              onOpenSystemMenu={() => setIsSystemMenuOpen(true)}
-              onEditTab={(tab) => {
-                const newTitle = prompt('Rename this session:', tab.title);
-                if (newTitle && user) {
-                  setDoc(doc(db, 'users', user.uid, 'tabs', tab.id), { title: newTitle }, { merge: true });
-                }
-              }}
-              onShareTab={(tab) => {
-                onQuickAction(() => handleAddTab(tab.type, `${tab.title} (Clone)`));
-              }}
-            />
-          </div>
+          {uiMode === 'browser' && (
+            <div className="md:hidden relative z-[100]">
+              <BottomNavigation 
+                tabs={tabs}
+                activeTabId={activeTabId || ''}
+                isSidebarOpen={!isSidebarCollapsed}
+                onTabSelect={(id) => onQuickAction(() => {
+                  const tab = tabs.find(t => t.id === id);
+                  if (tab?.status === 'shelved') {
+                    handleWakeTab(id);
+                  } else {
+                    setActiveTabId(id);
+                  }
+                })}
+                onTabClose={handleCloseTab}
+                onAddTab={() => onQuickAction(() => handleAddTab())}
+                onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
+                onOpenTabSwitcher={() => setIsTabSwitcherOpen(true)}
+                onOpenSystemMenu={() => setIsSystemMenuOpen(true)}
+                onEditTab={(tab) => {
+                  const newTitle = prompt('Rename this session:', tab.title);
+                  if (newTitle && user) {
+                    setDoc(doc(db, 'users', user.uid, 'tabs', tab.id), { title: newTitle }, { merge: true });
+                  }
+                }}
+                onShareTab={(tab) => {
+                  onQuickAction(() => handleAddTab(tab.type, `${tab.title} (Clone)`));
+                }}
+              />
+            </div>
+          )}
 
           <AnimatePresence>
-            {isSystemMenuOpen && (
-              <>
-                <div className="fixed inset-0 z-[110]" onClick={() => setIsSystemMenuOpen(false)} />
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="fixed bottom-24 right-4 w-64 bg-gray-900/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl z-[120] overflow-hidden"
-                >
+            {uiMode === 'browser' && isSystemMenuOpen && (
+              <motion.div
+                ref={systemMenuRef}
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                className="fixed bottom-24 right-4 w-64 bg-gray-900/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl z-[120] overflow-hidden"
+              >
                   <div className="p-2 space-y-1">
                     <button 
                       onClick={() => {
@@ -1443,7 +1499,6 @@ export default function App() {
                     </button>
                   </div>
                 </motion.div>
-              </>
             )}
           </AnimatePresence>
 

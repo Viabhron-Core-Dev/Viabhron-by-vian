@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { UIMode } from '../../types';
 
 const data = [
   { time: '00:00', cpu: 12, mem: 45, tokens: 1200 },
@@ -24,11 +25,11 @@ const data = [
   { time: '23:59', cpu: 15, mem: 48, tokens: 1500 },
 ];
 
-export function SystemMetrics() {
+export function SystemMetrics({ uiMode }: { uiMode?: UIMode }) {
   const [activeTab, setActiveTab] = useState<'overview' | 'agents' | 'cloud'>('overview');
 
   return (
-    <div className="h-full flex flex-col bg-gray-950 overflow-hidden">
+    <div className={`h-full flex flex-col bg-gray-950 overflow-hidden ${uiMode === 'browser' ? 'pb-32 md:pb-0' : ''}`}>
       <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-gray-900/50 backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-green-600/20 flex items-center justify-center">

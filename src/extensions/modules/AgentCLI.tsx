@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { UIMode } from '../../types';
 import { 
   Terminal as TerminalIcon, 
   Play, 
@@ -22,9 +23,10 @@ interface LogEntry {
 interface AgentCLIProps {
   isLockdown?: boolean;
   checkSovereignProcedures?: (action: string, metadata?: any) => { allowed: boolean; message?: string };
+  uiMode?: UIMode;
 }
 
-export const AgentCLI: React.FC<AgentCLIProps> = ({ isLockdown, checkSovereignProcedures }) => {
+export const AgentCLI: React.FC<AgentCLIProps> = ({ isLockdown, checkSovereignProcedures, uiMode }) => {
   const [logs, setLogs] = useState<LogEntry[]>([
     { id: '1', type: 'system', content: 'Viabhron Agent Execution Environment (v1.0.4) initialized.', timestamp: new Date() },
     { id: '2', type: 'system', content: 'Connected to Cloud Run Office (us-central1).', timestamp: new Date() },
@@ -84,7 +86,7 @@ export const AgentCLI: React.FC<AgentCLIProps> = ({ isLockdown, checkSovereignPr
   };
 
   return (
-    <div className="h-full bg-[#050508] flex flex-col font-mono">
+    <div className={`h-full bg-[#050508] flex flex-col font-mono ${uiMode === 'browser' ? 'pb-32 md:pb-0' : ''}`}>
       {/* Header HUD */}
       <div className="h-14 bg-gray-900/50 border-b border-white/5 flex items-center justify-between px-6 backdrop-blur-xl">
         <div className="flex items-center gap-4">
