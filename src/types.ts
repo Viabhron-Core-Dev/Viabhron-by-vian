@@ -11,12 +11,13 @@ export interface Extension {
   icon: LucideIcon;
   category: ExtensionCategory;
   status: 'active' | 'inactive' | 'error';
+  isBound?: boolean;
   source: 'inbuilt' | 'external';
   url?: string;
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client' | 'nexus';
 
 export type SystemMode = 'turbo' | 'eco' | 'stealth';
 
@@ -265,6 +266,27 @@ export interface AppSettings {
   relayNodes: string[];
   theme: "light" | "dark" | "celestial";
   lastBackupAt?: string;
+  tokenGovernance: TokenGovernance;
+  nexusSettings: NexusSettings;
+}
+
+export interface TokenGovernance {
+  globalMasterSlider: number; // 0-100
+  nexusSlider: number; // 0-100
+  emergencyBreakerEnabled: boolean;
+  dailyTokenLimit: number;
+  currentDailyUsage: number;
+  gracefulDegradationEnabled: boolean;
+  priorityModuleIds: string[]; // IDs of modules that stay in high-intel mode
+}
+
+export interface NexusSettings {
+  isEnabled: boolean;
+  isPrivate: boolean; // Local vs Global
+  allowedAgentIds: string[];
+  tokenUsageSlider: number; // 0-100
+  autoForkEnabled: boolean;
+  autonomyMandateEnabled: boolean;
 }
 
 export interface SecurityRule {
@@ -373,6 +395,11 @@ export interface Message {
     emailId?: string;
     snippet?: string;
     sender?: string;
+    [key: string]: any;
+  };
+  sanitizationReport?: {
+    pixels: number;
+    links: number;
   };
   emailMetadata?: {
     from: string;

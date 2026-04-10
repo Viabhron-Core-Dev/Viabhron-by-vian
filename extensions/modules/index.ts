@@ -1,5 +1,5 @@
-import { Terminal, Activity, Bug, Shield, Plus, Palette } from 'lucide-react';
-import { Extension } from '../../types';
+import { Terminal, Activity, Bug, Shield, Plus, Palette, Library } from 'lucide-react';
+import { Extension } from '../../src/types';
 
 export const agentTerminalModule: Extension = { 
   id: 't4', 
@@ -79,4 +79,14 @@ export const sovereignCreativeStudioModule: Extension = {
   status: 'active', 
   source: 'inbuilt', 
   description: 'Visual canvas for multi-step creative workflows and orchestration' 
+};
+
+export const viabhronNexusModule: Extension = {
+  id: 't12',
+  name: 'Viabhron Nexus',
+  category: 'module',
+  icon: Library,
+  status: 'inactive',
+  source: 'inbuilt',
+  description: 'Private Library Substrate for AI narrative synthesis and data trading'
 };

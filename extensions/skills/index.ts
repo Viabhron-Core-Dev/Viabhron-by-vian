@@ -1,5 +1,5 @@
 import { Globe, FileText, Layout, Code, Share2, ShieldAlert, Paintbrush } from 'lucide-react';
-import { Extension } from '../../types';
+import { Extension } from '../../src/types';
 
 export const globalPulseSkill: Extension = { 
   id: 's1', 

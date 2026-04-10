@@ -1,5 +1,5 @@
 import { Globe } from 'lucide-react';
-import { Extension } from '../../types';
+import { Extension } from '../../src/types';
 
 export const GlobalPulse: Extension = {
   id: 's1',

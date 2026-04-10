@@ -1,5 +1,5 @@
 import { Github, Mail, Slack, Database, Share2, ListTodo } from 'lucide-react';
-import { Extension } from '../../types';
+import { Extension } from '../../src/types';
 
 export const githubConnector: Extension = { 
   id: 'gh', 

@@ -49,7 +49,10 @@ import {
   HelpCircle,
   Bot,
   Network,
-  Layers
+  Layers,
+  Mail,
+  ShieldCheck,
+  Brain
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { localDb } from "../../lib/db";
@@ -711,6 +714,339 @@ const CloudflareKnockout = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
+const GmailRelayKnockout = ({ onClose }: { onClose: () => void }) => {
+  const [showOracle, setShowOracle] = useState(false);
+  const [oracleInput, setOracleInput] = useState("");
+  const [oracleMessages, setOracleMessages] = useState([
+    { role: 'assistant', content: "I am the Resident AI Oracle. I can help you connect multiple Gmail accounts with granular permissions. Which account should we configure first?" }
+  ]);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.9, y: 20 }}
+      className="fixed inset-4 z-[100] bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-800 flex flex-col overflow-hidden"
+    >
+      {/* Header */}
+      <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/50 backdrop-blur-xl">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20">
+            <Mail className="w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-lg font-black text-white tracking-tight">Gmail Sovereign Relay</h2>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Multi-Account Comms Substrate</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setShowOracle(!showOracle)}
+            className={`p-3 rounded-2xl transition-all ${showOracle ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20" : "bg-slate-800 text-slate-400 hover:text-white"}`}
+          >
+            <HelpCircle className="w-5 h-5" />
+          </button>
+          <button onClick={onClose} className="p-3 bg-slate-800 text-slate-400 hover:text-white rounded-2xl transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 flex overflow-hidden">
+        {/* Main Config Area */}
+        <div className="flex-1 overflow-y-auto p-8 space-y-8 no-scrollbar">
+          <div className="space-y-4">
+            <h3 className="text-xs font-black text-white uppercase tracking-[0.2em]">Connected Identities</h3>
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { email: "elvilewis40@gmail.com", mode: "Executive (R/W)", status: "Active" },
+                { email: "vianney.l@gmail.com", mode: "Sentinel (Read-Only)", status: "Pending Key" }
+              ].map(acc => (
+                <div key={acc.email} className="p-5 bg-slate-800/50 rounded-2xl border border-slate-700/50 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-slate-500 border border-slate-800">
+                      <User className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">{acc.email}</h4>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[8px] font-black text-indigo-400 uppercase tracking-widest">{acc.mode}</span>
+                        <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">•</span>
+                        <span className={`text-[8px] font-black uppercase tracking-widest ${acc.status === 'Active' ? 'text-green-500' : 'text-orange-500'}`}>{acc.status}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="p-2 text-slate-400 hover:text-white transition-colors">
+                    <Settings className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+              <button className="p-5 border-2 border-dashed border-slate-800 rounded-2xl flex items-center justify-center gap-3 text-slate-500 hover:text-slate-300 hover:border-slate-700 transition-all group">
+                <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Add Sovereign Identity</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xs font-black text-white uppercase tracking-[0.2em]">Sovereign Sanitization Briefing</h3>
+            <div className="p-6 bg-slate-900 rounded-[2rem] border border-slate-800 space-y-4">
+              <div className="flex items-center gap-3 text-green-400">
+                <ShieldCheck className="w-5 h-5" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Active Protection: elvilewis40@gmail.com</span>
+              </div>
+              <div className="space-y-3">
+                {[
+                  { type: "Tracking Pixel", count: 12, action: "Stripped", color: "text-red-400" },
+                  { type: "Suspicious Link", count: 3, action: "Neutralized", color: "text-orange-400" },
+                  { type: "Data Leak Pattern", count: 0, action: "Clean", color: "text-green-400" }
+                ].map(item => (
+                  <div key={item.type} className="flex items-center justify-between p-3 bg-slate-800/30 rounded-xl border border-slate-800/50">
+                    <span className="text-[10px] font-bold text-slate-300">{item.type}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-black text-white">{item.count}</span>
+                      <span className={`text-[8px] font-black uppercase tracking-widest ${item.color}`}>{item.action}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[9px] font-medium text-slate-500 italic">"The Resident AI has sanitized your incoming comms. No tracking data was leaked to external servers."</p>
+            </div>
+          </div>
+
+          <div className="p-8 bg-slate-950 rounded-[2rem] border border-slate-800 space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-black text-white uppercase tracking-[0.2em]">Late-Binding OAuth Injection</h3>
+              <div className="px-3 py-1 bg-red-500/10 text-red-500 rounded-full text-[8px] font-black uppercase tracking-widest border border-red-500/20">
+                Security Division Active
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Client ID</label>
+                  <input 
+                    type="password" 
+                    placeholder="••••••••••••"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-2xl px-5 py-4 text-sm text-white outline-none focus:border-red-500/50 transition-colors"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Client Secret</label>
+                  <input 
+                    type="password" 
+                    placeholder="••••••••••••"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-2xl px-5 py-4 text-sm text-white outline-none focus:border-red-500/50 transition-colors"
+                  />
+                </div>
+              </div>
+              <p className="text-[10px] text-slate-500 leading-relaxed italic">
+                * OAuth credentials are only injected into the protected substrate after the Resident AI has audited the "Relay" manifest.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Oracle Sidebar */}
+        <AnimatePresence>
+          {showOracle && (
+            <motion.div 
+              initial={{ x: 400 }}
+              animate={{ x: 0 }}
+              exit={{ x: 400 }}
+              className="w-96 border-l border-slate-800 bg-slate-900 flex flex-col shadow-2xl"
+            >
+              <div className="p-6 border-b border-slate-800 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 border border-indigo-500/20">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-white uppercase tracking-widest">Resident Oracle</h3>
+                  <p className="text-[9px] font-bold text-green-500 uppercase tracking-widest">Context: Gmail Substrate</p>
+                </div>
+              </div>
+              <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
+                {oracleMessages.map((msg, idx) => (
+                  <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[90%] p-4 rounded-2xl text-xs leading-relaxed ${
+                      msg.role === 'user' ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-300 border border-slate-700'
+                    }`}>
+                      {msg.content}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="p-6 border-t border-slate-800">
+                <div className="relative">
+                  <input 
+                    type="text" 
+                    placeholder="Ask the Oracle..."
+                    className="w-full bg-slate-800 border border-slate-700 rounded-2xl px-5 py-4 text-xs text-white outline-none focus:border-indigo-500/50 transition-colors"
+                    value={oracleInput}
+                    onChange={(e) => setOracleInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && oracleInput.trim()) {
+                        setOracleMessages([...oracleMessages, { role: 'user', content: oracleInput }]);
+                        setOracleInput("");
+                        setTimeout(() => {
+                          setOracleMessages(prev => [...prev, { role: 'assistant', content: "I am drafting the OAuth manifest for your secondary account. I will ensure only 'Sentinel' permissions are requested." }]);
+                        }, 1000);
+                      }
+                    }}
+                  />
+                  <Send className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+};
+
+const GitHubKnockout = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-slate-950/90 backdrop-blur-xl z-[150] flex items-center justify-center p-6"
+    >
+      <div className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
+        <div className="p-8 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-slate-900 shadow-lg">
+              <Globe className="w-7 h-7" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-white tracking-tight">GitHub Hatchery Ignition</h2>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Late-Binding Substrate Connection</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-3 hover:bg-slate-800 rounded-full transition-colors">
+            <X className="w-6 h-6 text-slate-500" />
+          </button>
+        </div>
+        
+        <div className="p-8 space-y-8 overflow-y-auto no-scrollbar">
+          <div className="p-6 bg-indigo-500/10 rounded-3xl border border-indigo-500/20 space-y-3">
+            <div className="flex items-center gap-3 text-indigo-400">
+              <ShieldCheck className="w-5 h-5" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Security Protocol: Manifest Audit</span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              The Resident AI will audit all incoming GitHub repositories before they are "Hatched" into the OS. This ensures no malicious code or telemetry leaks from external modules.
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Personal Access Token (PAT)</label>
+              <input 
+                type="password" 
+                placeholder="ghp_••••••••••••••••••••••••••••••••"
+                className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-6 py-4 text-sm text-white outline-none focus:border-indigo-500/50 transition-colors"
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-5 bg-slate-950 border border-slate-800 rounded-3xl space-y-2">
+                <h4 className="text-[10px] font-black text-white uppercase tracking-widest">Auto-Sync</h4>
+                <p className="text-[9px] text-slate-500">Keep extensions updated with the Hatchery repo.</p>
+                <div className="w-10 h-5 bg-indigo-500 rounded-full relative p-1 mt-2">
+                  <div className="absolute right-1 top-1 w-3 h-3 bg-white rounded-full" />
+                </div>
+              </div>
+              <div className="p-5 bg-slate-950 border border-slate-800 rounded-3xl space-y-2">
+                <h4 className="text-[10px] font-black text-white uppercase tracking-widest">Audit Level</h4>
+                <p className="text-[9px] text-slate-500">Strict adversarial review of all imports.</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-[10px] font-bold text-indigo-400">Level 4</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-8 bg-slate-950/50 border-t border-slate-800">
+          <button 
+            onClick={onClose}
+            className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs shadow-xl shadow-indigo-600/20 transition-all active:scale-[0.98]"
+          >
+            Ignite Connection
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const IntelligenceHubKnockout = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-slate-950/90 backdrop-blur-xl z-[150] flex items-center justify-center p-6"
+    >
+      <div className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl">
+        <div className="p-8 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 shadow-lg border border-indigo-500/20">
+              <Brain className="w-7 h-7" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-white tracking-tight">Intelligence Hubs Setup</h2>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Frontier Model Gateway Configuration</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-3 hover:bg-slate-800 rounded-full transition-colors">
+            <X className="w-6 h-6 text-slate-500" />
+          </button>
+        </div>
+        
+        <div className="p-8 space-y-8 overflow-y-auto no-scrollbar">
+          <div className="space-y-4">
+            {[
+              { name: "Hugging Face", icon: <Globe className="w-4 h-4" />, placeholder: "hf_••••••••••••••••" },
+              { name: "Open Router", icon: <Network className="w-4 h-4" />, placeholder: "sk-or-••••••••••••" },
+              { name: "Ollama (Local)", icon: <Terminal className="w-4 h-4" />, placeholder: "http://localhost:11434" },
+              { name: "Claude Mythos (Optional)", icon: <Sparkles className="w-4 h-4" />, placeholder: "Frontier Access Key" }
+            ].map(hub => (
+              <div key={hub.name} className="p-6 bg-slate-950 border border-slate-800 rounded-3xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="text-slate-400">{hub.icon}</div>
+                    <h4 className="text-[10px] font-black text-white uppercase tracking-widest">{hub.name}</h4>
+                  </div>
+                  <div className="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 rounded text-[8px] font-bold uppercase tracking-widest border border-indigo-500/20">
+                    Ready
+                  </div>
+                </div>
+                <input 
+                  type="password" 
+                  placeholder={hub.placeholder}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-indigo-500/50 transition-colors"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="p-8 bg-slate-950/50 border-t border-slate-800">
+          <button 
+            onClick={onClose}
+            className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs shadow-xl shadow-indigo-600/20 transition-all active:scale-[0.98]"
+          >
+            Ratify Intelligence Hubs
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 const HQExtensionsVault = ({ onOpenWorkforce }: { onOpenWorkforce: () => void }) => {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     connectors: true,
@@ -720,44 +1056,82 @@ const HQExtensionsVault = ({ onOpenWorkforce }: { onOpenWorkforce: () => void })
     gaming: false,
     testing: false,
     extraProcessor: false,
-    branches: false,
+    branches: true,
+    gmailRelay: false,
     viabhronicLoader: false,
     clients: false
   });
 
+  const [boundSections, setBoundSections] = useState<Record<string, boolean>>({
+    connectors: false,
+    skills: true,
+    tools: true,
+    mcp: true,
+    intelligenceHubs: false,
+    gaming: true,
+    testing: true,
+    extraProcessor: false,
+    branches: true,
+    gmailRelay: false,
+    viabhronicLoader: true,
+    clients: true
+  });
+
   const [showCloudflareKnockout, setShowCloudflareKnockout] = useState(false);
+  const [showGmailKnockout, setShowGmailKnockout] = useState(false);
+  const [showGitHubKnockout, setShowGitHubKnockout] = useState(false);
+  const [showIntelligenceHubKnockout, setShowIntelligenceHubKnockout] = useState(false);
+  const [isGlasswingActive, setIsGlasswingActive] = useState(false);
+  const [isMythosConfigured, setIsMythosConfigured] = useState(false);
 
   const toggleSection = (section: string) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const VaultSection = ({ title, icon: Icon, section, children, onAdd }: { title: string, icon: any, section: string, children?: React.ReactNode, onAdd?: () => void }) => (
-    <div className="space-y-3">
+  const VaultSection = ({ title, icon: Icon, section, children, onAdd, isBound = true, onBind }: { title: string, icon: any, section: string, children?: React.ReactNode, onAdd?: () => void, isBound?: boolean, onBind?: () => void }) => (
+    <div className={`space-y-3 transition-opacity duration-300 ${!isBound ? "opacity-50 grayscale" : ""}`}>
       <div 
-        onClick={() => toggleSection(section)}
-        className="w-full flex items-center justify-between group cursor-pointer"
+        onClick={() => isBound && toggleSection(section)}
+        className={`w-full flex items-center justify-between group ${isBound ? "cursor-pointer" : "cursor-not-allowed"}`}
       >
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-xl transition-colors ${openSections[section] ? "bg-wa-header/10 text-wa-header" : "bg-slate-100 text-slate-400"}`}>
+          <div className={`p-2 rounded-xl transition-colors ${openSections[section] && isBound ? "bg-wa-header/10 text-wa-header" : "bg-slate-100 text-slate-400"}`}>
             <Icon className="w-5 h-5" />
           </div>
-          <h2 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em]">{title}</h2>
+          <div className="flex flex-col">
+            <h2 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em]">{title}</h2>
+            {!isBound && <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Unbound Node</span>}
+          </div>
         </div>
         <div className="flex items-center gap-3">
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onAdd) onAdd();
-            }}
-            className="p-1.5 text-wa-header hover:bg-wa-header/10 rounded-lg transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-          <ChevronRight className={`w-4 h-4 text-slate-300 transition-transform ${openSections[section] ? "rotate-90" : ""}`} />
+          {!isBound ? (
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onBind) onBind();
+              }}
+              className="px-3 py-1.5 bg-wa-header text-white text-[8px] font-black uppercase tracking-widest rounded-lg shadow-sm hover:scale-105 transition-transform"
+            >
+              Bind Now
+            </button>
+          ) : (
+            <>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onAdd) onAdd();
+                }}
+                className="p-1.5 text-wa-header hover:bg-wa-header/10 rounded-lg transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+              <ChevronRight className={`w-4 h-4 text-slate-300 transition-transform ${openSections[section] ? "rotate-90" : ""}`} />
+            </>
+          )}
         </div>
       </div>
       <AnimatePresence>
-        {openSections[section] && (
+        {openSections[section] && isBound && (
           <motion.div 
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -781,6 +1155,18 @@ const HQExtensionsVault = ({ onOpenWorkforce }: { onOpenWorkforce: () => void })
         {showCloudflareKnockout && (
           <CloudflareKnockout onClose={() => setShowCloudflareKnockout(false)} />
         )}
+        {showGmailKnockout && (
+          <GmailRelayKnockout onClose={() => setShowGmailKnockout(false)} />
+        )}
+        {showGitHubKnockout && (
+          <GitHubKnockout onClose={() => setShowGitHubKnockout(false)} />
+        )}
+        {showIntelligenceHubKnockout && (
+          <IntelligenceHubKnockout onClose={() => {
+            setShowIntelligenceHubKnockout(false);
+            setIsMythosConfigured(true); // Simulate configuration
+          }} />
+        )}
       </AnimatePresence>
 
       <div className="flex items-center justify-between mb-2">
@@ -794,7 +1180,14 @@ const HQExtensionsVault = ({ onOpenWorkforce }: { onOpenWorkforce: () => void })
       </div>
 
       <div className="space-y-6">
-        <VaultSection title="Connectors" icon={Globe} section="connectors">
+        <VaultSection 
+          title="Connectors" 
+          icon={Globe} 
+          section="connectors"
+          isBound={boundSections.connectors}
+          onBind={() => setShowGitHubKnockout(true)}
+          onAdd={() => setShowGitHubKnockout(true)}
+        >
           {[
             { name: "GitHub Manifest", status: "Active", icon: <Globe className="w-5 h-5" /> },
             { name: "Gmail Relay", status: "Active", icon: <MessageSquare className="w-5 h-5" /> }
@@ -816,15 +1209,75 @@ const HQExtensionsVault = ({ onOpenWorkforce }: { onOpenWorkforce: () => void })
           ))}
         </VaultSection>
 
-        <VaultSection title="Skills" icon={Zap} section="skills" />
-        <VaultSection title="Tools" icon={Briefcase} section="tools" />
-        <VaultSection title="MCP Servers" icon={Cpu} section="mcp" />
+        <VaultSection title="Skills" icon={Zap} section="skills" isBound={boundSections.skills} />
+        <VaultSection title="Tools" icon={Briefcase} section="tools" isBound={boundSections.tools} />
+        <VaultSection title="MCP Servers" icon={Cpu} section="mcp" isBound={boundSections.mcp} />
         
+        <VaultSection 
+          title="Intelligence Hubs" 
+          icon={Brain} 
+          section="intelligenceHubs"
+          isBound={boundSections.intelligenceHubs}
+          onBind={() => setShowIntelligenceHubKnockout(true)}
+          onAdd={() => setShowIntelligenceHubKnockout(true)}
+        >
+          {[
+            { name: "Hugging Face", status: "Active", icon: <Globe className="w-5 h-5" /> },
+            { name: "Open Router", status: "Active", icon: <Network className="w-5 h-5" /> },
+            { name: "Ollama (Local)", status: "Active", icon: <Terminal className="w-5 h-5" /> },
+            { name: "Google Edge AI", status: "Active", icon: <Zap className="w-5 h-5" /> }
+          ].map(item => (
+            <div key={item.name} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 border border-slate-100">
+                  {item.icon}
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900">{item.name}</h3>
+                  <span className="text-[8px] font-bold text-indigo-500 uppercase tracking-widest">{item.status}</span>
+                </div>
+              </div>
+              <div className="w-10 h-5 bg-indigo-500 rounded-full relative p-1">
+                <div className="absolute right-1 top-1 w-3 h-3 bg-white rounded-full" />
+              </div>
+            </div>
+          ))}
+        </VaultSection>
+        
+        <VaultSection 
+          title="Gmail Relay" 
+          icon={Mail} 
+          section="gmailRelay"
+          onAdd={() => setShowGmailKnockout(true)}
+          isBound={boundSections.gmailRelay}
+          onBind={() => setBoundSections(prev => ({ ...prev, gmailRelay: true }))}
+        >
+          <div className="p-4 bg-red-50 rounded-2xl border border-red-100 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-red-500 border border-red-100">
+                <Mail className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-xs font-bold text-slate-900">Gmail Sovereign Node</h3>
+                <span className="text-[8px] font-bold text-red-500 uppercase tracking-widest">2 Accounts Connected</span>
+              </div>
+            </div>
+            <button 
+              onClick={() => setShowGmailKnockout(true)}
+              className="px-3 py-1.5 bg-red-500 text-white text-[8px] font-black uppercase tracking-widest rounded-lg"
+            >
+              Manage
+            </button>
+          </div>
+        </VaultSection>
+
         <VaultSection 
           title="Extra Processor" 
           icon={Network} 
           section="extraProcessor"
           onAdd={() => setShowCloudflareKnockout(true)}
+          isBound={boundSections.extraProcessor}
+          onBind={() => setBoundSections(prev => ({ ...prev, extraProcessor: true }))}
         >
           <div className="p-4 bg-orange-50 rounded-2xl border border-orange-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -845,7 +1298,12 @@ const HQExtensionsVault = ({ onOpenWorkforce }: { onOpenWorkforce: () => void })
           </div>
         </VaultSection>
 
-        <VaultSection title="Branches & Mission" icon={Layers} section="branches">
+        <VaultSection 
+          title="Branches & Mission" 
+          icon={Layers} 
+          section="branches"
+          isBound={boundSections.branches}
+        >
           <div className="p-4 bg-indigo-50 rounded-2xl border border-indigo-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-indigo-600 border border-indigo-100">
@@ -863,10 +1321,146 @@ const HQExtensionsVault = ({ onOpenWorkforce }: { onOpenWorkforce: () => void })
           </div>
         </VaultSection>
 
-        <VaultSection title="Viabhronic Loader" icon={Layout} section="viabhronicLoader" />
-        <VaultSection title="Clients" icon={Terminal} section="clients" />
-        <VaultSection title="Gaming Focused" icon={Zap} section="gaming" />
-        <VaultSection title="Testing" icon={Egg} section="testing" />
+        <VaultSection 
+          title="Corporate Kernel" 
+          icon={Briefcase} 
+          section="corporateKernel"
+          isBound={boundSections.corporateKernel}
+          onBind={() => setBoundSections(prev => ({ ...prev, corporateKernel: true }))}
+        >
+          <div className="space-y-3">
+            {[
+              { name: "UiPath Orchestrator", status: "Agent-First", icon: <WorkflowIcon className="w-5 h-5" /> },
+              { name: "Automation Anywhere", status: "Agentic-User", icon: <Cpu className="w-5 h-5" /> }
+            ].map(item => (
+              <div key={item.name} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 border border-slate-100">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900">{item.name}</h3>
+                    <span className="text-[8px] font-bold text-indigo-500 uppercase tracking-widest">{item.status}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Live</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </VaultSection>
+
+        <VaultSection 
+          title="App Hatchery" 
+          icon={Egg} 
+          section="hatchery"
+          isBound={true}
+        >
+          <div className="space-y-3">
+            <div className="p-4 bg-indigo-500/5 border border-indigo-500/20 rounded-2xl">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900">Agentic Worker Synthesis</h3>
+                    <span className="text-[8px] font-bold text-indigo-500 uppercase tracking-widest">Mission Control Mode</span>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {[
+                  { name: "Finance Auditor Agent", progress: 100, status: "Deployed" },
+                  { name: "Healthcare Claims Worker", progress: 45, status: "Synthesizing" }
+                ].map(worker => (
+                  <div key={worker.name} className="space-y-1">
+                    <div className="flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-slate-500">
+                      <span>{worker.name}</span>
+                      <span className={worker.status === "Deployed" ? "text-green-500" : "text-indigo-500"}>{worker.status}</span>
+                    </div>
+                    <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${worker.progress}%` }}
+                        className={`h-full ${worker.status === "Deployed" ? "bg-green-500" : "bg-indigo-500"}`}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </VaultSection>
+
+        <VaultSection title="Viabhronic Loader" icon={Layout} section="viabhronicLoader" isBound={boundSections.viabhronicLoader} />
+        <VaultSection title="Clients" icon={Terminal} section="clients" isBound={boundSections.clients} />
+        <VaultSection title="Gaming Focused" icon={Zap} section="gaming" isBound={boundSections.gaming} />
+        <VaultSection title="Testing" icon={Egg} section="testing" isBound={boundSections.testing} />
+        
+        <VaultSection 
+          title="Security Division" 
+          icon={Shield} 
+          section="security"
+          isBound={true}
+        >
+          <div className="space-y-3">
+            <div className={`p-4 rounded-2xl border transition-all duration-500 ${isGlasswingActive ? "bg-indigo-500/5 border-indigo-500/20 shadow-lg shadow-indigo-500/10" : "bg-slate-50 border-slate-100"}`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-colors ${isGlasswingActive ? "bg-indigo-500 text-white border-indigo-400 shadow-lg shadow-indigo-500/30" : "bg-white text-slate-400 border-slate-100"}`}>
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900">Glasswing Auditor</h3>
+                    <span className={`text-[8px] font-bold uppercase tracking-widest ${isGlasswingActive ? "text-indigo-500" : "text-slate-400"}`}>
+                      {isGlasswingActive ? "Level 5 Frontier Mode" : "Level 4 Standard Mode"}
+                    </span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => {
+                    if (!isMythosConfigured && !isGlasswingActive) {
+                      setShowIntelligenceHubKnockout(true);
+                    } else {
+                      setIsGlasswingActive(!isGlasswingActive);
+                    }
+                  }}
+                  className={`w-10 h-5 rounded-full relative p-1 transition-colors ${isGlasswingActive ? "bg-indigo-500" : "bg-slate-300"}`}
+                >
+                  <motion.div 
+                    animate={{ x: isGlasswingActive ? 20 : 0 }}
+                    className="w-3 h-3 bg-white rounded-full" 
+                  />
+                </button>
+              </div>
+              <p className="text-[9px] text-slate-500 leading-relaxed">
+                {isGlasswingActive 
+                  ? "Leveraging Claude Mythos for proactive vulnerability synthesis and automated patching." 
+                  : "Standard adversarial auditing of shell commands and script hygiene."}
+              </p>
+              {!isMythosConfigured && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Frontier Substrate Unbound</span>
+                  <button 
+                    onClick={() => setShowIntelligenceHubKnockout(true)}
+                    className="text-[8px] font-black text-indigo-600 uppercase tracking-widest hover:underline"
+                  >
+                    Connect Mythos
+                  </button>
+                </div>
+              )}
+              {isGlasswingActive && (
+                <div className="mt-3 pt-3 border-t border-indigo-500/10 flex items-center gap-2">
+                  <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" />
+                  <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">Glasswing Substrate Active</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </VaultSection>
       </div>
     </div>
   );
@@ -940,6 +1534,16 @@ const ChatView = ({ chat, onBack, onShowMenu, showMenu, menuRef }: { chat: Celes
               msg.role === 'user' ? 'bg-wa-sent text-white rounded-tr-none' : 'bg-white text-slate-900 rounded-tl-none border border-slate-100'
             }`}>
               {msg.content}
+              {msg.sanitizationReport && (
+                <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-2">
+                  <div className="p-1 bg-green-50 text-green-600 rounded-md">
+                    <ShieldCheck className="w-3 h-3" />
+                  </div>
+                  <div className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">
+                    Sanitized: {msg.sanitizationReport.pixels} Pixels • {msg.sanitizationReport.links} Links
+                  </div>
+                </div>
+              )}
               <button className="absolute -right-8 top-1/2 -translate-y-1/2 p-1.5 bg-slate-100 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-indigo-600">
                 <Share2 className="w-3.5 h-3.5" />
               </button>
@@ -1149,11 +1753,80 @@ export const CelestialClient: React.FC<CelestialClientProps> = ({ agents = [] })
       isSentinel: true
     },
     {
-      id: "gmail-node",
-      name: "New GMAIL Node",
-      lastMessage: "No messages yet",
+      id: "gmail-relay",
+      name: "Gmail Relay",
+      lastMessage: "Chairman, I have sanitized 3 new emails for you.",
+      messages: [
+        { 
+          id: "g1", 
+          role: "assistant", 
+          content: "I have processed your incoming streams. I removed 2 tracking pixels and 1 suspicious redirect from the elvilewis40@gmail.com thread.", 
+          timestamp: new Date().toISOString(),
+          sanitizationReport: { pixels: 2, links: 1 }
+        }
+      ],
+      type: "gmail",
+      updatedAt: Date.now()
+    },
+    {
+      id: "gmail-personal",
+      name: "[PERSONAL] vianney.l",
+      lastMessage: "No new sanitized messages.",
       messages: [],
       type: "gmail",
+      updatedAt: Date.now()
+    },
+    {
+      id: "gmail-work",
+      name: "[WORK] elvilewis40",
+      lastMessage: "Draft: Re: Q2 Planning Docs",
+      messages: [],
+      type: "gmail",
+      updatedAt: Date.now()
+    },
+    {
+      id: "sentinel-logs",
+      name: "Sentinel Logs",
+      lastMessage: "Sentinel: No new activity.",
+      messages: [],
+      type: "sentinel",
+      updatedAt: Date.now()
+    },
+    {
+      id: "glasswing-auditor",
+      name: "Glasswing Auditor",
+      lastMessage: "Chairman, I have synthesized a new vulnerability in Node-7.",
+      messages: [
+        { 
+          id: "gw1", 
+          role: "assistant", 
+          content: "[GLASSWING BRIEFING] I have identified a potential privilege escalation flaw in the 'Extra Processor' node manifest. This flaw is similar to the 27-year-old OpenBSD bug recently disclosed. I have a Sovereign Patch ready for ratification.", 
+          timestamp: new Date().toISOString(),
+          metadata: { type: "security-alert", severity: "high" }
+        }
+      ],
+      type: "agent",
+      updatedAt: Date.now()
+    },
+    {
+      id: "mission-control",
+      name: "Mission Control",
+      lastMessage: "Finance Auditor Agent: 1,240 claims processed.",
+      messages: [
+        { 
+          id: "mc1", 
+          role: "assistant", 
+          content: "[MISSION LOG] Finance Auditor Agent has successfully connected to the UiPath Orchestrator substrate. Primary User status confirmed.", 
+          timestamp: new Date().toISOString()
+        },
+        { 
+          id: "mc2", 
+          role: "assistant", 
+          content: "[STATUS] Healthcare Claims Worker synthesis at 45%. Adversarial Auditor is currently vetting the automation manifest.", 
+          timestamp: new Date().toISOString()
+        }
+      ],
+      type: "sentinel",
       updatedAt: Date.now()
     },
     ...agentNodes

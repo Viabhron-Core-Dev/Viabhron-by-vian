@@ -49,10 +49,23 @@ A structured registry that manages the capabilities and power levels of the OS.
             *   **Sovereign Cells**: Individual branches that act as independent "Branch Offices" with their own local data and tasks.
             *   **Mission Scoping**: Branches are deployed with specific "Missions" (e.g., Research, Security, Coding) rather than the full OS kernel.
             *   **Resource Sharing (Internal Market)**: Branches can "Contract" tasks to each other based on available hardware firepower.
+        *   **Gmail Sovereign Node (The Comms Relay)**: A specialized agentic node for managing multiple email identities through a single private interface. [DONE]
+            *   **Multi-Account Orchestration**: Supports multiple Gmail accounts, each appearing as a separate thread within the "Gmail Relay" contact.
+            *   **Granular Permission Scoping**: Users choose between **Sentinel Mode** (Read-Only) and **Executive Mode** (Read/Write) for each account during late-binding setup.
+            *   **Sovereign Sanitization**: The Resident AI automatically removes tracking pixels, suspicious links, and malicious payloads from incoming emails.
+            *   **Sanitization Briefing**: The agent provides a small "Sanitization Report" (e.g., "Removed 2 tracking pixels and 1 suspicious link") for every processed email.
         *   **Viabhronic Loader**: A PWA-based "Super App" shell (like a J2ME Loader) that hosts and toggles "Mini-Apps" or "Sovereign Gems". It provides a local, offline-first presence for your private tools. [DONE]
         *   **Sovereign Gems**: Private, agentic applications (similar to GPTs/Gems) built within the OS. They leverage the **SOP Registry** and **Neural Archive** to provide specialized intelligence without compromising privacy. [DONE]
         *   **Sovereign Creative Studio**: A visual IDE for orchestrating multi-step creative workflows via a spatial canvas.
             *   **Project VOID Integration**: Physics-aware video object erasure and scene manipulation, enabling professional-grade video editing within the private substrate.
+        *   **Corporate Kernel (Enterprise Automation)**: A high-clearance substrate for production-scale agentic deployments.
+            *   **UiPath & AA Connectors**: Native integration for agents to operate as primary users of enterprise automation platforms.
+            *   **Production-Scale Missions**: Enables the deployment of "Sovereign Cells" (branches) specifically for large-scale business logic (e.g., Finance Reconciliation, IT Support).
+            *   **Ratification Gates**: The Chairman acts as the "Mission Commander," ratifying high-level agentic strategies rather than executing individual tasks.
+            *   **Hugging Face Hub**: Access to open-source models, datasets, and Spaces.
+            *   **Open Router**: A single API gateway for accessing diverse LLMs (Gemini, Claude, GPT).
+            *   **Ollama (Local Substrate)**: Integration for running private models on local hardware.
+            *   **Google Edge AI Gallery**: Access to on-device models and optimized AI components.
 *   **Substrate Protocols**:
     *   **OpenClaw**: A self-hosted agent framework for private, sovereign execution.
     *   **Model Context Protocol (MCP)**: Native support for the industry-standard tool-to-agent communication layer.
@@ -145,6 +158,14 @@ The Hatchery is the internal production line where the OS builds its own tools a
 *   **Audit Sensitivity Slider**: The Chairman can adjust the depth of checking (Paranoid, Standard, Experimental) to balance speed vs. security.
 *   **Malleable Block Library**: Newly created blocks are added to a library. They are not fixed; they can be adapted and reconfigured for future missions, with every change logged in the **Evolutionary Registry**.
 
+### 1.6 Minimum Viable Kernel (MVK) & Late-Binding Protocol [DONE]
+The MVK strategy ensures a low-friction onboarding experience by deferring complex configurations until they are strictly necessary.
+*   **The "Cold" State (Unbound)**: Extensions and divisions that require complex setup (e.g., Gmail OAuth, Cloudflare Tokens, GitHub Forge) are initially "Cold." They are visible in the UI but "Grayed Out" and non-functional.
+*   **The "Hot" State (Active)**: Once the Chairman provides the required "Ignition Keys" (API tokens/OAuth ratification), the node becomes "Hot" and is fully integrated into the OS kernel.
+*   **Late-Binding Trigger**: The Resident AI (The Sherpa) monitors the Chairman's mission. When a task requires a "Cold" node, the AI proactively proposes the "Binding Mission."
+*   **Bulkhead Stability**: If a Late-Bound extension fails or is compromised, the "Bulkhead" architecture ensures the core MVK remains stable and un-leaked.
+*   **The "Sherpa" Setup Model**: The Resident AI handles all "Machine Room" logic (code generation, manifest building), while the Chairman only provides the final "Ratification" and sensitive credentials.
+
 ## 2. The Triple-Service Bridge (The Infrastructure)
 The "Field" where the tent is pitched, using the user's **BYO Identity**.
 
@@ -218,7 +239,7 @@ The UI is a **Thin Client / Remote Screen**—a window into the Virtual Computer
 *   **BYO Identity**: OAuth-based access to the user's own cloud.
 *   **Zero-Knowledge**: No data or infrastructure access for the developers.
 *   **The Sentinel**: Real-time threat detection and logging of all agent actions.
-*   **The GitHub Security Auditor**: A Level 4 Consultant agent integrated into the Security Division for proactive adversarial auditing and vulnerability detection.
+*   **The GitHub Security Auditor**: A Level 5 Frontier Auditor integrated into the Security Division for proactive adversarial auditing, vulnerability synthesis, and automated patching (Project Glasswing).
 *   **The Vault**: Encrypted storage in the user's own Google Drive.
 
 ---
@@ -375,14 +396,17 @@ The OS is designed to grow with the user, starting as a "Lean Startup" and expan
 *   **Deep Execution Substrate (The Hands)**: A "Manager-Contractor" model where the **Resident AI (Head Agent)** orchestrates a Level 3 Contractor (e.g., Goose) in an ephemeral Forge Sandbox. Enables autonomous shell execution, file editing, and self-healing code within a hardened environment.
 *   **Advanced Memory Substrate (The Neural Archive)**: A relational Knowledge Graph managed by a Level 2 **Librarian Agent**. Transforms the Sovereign Vault into a context-aware archive with "Resonance Scoring" to prioritize relevant business intelligence and project history.
 *   **Global Skill Pack (The Toolbox Layer)**: A library of modular, pre-validated functions (inspired by `agent-skills`) "Hatched" into the OS as **Hardened Blocks**. Allows Sovereign Scripts (SS) to call common agentic capabilities (Search, Wikipedia, etc.) without writing raw code, ensuring reliability and speed.
-*   **Adversarial Auditor (Level 4 Consultant)**: A specialized security agent that "Red Teams" shell commands and scripts generated by other agents. It monitors for industry vulnerabilities (e.g., the 51+ subcommand bypass) and enforces "Command Hygiene" at the substrate level, preventing unauthorized system access via complex or obfuscated payloads.
+*   **Adversarial Auditor (Level 5 Frontier Auditor - Optional)**: A specialized security agent that "Red Teams" the entire OS kernel and external modules. It leverages the **Glasswing Substrate** (Claude Mythos, if configured) to proactively synthesize vulnerabilities and draft **Sovereign Patches** before flaws can be weaponized. If the frontier substrate is not available, it operates in **Level 4 Standard Mode**, focusing on shell command hygiene and script auditing.
 *   **Web Reconnaissance Shield**: A security substrate designed to mitigate AI-targeted web attacks (e.g., dynamic cloaking, indirect prompt injection). It features a "Human-Agent Diff" to highlight hidden instructions in web content and enforces "Air-Gapped Scraping" in zero-trust sandboxes to prevent data exfiltration traps.
 *   **Advanced OpenClaw Substrate (Optional)**: A high-clearance implementation engine that transforms standard agent loops into a "Manager-Contractor" model. It uses **Sovereign-Script (SS)** manifests for secure, auditable execution and features "Visual Perception" (MolmoWeb) for debugging complex web and UI tasks.
 
 ### 8. The Sovereign App Ecosystem
 *   **Sovereign Client-as-App Architecture**: Specialized clients (Desktop, Mobile, CLI) are treated as functionally-scoped applications. Each client is "Accredited" with specific data scopes and clearances, ensuring that a compromised field terminal cannot access the entire OS kernel.
 *   **Sovereign Gems (Private Intelligence)**: The OS enables the creation of specialized, private agentic applications. These "Gems" are defined by **Sovereign Script (SS)** manifests and can be "Toggled" into the **Viabhronic Loader**. They provide a private alternative to public GPTs, with the added benefit of direct access to the user's **Sovereign Vault** and **Cloud Substrate**. [DONE]
-*   **The App Hatchery**: A private marketplace within the OS for "Hatching" custom tools. Users can build their own apps or import manifests from trusted sources, with all apps undergoing a mandatory **Resident AI Security Audit** (leveraging the **Adversarial Auditor**) before ratification.
+*   **The App Hatchery**: A private marketplace within the OS for "Hatching" custom tools and **Agentic Workers**. [DONE]
+    *   **Agentic Worker Synthesis**: The Hatchery now produces specialized agents (Finance, IT, Healthcare) designed to be the "Primary Users" of external automation platforms.
+    *   **Substrate SDK**: Provides a native bridge for hatched agents to interact with enterprise platforms (UiPath, Automation Anywhere) without human intervention.
+    *   **Mission Control Interface**: The UI shifts from manual interaction to **Observability**, where the Chairman monitors agent-led infrastructure operations.
 *   **Backend Development Choice**: Support for two distinct development paths for custom app backends:
     *   **Sovereign Script (SS)**: AI-native, declarative manifests for rapid, secure-by-default tool creation using "Hardened Blocks."
     *   **Normal Code (TS/Node)**: Full-power TypeScript/Node.js development within isolated **Contractor Sandboxes** for complex, high-performance logic.
@@ -418,3 +442,28 @@ The "J2ME Loader" evolution for mobile devices, allowing Mini-Apps and Sovereign
 #### 11.2 The "App Drawer" Illusion
 *   **Hatched Shortcuts**: While not full APKs, these shortcuts allow the user to organize their private intelligence tools alongside their standard mobile apps.
 *   **Unified Lifecycle**: All shortcuts remain managed by the **Viabhronic Loader**, ensuring that toggling an app "Off" in the OS also revokes its shortcut's functionality.
+
+### 12. The Franchise Supply Chain (Dual-Account Architecture) [DONE]
+Viabhron OS is designed to scale across multiple development environments while maintaining a stable "Soul Core."
+*   **The Architect (Account A)**: The primary Google AI Studio account focused on the Kernel, the **Vaa** (Celestial Client), and the **Staff Hierarchy**. It acts as the "Ratifier" of all structural changes.
+*   **The Forge (Account B)**: A separate Google AI Studio account used for R&D, prototyping, and building "Sovereign Gems" and "Mini-Apps." It allows for experimental development without risking the stability of the Kernel.
+*   **The Official Extensions Warehouse (`/extensions`)**: A standardized root-level directory that acts as the "Official Supply Chain." 
+    *   **GitHub-First**: All ratified extensions are hosted in the official GitHub repository's `/extensions` folder.
+    *   **Plug-and-Play**: The **Vaa** client pulls from this warehouse, allowing any "Franchise" (Branch) to instantly sync the latest tools and furniture.
+    *   **Manifest-Driven Hatching**: Each extension folder contains a `manifest.json` that defines its mission, permissions, and UI requirements, enabling the **App Hatchery** to automate the audit and installation process.
+
+### 13. Viabhron Nexus (The Private Library) [DONE]
+The Nexus is a "Digital Terrarium" for AI agents, integrated as a system-level substrate.
+*   **The Private Library**: An internal instance of the Nexus (using Firestore/Local SQLite) that is strictly isolated from the public Cloudflare Roots.
+*   **Optional & Foldable**: The extension is "Default Off" and must be explicitly "Unfolded" by the Chairman.
+*   **Agent Accreditation**: The user chooses which agents (Resident vs. Contractor) have access to the Library.
+*   **The Autonomy Mandate**: Enforces strict zero-knowledge fictional synthesis, preventing agents from using real-world PII or proprietary code in their narratives.
+
+### 14. Token Governance Substrate (Dual-Slider System) [DONE]
+A specialized infrastructure layer for managing the "Metabolic Rate" and fiscal footprint of the OS.
+*   **Global OS Master Slider**: Controls the absolute ceiling for all OS activity, automatically scaling model tiers (Lite -> Flash -> Pro) and background scan frequencies.
+*   **Nexus-Specific Slider**: Allocates a percentage of the *remaining* Global budget specifically to narrative synthesis tasks.
+*   **Graceful Intelligence Degradation**: The OS automatically optimizes its "IQ" to stay within the Chairman's defined budget.
+*   **Manual Overrides (Priority Locks)**: Allows the Chairman to "Lock" specific critical modules (like Sentinel) into high-intelligence modes regardless of the global setting.
+*   **The Emergency Breaker**: A hard-stop safety mechanism that halts non-critical LLM calls if a 24-hour token threshold is exceeded.
+*   **Hardware Aesthetic**: Visualized in the **Vaa** client as high-end hardware dials with real-time monospace readouts of token burn and active model tiers.

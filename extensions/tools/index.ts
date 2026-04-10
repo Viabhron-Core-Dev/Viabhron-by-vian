@@ -1,5 +1,5 @@
 import { Globe, BookOpen, Terminal } from 'lucide-react';
-import { Extension } from '../../types';
+import { Extension } from '../../src/types';
 
 export const headlessBrowserTool: Extension = { 
   id: 't1', 

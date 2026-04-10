@@ -1,5 +1,5 @@
 import { Database, Cpu, BookOpen, Layout, Box } from 'lucide-react';
-import { Extension } from '../../types';
+import { Extension } from '../../src/types';
 
 export const localDatabaseMcp: Extension = { 
   id: 'm1', 

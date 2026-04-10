@@ -28,7 +28,7 @@ The backend runs on **Google Cloud Run**, providing a 24/7 environment for agent
 
 ### 2. The Desk (The Dual-State UI)
 The frontend is your "window" into the office. It is a **Generative UI** that "projects" the substrate's text-driven data into a functional, interactive workspace.
-*   **The Celestial Interface (VhatsAppeningAi)**: A premium, WhatsApp-inspired "Celestial Dark" client that treats AI agents as "Star Nodes" (contacts). It is the user-friendly face of the OS, optimized for mobile and PWA deployment.
+*   **The Celestial Interface (Vaa)**: A premium, WhatsApp-inspired "Celestial Dark" client that treats AI agents as "Star Nodes" (contacts). It is the user-friendly face of the OS, optimized for mobile and PWA deployment.
 *   **The Machine Room**: An industrial, terminal-core interface for deep system tuning and security management.
 *   **The Projection**: The UI is a designed experience, not just a report. It can be reconfigured by the **Head Agent** via natural language prompts.
 *   **Core Skeleton**: The **Workflow Canvas** and **Sandbox** are built-in infrastructure, providing a visual orchestrator and a virtual computer environment for all agents.
@@ -53,48 +53,72 @@ Users "pitch their own tent" by connecting their own **Firebase** and **Google C
 *   **Passkey Sovereignty**: Access to the OS kernel is secured via passwordless biometric passkeys or physical security keys, ensuring the "Business-in-a-Box" is impossible to seize even if cloud credentials are compromised.
 *   **Mobile Command**: The **Sovereign Intercom Bridge** provides 24/7 oversight of the OS via private Telegram/Discord channels, allowing for live ratification of agent decisions from any device.
 
-### 6. Gaming & Entertainment
+### 6. Distributed Intelligence (The Vine)
+Viabhron can spread across multiple devices and clouds as a network of **Sovereign Branches**.
+*   **Branch Autonomy**: Each branch operates independently with its own mission (e.g., Comms, Security, Research) and local data.
+*   **Mission Promotion**: Branch Sub-Managers can request "Mission Upgrades" from the Chairman if they detect sufficient local hardware resources.
+*   **Sovereign Seed Delivery**: New branches are "Hatched" via physical USB or encrypted email links protected by **Passkey (Biometric)** authentication.
+
+### 7. Extra Processors (Edge Intelligence)
+Offload heavy compute and storage tasks to edge providers like **Cloudflare**.
+*   **Consultant Knockout Window**: A specialized workspace for configuring Workers, R2, and Tunnels with the help of the **Resident AI Oracle**.
+*   **Late-Binding Security**: Sensitive API tokens are only provided *after* the AI has finished building and auditing the integration code.
+
+### 8. Gmail Sovereign Node (The Comms Relay)
+Manage multiple email identities through a single, private agentic interface.
+*   **Multi-Account Threads**: Each account appears as a separate thread within the "Gmail Relay" contact in VAA.
+*   **Sovereign Sanitization**: The Resident AI automatically strips tracking pixels and suspicious links, providing a "Sanitization Briefing" for every email.
+*   **Permission Scoping**: Choose between **Sentinel Mode** (Read-Only) and **Executive Mode** (Read/Write) for each connected account.
+
+### 9. Gaming & Entertainment
 A dedicated **Gaming Focused Extensions** section allows the OS to host private, agent-built entertainment and simulations, built using the **Game Forge** substrate.
 
-### 7. Business-in-a-Box (The Corporate Kernel)
+### 10. Business-in-a-Box (The Corporate Kernel)
 Viabhron formalizes AI workflows into **Standard Operating Procedures (SOPs)**. It is designed to be a "Turnkey" solution where departments (Security, Creative, R&D) are pre-configured and ready to scale.
 *   **Intelligence Manufacturing**: The **Mistral Sovereign Forge** allows enterprises to build custom, "frontier-grade" AI models using proprietary data from the Neural Archive, ensuring 100% data sovereignty.
 *   **Physics-Aware Creative**: **Project VOID** enables professional-grade video object erasure and scene manipulation, respecting physical interactions like collisions and splashes.
 *   **Visual Intelligence**: **MolmoWeb** integration allows agents to navigate the web by "seeing" screenshots, ensuring 100% success on dynamic sites without leaking data to external scrapers.
 
-### 7. The Viabhronic Loader (The Sovereign App Store)
+### 11. The Viabhronic Loader (The Sovereign App Store)
 The **Viabhronic Loader** is a PWA-based "Super App" shell (inspired by the J2ME Loader) that acts as your private application launcher.
 *   **Local Presence**: Mini-apps are stored locally on your device via the PWA, ensuring they launch instantly and remain accessible even with intermittent connectivity.
 *   **Toggled Visibility**: You can "Toggle" apps on or off from the sidebar. Active apps appear as dedicated icons on your **Mobile Desk**, while inactive ones stay hidden to keep your workspace clean.
 *   **Gaming Hub**: The loader is designed to host lightweight, private games (built via the **Game Forge**) that respect your data sovereignty.
 
-### 8. Sovereign Gems (Private Intelligence)
+### 12. Sovereign Gems (Private Intelligence)
 Viabhron allows you to build your own version of "Gems" or "GPTs"—specialized, private agentic applications.
 *   **Private Knowledge**: Unlike public AI platforms, **Sovereign Gems** use your private data from the **Filing Cabinet (Google Drive)** and never leak it to external training sets.
 *   **Custom Brains**: Assign different LLMs to different Gems based on the task (e.g., a "Coding Gem" using Gemini Pro vs. a "Diary Gem" using a local Gemma model).
 *   **Human-Direct vs. Agent-Direct**: Simple utilities are handled by **Mini-Apps** (Human-Direct), while complex, multi-step missions are delegated to **Gems** via the **Main Terminal** (Agent-Direct).
 
-### 9. Mini-App Ecosystem (The Mobile Desk)
+### 13. Mini-App Ecosystem (The Mobile Desk)
 The **Sovereign PWA Launcher** provides a collection of lightweight "Mini-Apps" (Notes, Expenses, News) that can be toggled on/off from the sidebar.
 *   **Hybrid Sync**: Choose between **Local Mode** (private, offline-first) and **Sovereign Mode** (fully cloud-integrated) for each mini-app.
 *   **Extension-Ready**: Add new mini-apps as extensions to your OS, expanding your mobile capabilities without bloating the kernel.
 
-### 10. Multi-Terminal Substrate (The Sovereign Nexus)
+### 14. Multi-Terminal Substrate (The Sovereign Nexus)
 Viabhron is a **Headless OS**. You can accredit multiple "Terminals" (Desktop, CLI, Browser) to connect to your private cloud.
 *   **Accreditation Control**: Manage client access and permissions from the sidebar.
 *   **Unified Brain**: All clients share the same **Soul Core**, ensuring your intelligence and data are consistent across every device.
 
-### 11. Progressive Governance (Anti-Bloat)
+### 15. Progressive Governance (Anti-Bloat)
 The OS expands only as you need it. Through **Modular Ratification**, the system proposes structural upgrades (like a **Pooled Treasury**, Judicial branch, or the **TurboQuant Substrate Patch**) which you can **Ratify, Shelve, or Veto** based on your current needs and budget.
 *   **Fiscal Sovereignty**: The **Pooled Treasury Protocol** eliminates per-seat fees, replacing them with task-based intelligence funding (e.g., $0.25 flat-fee code reviews).
 
-### 12. Sovereign Script (SS): The Syntax of Intent
+### 16. Sovereign Script (SS): The Syntax of Intent
 Viabhron introduces **Sovereign Script (SS)**, a declarative, AI-native syntax designed to bridge the gap between human intent and machine execution. 
 *   **Manifest of Intent**: SS is not a traditional programming language; it is a "Manifest of Purpose." Instead of writing imperative logic, the AI defines goals (e.g., `Goal: Secure_Vault_Backup`) and constraints.
 *   **Malleable Blocks**: SS operates by orchestrating pre-validated, secure "Malleable Blocks" (like LEGO bricks that can change shape). These blocks are not fixed; they can be adapted, extended, and reconfigured by the Resident AI or the Chairman to fit the exact needs of a mission, while maintaining the underlying security "Hardening" that prevents hallucinations and vulnerabilities. **To maintain system integrity, these blocks are only modified when strictly necessary, avoiding any unnecessary changes to the core OS structure.**
 *   **Evolutionary Logging**: Every block's formation, structure, and performance is recorded in a "Black Box" registry, allowing the Sovereign Script substrate to learn and improve from every mission.
 *   **Human-Auditable**: The syntax is designed to be readable by the **Chairman**, allowing for a clear understanding of the "Tactical Map" of any autonomous workflow without requiring coding knowledge.
 *   **Self-Healing**: When a workflow fails, the Resident AI re-evaluates the "Intent Manifest" rather than debugging code, allowing the system to re-wire itself to achieve the goal.
+
+### 17. Minimum Viable Kernel (MVK) & Late-Binding Protocol
+Viabhron prioritizes a low-friction onboarding experience through the **MVK** strategy.
+*   **Deferred Complexity**: Complex integrations (Gmail, GitHub, Cloudflare) are initially "Unbound." They appear in the UI as grayed-out "Cold Nodes" to prevent setup fatigue.
+*   **Late-Binding Ignition**: Sensitive credentials and complex OAuth flows are only requested when the user actually needs the feature.
+*   **The Sherpa Model**: The Resident AI guides the user through the "Late-Binding" process, generating the necessary manifests and auditing the integration code before the user provides the "Ignition Keys."
+*   **Fault Isolation**: This protocol ensures that the core OS remains stable and secure even if an individual late-bound extension fails.
 
 ## 🐳 The "Tent" (Cloud Docker Architecture)
 
@@ -197,10 +221,9 @@ Viabhron is built with a **"Zero-Local-Build"** philosophy, specifically optimiz
 
 ## 📂 Repository Structure
 
-*   `/src/extensions/modules`: High-level features (Canvas, Artifacts, Governance).
-*   `/src/extensions/skills`: Complex agent behaviors (Deep Research, Coding).
-*   `/src/extensions/tools`: Simple API connectors (Search, Image Gen).
-*   `/src/extensions/mcp`: Model Context Protocol servers.
+*   `/extensions`: The Official Extensions Warehouse (Connectors, Skills, Tools, MCP).
+*   `/src/components/Celestial`: The **Vaa** (Celestial Client) source code.
+*   `/src/components/Shell`: The Core OS Shell components (Hatchery, SOPs, Ratification).
 *   `.github/workflows/build.yml`: The cloud-only build pipeline for PWA and APK.
 
 ## 🚀 Setup Instructions
