@@ -1,5 +1,5 @@
 import { Extension } from '../types';
-import { githubConnector, linearConnector, cqConnector, huggingFaceConnector, gmailConnector, slackConnector, symphonyModule } from '../../extensions/connectors';
+import { githubConnector, linearConnector, cqConnector, huggingFaceConnector, gmailConnector, slackConnector } from '../../extensions/connectors';
 import { globalPulseSkill, docForgeSkill, artifactSandboxSkill, codeHunterSkill, socialSentinelSkill, githubSecurityAuditorSkill, creativeDirectorSkill } from '../../extensions/skills';
 import { headlessBrowserTool, pdfExtractorTool, codeParserTool } from '../../extensions/tools';
 import { localDatabaseMcp, systemMetricsMcp, geminiApiDocsMcp, googleWorkspaceMcp, openClawProtocol } from '../../extensions/mcp';
@@ -13,6 +13,7 @@ import {
   sentinelGuardianModule,
   sovereignCreativeStudioModule,
   viabhronNexusModule,
+  symphonyModule,
 } from '../../extensions/modules';
 
 export const INITIAL_EXTENSIONS: Extension[] = [

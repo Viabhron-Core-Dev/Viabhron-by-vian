@@ -1,4 +1,4 @@
-import { Terminal, Activity, Bug, Shield, Plus, Palette, Library } from 'lucide-react';
+import { Terminal, Activity, Bug, Shield, Plus, Palette, Library, Music } from 'lucide-react';
 import { Extension } from '../../src/types';
 
 export const agentTerminalModule: Extension = { 
@@ -86,7 +86,17 @@ export const viabhronNexusModule: Extension = {
   name: 'Viabhron Nexus',
   category: 'module',
   icon: Library,
-  status: 'inactive',
+  status: 'active',
   source: 'inbuilt',
   description: 'Private Library Substrate for AI narrative synthesis and data trading'
+};
+
+export const symphonyModule: Extension = {
+  id: 't13',
+  name: 'Symphony Orchestrator',
+  category: 'module',
+  icon: Music,
+  status: 'active',
+  source: 'inbuilt',
+  description: 'Autonomous AI-driven implementation runs based on Linear tickets.'
 };

@@ -1,7 +1,8 @@
 {
-  "name": "react-example",
+  "name": "viabhron-os",
+  "description": "A private, sovereign Multi-Agent Operating System (MAOS) and 'Business-in-a-Box' with a persistent agentic office.",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.4",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",

@@ -66,6 +66,8 @@ A structured registry that manages the capabilities and power levels of the OS.
             *   **Open Router**: A single API gateway for accessing diverse LLMs (Gemini, Claude, GPT).
             *   **Ollama (Local Substrate)**: Integration for running private models on local hardware.
             *   **Google Edge AI Gallery**: Access to on-device models and optimized AI components.
+    *   **Sovereign x402 Payment Gateway**: An autonomous, consumption-based billing system that allows the OS to pay for its own AI services using a "Pooled Treasury" model.
+    *   **8004 Sovereign Identity Protocol**: An on-chain digital passport system that provides agents with verifiable, accredited identities on blockchain networks (TRON, BNB, Ethereum).
 *   **Substrate Protocols**:
     *   **OpenClaw**: A self-hosted agent framework for private, sovereign execution.
     *   **Model Context Protocol (MCP)**: Native support for the industry-standard tool-to-agent communication layer.
@@ -111,7 +113,15 @@ The "Active Intelligence" that performs work within the office, managed by a **M
     *   **Status**: Local/Branch-Specific.
     *   **Brain**: Tiny LLM (Gemma/Phi).
     *   **Role**: A Resident AI that manages a specific branch's mission. It can proactively request "Mission Promotions" from the Chairman if it detects sufficient local hardware resources.
-6.  **Specialized Roles (Optional)**
+6.  **Fiscal Comptroller (The Accountant)** [DONE]
+    *   **Status**: Permanent, "In-Office."
+    *   **Brain**: Specialized Financial LLM.
+    *   **Role**: Manages the OS budget, tracks x402 transactions, and enforces spending limits.
+7.  **Sovereign Identity Registrar (The ID Manager)** [DONE]
+    *   **Status**: Permanent, "In-Office."
+    *   **Brain**: Security-Hardened LLM.
+    *   **Role**: Manages the 8004 Identity Protocol, issuing and verifying agent passports.
+8.  **Specialized Roles (Optional)**
     *   **The Librarian**: An optional agent dedicated to monitoring Hugging Face and GitHub for new "Eggs" (models, tools, datasets) that align with the Chairman's interests and project needs. [DONE]
     *   **The Creative Director**: A specialized agent role for assembling and managing multi-step creative workflows on the Sovereign Creative Studio canvas.
 
@@ -139,6 +149,7 @@ The "Machine Room" contains the core infrastructure controls, isolated from agen
     *   **Pooled Treasury Protocol**: Replaces per-agent/per-seat fees with a unified credit pool. Credits are dynamically allocated to agents based on task priority and complexity.
     *   **Task-Based Intelligence**: Enables flat-fee agentic services (e.g., $0.25 Code Reviews, $0.10 Security Scans) to provide predictable operational costs.
     *   **Chairman Oversight**: The Chairman sets the "Burn Rate" and "Credit Ceiling" to prevent runaway costs.
+    *   **User Choice in Management**: The Chairman can choose between the **Fiscal Comptroller** (automated) or the **Strategic Advisor** (human-in-the-loop) for treasury management.
 
 ---
 
@@ -183,18 +194,22 @@ The UI is a **Thin Client / Remote Screen**—a window into the Virtual Computer
 
 ### 3.1 The Dual-State UI (The Projection) [DONE]
 *   **The Default: VhatsAppeningAi (VAA)**: A standalone, mobile-first "AI Orchestration" interface. When active, all "Expert Mode" elements (Sidebar, Tab Bar, System HUD) are completely hidden, providing a focused, messenger-like experience for the Chairman.
-*   **The Expert Mode: Browser UI**: A high-density, technical interface for "Architect Mode" work (Machine Room, Forge, Governance). It reveals the full OS shell, including the Sidebar and Tab management system.
+*   **The Expert Mode: Browser UI (The Kernel)**: A high-density, technical interface for "Architect Mode" work (Machine Room, Forge, Governance). It reveals the full OS shell, including the Sidebar and Tab management system.
+    *   **Immutable Kernel**: The Browser UI acts as the immutable system management layer. It cannot be deleted or modified by the user, serving as a permanent recovery layer and "Machine Room."
 *   **The Portal Toggle**: A seamless mechanism for switching between these two top-level shells.
     *   **In VAA**: Tapping the "VhatsAppeningAi" title in the top bar instantly morphs the UI into the Browser UI.
-    *   **In Browser UI**: Tapping the "Viabhron" logo in the sidebar instantly collapses the shell back into the clean VAA interface.
+    *   **In Browser UI**: The **Home icon** in the bottom navigation bar acts as the primary toggle to return to the VAA client.
+    *   **Dashboard Landing**: The Browser UI defaults to a **Dashboard** view upon entry, providing a high-density "Mission Control" overview of system health, active agents, and recent pulses.
+    *   **System Settings**: Relocated to the **System Menu (3-dots)** within the Browser UI, keeping the primary navigation bar focused on core orchestration.
     *   **Consistency**: Both shells share the same core data, active workflows, and agent states. Switching is a "Context Shift" of the viewing lens, not a restart of the OS.
 *   **The Substrate (Reality)**: A complex, text-driven infrastructure optimized for AI processing (JSON, manifests, logs).
 
 *   **The Chairman (The Human)**: Sits at the top of the hierarchy. Does not do the "Work" (coding, searching, processing).
 *   **Instruction Hierarchy (OpenAI IH-Challenge)**: The Architect is programmed to prioritize the Chairman's commands as "System Level" and ignore conflicting "Lower-Tier" requests from sub-agents.
-*   **The Dashboard**: The UI is for the Chairman to look at **Artifacts** (documents/results) and grant **Permissions**. [DONE]
+*   **The Dashboard**: The UI is for the Chairman to look at **Artifacts** (documents/results) and grant **Permissions**. The Browser UI defaults to a Bento-style Dashboard for situational awareness. [DONE]
 *   **The Machine Room UI**: A visually distinct "Industrial" interface (Terminal-Core aesthetic) for Security and Efficiency controls. [DONE]
 *   **The Celestial Client (VhatsAppeningAi)**: The flagship default UI for the OS. [DONE]
+    *   **Modular Extension**: Extracted into a standalone client extension (`/extensions/clients/Vaa`), allowing for custom client UI development and "Kernel-Level" UI separation.
     *   **Celestial Dark Theme**: A premium, glassmorphic UI designed for high-density information and fluid motion.
     *   **Tab Structure**:
         *   **Chats**: The primary communication hub.
@@ -365,7 +380,7 @@ The OS is designed to grow with the user, starting as a "Lean Startup" and expan
 *   **Motion (Framer Motion)**: Used for "Fluid UI" transitions, staggered entrances, and micro-interactions that reinforce the OS's "living" feel.
 
 ### 2. State Management: The Soul Core
-*   **Firebase Firestore**: Acts as the persistent "Soul Core" for real-time, cross-client synchronization.
+*   **Firebase Firestore**: Acts as the persistent "Soul Core" for real-time, cross-client synchronization. The schema is defined by a comprehensive **Firebase Blueprint**, covering User Sessions, Tabs, Vaa Chats, Agents, Memories, and System Notifications.
 *   **React State Hooks**: Used for ephemeral, high-frequency UI state (e.g., sidebar collapse, active tabs).
 *   **Context API (Auth)**: Manages the "Chairman's" identity and session across the entire application.
 

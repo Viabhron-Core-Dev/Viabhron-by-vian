@@ -1,6 +1,6 @@
 {
   "name": "Viabhron",
-  "description": "A modular AI Operating System (MAOS) with a persistent agentic office, a generative UI desk, and a secure tent-deployment model.",
+  "description": "A private, sovereign Multi-Agent Operating System (MAOS) with autonomous x402 payments, 8004 digital passports, and a persistent agentic office.",
   "requestFramePermissions": [
     "camera",
     "microphone",

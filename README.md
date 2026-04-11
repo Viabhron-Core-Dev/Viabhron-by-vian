@@ -29,7 +29,8 @@ The backend runs on **Google Cloud Run**, providing a 24/7 environment for agent
 ### 2. The Desk (The Dual-State UI)
 The frontend is your "window" into the office. It is a **Generative UI** that "projects" the substrate's text-driven data into a functional, interactive workspace.
 *   **The Celestial Interface (Vaa)**: A premium, WhatsApp-inspired "Celestial Dark" client that treats AI agents as "Star Nodes" (contacts). It is the user-friendly face of the OS, optimized for mobile and PWA deployment.
-*   **The Machine Room**: An industrial, terminal-core interface for deep system tuning and security management.
+*   **The Machine Room (Browser UI)**: An industrial, terminal-core interface for deep system tuning and security management. This acts as the **Immutable Kernel**, a non-deletable recovery layer.
+*   **The Portal Toggle**: A seamless switching mechanism. Tapping the "VhatsAppeningAi" title in Vaa morphs the UI into the Machine Room, while the "Viabhron" logo (or "Ascend" button) in the Machine Room collapses it back to Vaa.
 *   **The Projection**: The UI is a designed experience, not just a report. It can be reconfigured by the **Head Agent** via natural language prompts.
 *   **Core Skeleton**: The **Workflow Canvas** and **Sandbox** are built-in infrastructure, providing a visual orchestrator and a virtual computer environment for all agents.
 

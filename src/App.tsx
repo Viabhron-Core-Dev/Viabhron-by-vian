@@ -48,6 +48,9 @@ import { Governance } from '../extensions/modules/Governance';
 import { Forge } from '../extensions/modules/Forge';
 import { AgentCLI } from '../extensions/modules/AgentCLI';
 import { Sentinel } from '../extensions/modules/Sentinel';
+import { Nexus } from '../extensions/modules/Nexus';
+import { Symphony } from '../extensions/modules/Symphony';
+import { Creative } from '../extensions/modules/Creative';
 import { SecurityDivision } from './components/MachineRoom/SecurityDivision';
 import { EfficiencyDivision } from './components/MachineRoom/EfficiencyDivision';
 import { Hatchery } from './components/Shell/Hatchery';
@@ -55,7 +58,7 @@ import { SOPRegistry } from './components/Shell/SOPRegistry';
 import { RatificationRegistry } from './components/Shell/RatificationRegistry';
 import { Onboarding } from './components/Shell/Onboarding';
 import { Logo } from './components/Shell/Logo';
-import { CelestialClient } from "./components/Celestial/CelestialClient";
+import { VaaClient } from "../extensions/clients/Vaa";
 
 import { Extension, TabType, Agent, UIConfig, UIMode, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client, OnboardingState } from './types';
 import { infra } from './lib/infraManager';
@@ -1033,9 +1036,10 @@ export default function App() {
 
             <div className="flex-1 relative h-full">
               {uiMode === 'vaa' ? (
-                <CelestialClient agents={agents} />
+                <VaaClient agents={agents} />
               ) : (
-                tabs.map((tab) => (
+                <>
+                  {tabs.map((tab) => (
                   <div 
                     key={tab.id}
                     className={`absolute inset-0 transition-opacity duration-300 ${tab.id === activeTabId && tab.status === 'active' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
@@ -1129,6 +1133,12 @@ export default function App() {
                       logs={logs}
                       uiMode={uiMode}
                     />
+                  ) : tab.type === 'nexus' ? (
+                    <Nexus uiMode={uiMode} />
+                  ) : tab.type === 'symphony' ? (
+                    <Symphony uiMode={uiMode} backgroundTasks={backgroundTasks} logs={logs} />
+                  ) : tab.type === 'creative' ? (
+                    <Creative uiMode={uiMode} />
                   ) : tab.type === 'sops' ? (
                     <SOPRegistry sops={sops} onExecute={(sop) => console.log('Executing SOP:', sop)} uiMode={uiMode} />
                   ) : tab.type === 'proposals' ? (
@@ -1384,7 +1394,7 @@ export default function App() {
                     </div>
                   </div>
                 ) : tab.type === 'vhatsappening' ? (
-                  <CelestialClient agents={agents} />
+                  <VaaClient agents={agents} />
                 ) : tab.type === 'placeholder_client' ? (
                   <div className="h-full bg-gray-950 flex flex-col items-center justify-center space-y-4 p-8 text-center">
                     <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center">
@@ -1397,8 +1407,12 @@ export default function App() {
                     </div>
                   </div>
                 ) : null}
-              </div>
-            )))}
+                  </div>
+                ))}
+
+                {/* Ascend Button Removed - Now using Home button in BottomNavigation */}
+              </>
+            )}
           </div>
 
           {uiMode === 'browser' && (
@@ -1418,7 +1432,7 @@ export default function App() {
                 onTabClose={handleCloseTab}
                 onAddTab={() => onQuickAction(() => handleAddTab())}
                 onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
+                onToggleUIMode={() => window.dispatchEvent(new CustomEvent('viabhron:toggle-ui'))}
                 onOpenTabSwitcher={() => setIsTabSwitcherOpen(true)}
                 onOpenSystemMenu={() => setIsSystemMenuOpen(true)}
                 onEditTab={(tab) => {
@@ -1476,12 +1490,22 @@ export default function App() {
                     </button>
                     <button 
                       onClick={() => {
-                        setIsAgentSettingsOpen(true);
+                        onQuickAction(() => handleAddTab('settings', 'System Settings'));
                         setIsSystemMenuOpen(false);
                       }}
                       className="w-full flex items-center gap-3 p-3 hover:bg-white/5 rounded-2xl transition-colors text-left group"
                     >
                       <Settings className="w-4 h-4 text-gray-500 group-hover:text-blue-400" />
+                      <span className="text-xs font-bold text-gray-300 group-hover:text-white uppercase tracking-wider">System Settings</span>
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setIsAgentSettingsOpen(true);
+                        setIsSystemMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 p-3 hover:bg-white/5 rounded-2xl transition-colors text-left group"
+                    >
+                      <Bot className="w-4 h-4 text-gray-500 group-hover:text-blue-400" />
                       <span className="text-xs font-bold text-gray-300 group-hover:text-white uppercase tracking-wider">Agent Settings</span>
                     </button>
                     <button className="w-full flex items-center gap-3 p-3 hover:bg-white/5 rounded-2xl transition-colors text-left group">

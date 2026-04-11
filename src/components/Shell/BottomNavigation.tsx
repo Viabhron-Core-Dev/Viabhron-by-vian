@@ -28,7 +28,7 @@ interface BottomNavigationProps {
   onTabClose: (id: string) => void;
   onAddTab: (type?: TabType) => void;
   onToggleSidebar: () => void;
-  onOpenSettings: () => void;
+  onToggleUIMode: () => void;
   onOpenTabSwitcher: () => void;
   onOpenSystemMenu: () => void;
   onEditTab: (tab: Tab) => void;
@@ -43,7 +43,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   onTabClose,
   onAddTab,
   onToggleSidebar,
-  onOpenSettings,
+  onToggleUIMode,
   onOpenTabSwitcher,
   onOpenSystemMenu,
   onEditTab,
@@ -130,8 +130,9 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
       <div className="bg-gray-900/95 backdrop-blur-2xl border-t border-white/10 px-4 py-2 pointer-events-auto flex items-center gap-4">
         <motion.button 
           whileTap={{ scale: 0.9 }}
-          onClick={onOpenSettings}
+          onClick={onToggleUIMode}
           className="p-1.5 text-gray-500 hover:text-white transition-colors"
+          title="Switch to VAA"
         >
           <Home className="w-4.5 h-4.5" />
         </motion.button>

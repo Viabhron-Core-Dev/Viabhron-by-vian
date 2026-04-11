@@ -18,8 +18,50 @@ service cloud.firestore {
     // Fields:
     //   - id: string (required)
     //   - title: string (required)
-    //   - type: string (required, enum: chat, settings, discovery)
+    //   - type: string (required)
+    //   - status: string (required, enum: active, shelved, archived)
+    //   - agentId: string (optional)
     //   - createdAt: timestamp
+    //
+    // Collection: users/{userId}/vaa/chats
+    // Document ID: {chatId}
+    // Fields:
+    //   - id: string (required)
+    //   - name: string (optional)
+    //   - type: string (required, enum: direct, council, individual, workflow, debate, agent, gmail, sentinel)
+    //   - filterCategory: string (optional)
+    //   - lastMessage: string (optional)
+    //   - updatedAt: timestamp
+    //
+    // Collection: users/{userId}/vaa/filters
+    // Document ID: {filterId}
+    // Fields:
+    //   - id: string (required)
+    //   - label: string (required)
+    //   - active: bool (required)
+    //   - order: int (required)
+    //
+    // Collection: users/{userId}/agents
+    // Document ID: {agentId}
+    // Fields:
+    //   - id: string (required)
+    //   - name: string (required)
+    //   - role: string (required, enum: head, executive, contractor, consultant, specialized)
+    //   - provider: string (required)
+    //   - model: string (required)
+    //   - status: string (required, enum: active, inactive, error)
+    //   - color: string (required)
+    //   - lastActive: timestamp
+    //
+    // Collection: users/{userId}/notifications
+    // Document ID: {notificationId}
+    // Fields:
+    //   - id: string (required)
+    //   - title: string (required)
+    //   - message: string (required)
+    //   - type: string (required, enum: security, info, warning, error, system)
+    //   - read: bool (required)
+    //   - timestamp: timestamp
     //
     // Collection: users/{userId}/tabs/{tabId}/messages
     // Document ID: {messageId}
@@ -106,8 +148,46 @@ service cloud.firestore {
     }
 
     function isValidTab(data) {
-      return data.keys().hasAll(['id', 'title', 'type']) &&
-             data.type in ['chat', 'settings', 'discovery'];
+      return data.keys().hasAll(['id', 'title', 'type', 'status']) &&
+             data.id is string && data.id.size() < 128 &&
+             data.title is string && data.title.size() < 100 &&
+             data.type is string && data.type.size() < 50 &&
+             data.status in ['active', 'shelved', 'archived'];
+    }
+
+    function isValidChat(data) {
+      return data.keys().hasAll(['id', 'type', 'updatedAt']) &&
+             data.id is string && data.id.size() < 128 &&
+             data.type in ['direct', 'council', 'individual', 'workflow', 'debate', 'agent', 'gmail', 'sentinel'] &&
+             (!('name' in data) || (data.name is string && data.name.size() < 100)) &&
+             (!('filterCategory' in data) || (data.filterCategory is string && data.filterCategory.size() < 50));
+    }
+
+    function isValidFilter(data) {
+      return data.keys().hasAll(['id', 'label', 'active', 'order']) &&
+             data.id is string && data.id.size() < 128 &&
+             data.label is string && data.label.size() < 50 &&
+             data.active is bool &&
+             data.order is int;
+    }
+
+    function isValidAgent(data) {
+      return data.keys().hasAll(['id', 'name', 'role', 'provider', 'model', 'status']) &&
+             data.id is string && data.id.size() < 128 &&
+             data.name is string && data.name.size() < 100 &&
+             data.role in ['head', 'executive', 'contractor', 'consultant', 'specialized'] &&
+             data.provider is string && data.provider.size() < 50 &&
+             data.model is string && data.model.size() < 100 &&
+             data.status in ['active', 'inactive', 'error'];
+    }
+
+    function isValidNotification(data) {
+      return data.keys().hasAll(['id', 'title', 'message', 'type', 'read', 'timestamp']) &&
+             data.id is string && data.id.size() < 128 &&
+             data.title is string && data.title.size() < 100 &&
+             data.message is string && data.message.size() < 1000 &&
+             data.type in ['security', 'info', 'warning', 'error', 'system'] &&
+             data.read is bool;
     }
 
     function isValidMessage(data) {
@@ -202,6 +282,35 @@ service cloud.firestore {
         allow read: if isOwner(userId);
         allow create: if isOwner(userId) && isValidSecurityRule(request.resource.data);
         allow update: if isOwner(userId) && isValidSecurityRule(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /vaa/chats/{chatId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidChat(request.resource.data);
+        allow delete: if isOwner(userId);
+
+        match /messages/{messageId} {
+          allow read: if isOwner(userId);
+          allow create: if isOwner(userId) && isValidMessage(request.resource.data);
+        }
+      }
+
+      match /vaa/filters/{filterId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidFilter(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /agents/{agentId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidAgent(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /notifications/{notificationId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidNotification(request.resource.data);
         allow delete: if isOwner(userId);
       }
     }

@@ -19,10 +19,69 @@
       "properties": {
         "id": { "type": "string" },
         "title": { "type": "string" },
-        "type": { "type": "string", "enum": ["chat", "settings", "discovery"] },
+        "type": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "shelved", "archived"] },
+        "agentId": { "type": "string" },
         "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "title", "type"]
+      "required": ["id", "title", "type", "status"]
+    },
+    "Chat": {
+      "title": "Celestial Chat",
+      "description": "A chat session in the Vaa client.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["direct", "council", "individual", "workflow", "debate", "agent", "gmail", "sentinel"] },
+        "filterCategory": { "type": "string" },
+        "lastMessage": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "updatedAt"]
+    },
+    "Agent": {
+      "title": "Sovereign Agent",
+      "description": "An AI agent within the OS.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "role": { "type": "string", "enum": ["head", "executive", "contractor", "consultant", "specialized"] },
+        "provider": { "type": "string" },
+        "model": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive", "error"] },
+        "color": { "type": "string" },
+        "lastActive": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "role", "provider", "model", "status"]
+    },
+    "FilterConfig": {
+      "title": "Filter Configuration",
+      "description": "User's chat filter preferences.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "active": { "type": "boolean" },
+        "order": { "type": "integer" }
+      },
+      "required": ["id", "label", "active", "order"]
+    },
+    "Notification": {
+      "title": "System Notification",
+      "description": "A notification for the user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string", "enum": ["security", "info", "warning", "error", "system"] },
+        "read": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "message", "type", "read", "timestamp"]
     },
     "Message": {
       "title": "Message",
@@ -119,6 +178,90 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "name", "naturalLanguage", "type", "urgencyLevel", "active", "createdAt"]
+    },
+    "TokenGovernance": {
+      "title": "Token Governance",
+      "description": "Settings for managing OS-wide and extension-specific token usage.",
+      "type": "object",
+      "properties": {
+        "globalMasterSlider": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "nexusSlider": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "emergencyBreakerEnabled": { "type": "boolean" },
+        "dailyTokenLimit": { "type": "integer" },
+        "currentDailyUsage": { "type": "integer" },
+        "gracefulDegradationEnabled": { "type": "boolean" },
+        "priorityModuleIds": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["globalMasterSlider", "nexusSlider", "emergencyBreakerEnabled", "dailyTokenLimit", "currentDailyUsage", "gracefulDegradationEnabled"]
+    },
+    "NexusSettings": {
+      "title": "Nexus Settings",
+      "description": "Configuration for the Viabhron Nexus private library.",
+      "type": "object",
+      "properties": {
+        "isEnabled": { "type": "boolean" },
+        "isPrivate": { "type": "boolean" },
+        "allowedAgentIds": { "type": "array", "items": { "type": "string" } },
+        "tokenUsageSlider": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "autoForkEnabled": { "type": "boolean" },
+        "autonomyMandateEnabled": { "type": "boolean" }
+      },
+      "required": ["isEnabled", "isPrivate", "allowedAgentIds", "tokenUsageSlider", "autoForkEnabled", "autonomyMandateEnabled"]
+    },
+    "X402Config": {
+      "title": "X402 Payment Gateway Config",
+      "description": "Settings for the x402 autonomous payment system.",
+      "type": "object",
+      "properties": {
+        "dailyLimit": { "type": "number", "minimum": 0 },
+        "currentSpending": { "type": "number" },
+        "provider": { "type": "string", "enum": ["coinbase", "nodit", "stripe"] },
+        "active": { "type": "boolean" },
+        "lastResetAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["dailyLimit", "currentSpending", "provider", "active"]
+    },
+    "X402Transaction": {
+      "title": "X402 Transaction",
+      "description": "A record of an autonomous payment for AI services.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string" },
+        "service": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "completed", "failed"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "agentId": { "type": "string" }
+      },
+      "required": ["id", "amount", "currency", "service", "status", "timestamp"]
+    },
+    "SovereignIdentity": {
+      "title": "Sovereign Identity (8004)",
+      "description": "On-chain digital passport for an agent or user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "did": { "type": "string", "description": "Decentralized Identifier" },
+        "chain": { "type": "string", "enum": ["tron", "bnb", "ethereum", "base"] },
+        "address": { "type": "string" },
+        "status": { "type": "string", "enum": ["unverified", "verified", "revoked"] },
+        "issuedAt": { "type": "string", "format": "date-time" },
+        "metadata": { "type": "object" }
+      },
+      "required": ["id", "did", "chain", "address", "status"]
+    },
+    "MultiChainConfig": {
+      "title": "Multi-Chain Configuration",
+      "description": "Settings for blockchain bridges and identity registrar.",
+      "type": "object",
+      "properties": {
+        "defaultChain": { "type": "string" },
+        "enabledChains": { "type": "array", "items": { "type": "string" } },
+        "registrarAgentId": { "type": "string" },
+        "autoVerify": { "type": "boolean" }
+      },
+      "required": ["defaultChain", "enabledChains", "registrarAgentId"]
     }
   },
   "firestore": {
@@ -157,6 +300,50 @@
     "/users/{userId}/security/rules/{ruleId}": {
       "schema": "SecurityRule",
       "description": "The Articles of Incorporation: Natural language rules for the agent company."
+    },
+    "/users/{userId}/settings/token_governance": {
+      "schema": "TokenGovernance",
+      "description": "OS-wide token management settings."
+    },
+    "/users/{userId}/settings/nexus": {
+      "schema": "NexusSettings",
+      "description": "Viabhron Nexus configuration."
+    },
+    "/users/{userId}/fiscal/x402/config": {
+      "schema": "X402Config",
+      "description": "x402 Payment Gateway settings."
+    },
+    "/users/{userId}/fiscal/x402/transactions/{transactionId}": {
+      "schema": "X402Transaction",
+      "description": "Autonomous billing history."
+    },
+    "/users/{userId}/security/identity/8004/{identityId}": {
+      "schema": "SovereignIdentity",
+      "description": "On-chain agent passports."
+    },
+    "/users/{userId}/security/identity/config": {
+      "schema": "MultiChainConfig",
+      "description": "Identity registrar and chain settings."
+    },
+    "/users/{userId}/vaa/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "Vaa client chat sessions."
+    },
+    "/users/{userId}/vaa/chats/{chatId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages within a Vaa chat."
+    },
+    "/users/{userId}/vaa/filters/{filterId}": {
+      "schema": "FilterConfig",
+      "description": "Vaa client filter preferences."
+    },
+    "/users/{userId}/agents/{agentId}": {
+      "schema": "Agent",
+      "description": "Sovereign agents belonging to the user."
+    },
+    "/users/{userId}/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "System-wide notifications."
     }
   }
 }
