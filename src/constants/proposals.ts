@@ -43,6 +43,7 @@ export const INITIAL_PROPOSALS: RatificationProposal[] = [
       benefit: 'Provides the Chairman with a Daily Intelligence Briefing on AI ecosystem changes.'
     },
     status: 'pending',
+    isUnfolded: false,
     shadowModeAvailable: false,
     createdAt: new Date()
   },

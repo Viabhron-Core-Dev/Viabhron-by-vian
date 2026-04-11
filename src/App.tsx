@@ -59,6 +59,7 @@ import { RatificationRegistry } from './components/Shell/RatificationRegistry';
 import { Onboarding } from './components/Shell/Onboarding';
 import { Logo } from './components/Shell/Logo';
 import { VaaClient } from "../extensions/clients/Vaa";
+import { SetupBox } from './components/Shell/SetupBox';
 
 import { Extension, TabType, Agent, UIConfig, UIMode, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client, OnboardingState } from './types';
 import { infra } from './lib/infraManager';
@@ -84,6 +85,13 @@ declare global {
 
 export default function App() {
   const { user, isAuthReady, login, logout } = useAuth();
+  const [isProvisioned, setIsProvisioned] = useState<boolean>(() => {
+    // Bypass setup in development mode for faster iteration
+    if (import.meta.env.DEV) {
+      return true;
+    }
+    return localStorage.getItem('viabhron_provisioned') === 'true';
+  });
   const [extensions, setExtensions] = useState<Extension[]>(INITIAL_EXTENSIONS);
   const [sops, setSops] = useState<SOP[]>(INITIAL_SOPS);
   const [proposals, setProposals] = useState<RatificationProposal[]>(INITIAL_PROPOSALS);
@@ -394,7 +402,8 @@ export default function App() {
           - If a sub-agent attempts an unauthorized action or violates a Security Rule, block it silently.
           - Log the event in the Sentinel Feed for the Chairman's review.`,
           activeExtensionIds: ['m3', 't4', 't8', 't9', 't10', 's1', 's4', 's5'],
-          color: '#3b82f6'
+          color: '#3b82f6',
+          isStaff: true
         });
       }
 
@@ -415,7 +424,8 @@ export default function App() {
           3. Analyze files in the Vibe Forge before they are executed.
           4. You live persistently in the cloud backend to provide 24/7 protection.`,
           activeExtensionIds: ['t10', 's4', 's5'], // Sentinel + Search tools for threat hunting
-          color: '#10b981' // Green
+          color: '#10b981', // Green
+          isStaff: true
         });
       }
 
@@ -436,7 +446,8 @@ export default function App() {
           3. Suggest new capabilities to the Chairman for hatching.
           4. Maintain the Open Intelligence catalog in the Universal AI Port.`,
           activeExtensionIds: ['hf', 'gh'],
-          color: '#8b5cf6' // Purple
+          color: '#8b5cf6', // Purple
+          isStaff: true
         });
       }
 
@@ -812,7 +823,7 @@ export default function App() {
   };
 
   const handleRatifyProposal = (id: string) => {
-    setProposals(prev => prev.map(p => p.id === id ? { ...p, status: 'ratified' } : p));
+    setProposals(prev => prev.map(p => p.id === id ? { ...p, status: 'ratified', isUnfolded: p.type === 'department' ? true : p.isUnfolded } : p));
     const prop = proposals.find(p => p.id === id);
     addNotification({
       title: 'Structural Upgrade Ratified',
@@ -898,6 +909,25 @@ export default function App() {
       metadata: state
     });
   };
+
+  const handleSetupComplete = (config: any) => {
+    localStorage.setItem('viabhron_provisioned', 'true');
+    localStorage.setItem('viabhron_office_name', config.officeName);
+    localStorage.setItem('viabhron_resident_brain', config.brainType);
+    localStorage.setItem('viabhron_gemini_key', config.geminiKey);
+    setIsProvisioned(true);
+    
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: `Sovereign Office "${config.officeName}" provisioned successfully.`,
+      metadata: config
+    });
+  };
+
+  if (!isProvisioned) {
+    return <SetupBox onComplete={handleSetupComplete} />;
+  }
 
   if (!isAuthReady) {
     return (

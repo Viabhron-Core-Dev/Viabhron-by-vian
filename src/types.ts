@@ -327,6 +327,7 @@ export interface Agent {
   apiKey?: string; // Optional for Head Agent (Least Privilege)
   systemInstruction: string;
   activeExtensionIds: string[];
+  isStaff?: boolean;
   avatar?: string;
   color: string;
   parentId?: string; // For hierarchy (Sub/Minor agents)
@@ -592,6 +593,7 @@ export interface RatificationProposal {
     benefit: string;
   };
   status: 'pending' | 'ratified' | 'shelved' | 'vetoed';
+  isUnfolded?: boolean;
   shadowModeAvailable: boolean;
   sunsetClause?: {
     reviewIntervalDays: number;

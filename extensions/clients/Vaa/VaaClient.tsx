@@ -81,6 +81,7 @@ import { VaaSettings } from "./components/VaaSettings";
 import { HQExtensionsVault } from "./components/HQExtensionsVault";
 import { SearchAndFilters, WorkflowTab } from "./components/Misc";
 import { CameraCapture, QRScanner } from "./components/MediaTools";
+import { ContactList } from "./components/ContactList";
 
 // --- Sub-components ---
 
@@ -134,6 +135,7 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
   const [showSwipeView, setShowSwipeView] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [showQRScanner, setShowQRScanner] = useState(false);
+  const [showContactList, setShowContactList] = useState(false);
   const [activeChatFilter, setActiveChatFilter] = useState("All");
   const [availableChatFilters, setAvailableChatFilters] = useState(["All", "Semi Local", "Cloudflare", "GitHub", "Gmail", "Corporate", "Hatchery"]);
   const [activeChatFilters, setActiveChatFilters] = useState(["All", "Semi Local", "Cloudflare", "GitHub", "Gmail"]);
@@ -152,6 +154,7 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
   const displayTabs = [TABS[TABS.length - 1], ...TABS, TABS[0]];
 
   const handleTabClick = (tabId: "chats" | "news" | "workflow" | "extensions") => {
+    if (showContactList) setShowContactList(false);
     const realIndex = TABS.indexOf(tabId);
     const displayIndex = realIndex + 1;
     setActiveTab(tabId);
@@ -260,17 +263,19 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
     }
   };
 
-  // Map system agents to Celestial nodes
-  const agentNodes: CelestialChat[] = agents.map(agent => ({
-    id: `agent-${agent.id}`,
-    nodeId: agent.id,
-    name: agent.name,
-    lastMessage: agent.description || "System Agent ready for deployment.",
-    messages: [],
-    type: "agent",
-    updatedAt: Date.now(),
-    isHeadAgent: agent.name.toLowerCase().includes("architect") || agent.name.toLowerCase().includes("omega")
-  }));
+  // Map system agents to Celestial nodes (only if they have messages or are not staff)
+  const agentNodes: CelestialChat[] = agents
+    .filter(agent => !agent.isStaff) // Staff only in contact list
+    .map(agent => ({
+      id: `agent-${agent.id}`,
+      nodeId: agent.id,
+      name: agent.name,
+      lastMessage: agent.description || "System Agent ready for deployment.",
+      messages: [],
+      type: "agent",
+      updatedAt: Date.now(),
+      isHeadAgent: agent.name.toLowerCase().includes("architect") || agent.name.toLowerCase().includes("omega")
+    }));
 
   const allChats: CelestialChat[] = [
     {
@@ -398,6 +403,28 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
 
   const headAgentChat = allChats.find(c => c.isHeadAgent) || allChats[0];
 
+  const handleSelectContact = (agent: Agent) => {
+    // Check if chat already exists
+    const existingChat = allChats.find(c => c.nodeId === agent.id);
+    if (existingChat) {
+      setSelectedChat(existingChat);
+    } else {
+      // Create a new chat thread (simulated for now)
+      const newChat: CelestialChat = {
+        id: `chat-${Date.now()}`,
+        nodeId: agent.id,
+        name: agent.name,
+        type: "agent",
+        messages: [],
+        updatedAt: Date.now(),
+        lastMessage: "Mission initiated."
+      };
+      setSelectedChat(newChat);
+    }
+    setShowContactList(false);
+    setShowPlusMenu(false);
+  };
+
   return (
     <div className="h-full flex flex-col bg-white relative overflow-hidden font-sans selection:bg-wa-header/10">
       <Toaster position="top-center" richColors />
@@ -438,6 +465,20 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
                 onUpdate={setWorkflowData}
               />
             </div>
+          </motion.div>
+        ) : showContactList ? (
+          <motion.div
+            key="contacts"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            className="h-full"
+          >
+            <ContactList 
+              agents={agents} 
+              onSelect={handleSelectContact} 
+              onBack={() => setShowContactList(false)} 
+            />
           </motion.div>
         ) : !selectedChat ? (
           <motion.div 
@@ -486,7 +527,7 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
                       >
                         {[
                           { label: "Settings", icon: <Settings className="w-5 h-5" />, action: () => { setShowVaaSettings(true); setShowMenu(false); } },
-                          { label: "Contacts", icon: <Users className="w-5 h-5" />, action: () => setShowMenu(false) },
+                          { label: "Contacts", icon: <Users className="w-5 h-5" />, action: () => { setShowContactList(true); setShowMenu(false); } },
                           { label: "Backup/Restore", icon: <History className="w-5 h-5" />, action: () => setShowMenu(false) },
                           { label: "Logout", icon: <LogOut className="w-5 h-5" />, action: () => setShowMenu(false), color: "text-red-500" }
                         ].map((item, i) => (
@@ -595,10 +636,10 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
                         className="absolute bottom-20 right-0 w-56 bg-white rounded-3xl shadow-2xl border border-slate-100 p-2 z-50"
                       >
                         {[
-                          { label: "Normal Chat", icon: <MessageCircle className="w-5 h-5" />, action: () => setShowPlusMenu(false) },
-                          { label: "Group Chat", icon: <Users className="w-5 h-5" />, action: () => setShowPlusMenu(false) },
-                          { label: "Debate (Parallel)", icon: <Layout className="w-5 h-5" />, action: () => setShowPlusMenu(false) },
-                          { label: "Debate (Interagent)", icon: <Zap className="w-5 h-5" />, action: () => setShowPlusMenu(false) },
+                          { label: "Normal Chat", icon: <MessageCircle className="w-5 h-5" />, action: () => setShowContactList(true) },
+                          { label: "Group Chat", icon: <Users className="w-5 h-5" />, action: () => setShowContactList(true) },
+                          { label: "Debate (Parallel)", icon: <Layout className="w-5 h-5" />, action: () => setShowContactList(true) },
+                          { label: "Debate (Interagent)", icon: <Zap className="w-5 h-5" />, action: () => setShowContactList(true) },
                         ].map((item) => (
                           <button 
                             key={item.label}
