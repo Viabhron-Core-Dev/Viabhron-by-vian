@@ -1,5 +1,5 @@
 # Viabhron: Modular AI Operating System (MAOS)
-
+pwa live link: https://viabhron-core-dev.github.io/Viabhron-by-vian/
 > [!IMPORTANT]
 > **PROJECT STATUS: CONCEPTUAL PROTOTYPE**
 > This project is a **work in progress** and serves as a **conceptualization of an idea** rather than a production-ready application. 
