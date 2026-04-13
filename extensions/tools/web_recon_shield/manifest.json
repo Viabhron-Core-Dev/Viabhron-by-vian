@@ -1,0 +1,10 @@
+{
+  "name": "Web Reconnaissance Shield",
+  "id": "web_recon_shield",
+  "version": "1.0.0",
+  "description": "Protection against AI-targeted web attacks (cloaking, prompt injection).",
+  "type": "tool",
+  "category": "Security",
+  "permissions": ["web:analyze", "scraping:airgap"],
+  "entry": "index.ts"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Federated Registry (SFR)",
+  "id": "sfr",
+  "version": "1.0.0",
+  "description": "Cross-instance agent accreditation.",
+  "type": "tool",
+  "category": "Registry",
+  "permissions": ["federation:read", "trust:score"],
+  "entry": "index.ts"
+}

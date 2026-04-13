@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Engine Orchestrator (SEO)",
+  "id": "seo",
+  "version": "1.0.0",
+  "description": "Master controller for engine-level extensions.",
+  "type": "tool",
+  "category": "Engine",
+  "permissions": ["kernel:manage", "extension:orchestrate"],
+  "entry": "index.ts"
+}

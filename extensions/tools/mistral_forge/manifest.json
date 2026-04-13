@@ -1,0 +1,10 @@
+{
+  "name": "Mistral Sovereign Forge",
+  "id": "mistral_forge",
+  "version": "1.0.0",
+  "description": "Specialized substrate for Mistral model fine-tuning and deployment.",
+  "type": "tool",
+  "category": "Intelligence",
+  "permissions": ["model:fine-tune", "inference:deploy"],
+  "entry": "index.ts"
+}

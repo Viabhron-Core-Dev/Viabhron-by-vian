@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Event Bus (SEB)",
+  "id": "seb",
+  "version": "1.0.0",
+  "description": "Standardized inter-agent and inter-extension communication.",
+  "type": "tool",
+  "category": "Infrastructure",
+  "permissions": ["event:publish", "event:subscribe"],
+  "entry": "index.ts"
+}

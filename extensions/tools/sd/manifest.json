@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Dispatch (SD)",
+  "id": "sd",
+  "version": "1.0.0",
+  "description": "Task routing and load balancing.",
+  "type": "tool",
+  "category": "Infrastructure",
+  "permissions": ["task:route", "load:balance"],
+  "entry": "index.ts"
+}

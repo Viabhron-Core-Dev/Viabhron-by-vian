@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Verification Loop (SVL)",
+  "id": "svl",
+  "version": "1.0.0",
+  "description": "Continuous, automated adversarial auditing.",
+  "type": "tool",
+  "category": "Security",
+  "permissions": ["adversarial:audit", "patch:generate"],
+  "entry": "index.ts"
+}

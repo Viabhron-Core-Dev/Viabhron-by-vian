@@ -14,6 +14,10 @@ import {
   sovereignCreativeStudioModule,
   viabhronNexusModule,
   symphonyModule,
+  soundForgeModule,
+  imageStudioModule,
+  videoSuiteModule,
+  mossSystemModule,
 } from '../../extensions/modules';
 
 export const INITIAL_EXTENSIONS: Extension[] = [
@@ -57,4 +61,8 @@ export const INITIAL_EXTENSIONS: Extension[] = [
   sovereignCreativeStudioModule,
   viabhronNexusModule,
   symphonyModule,
+  soundForgeModule,
+  imageStudioModule,
+  videoSuiteModule,
+  mossSystemModule,
 ];

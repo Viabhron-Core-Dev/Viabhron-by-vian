@@ -1,0 +1,10 @@
+{
+  "name": "Workflow Chronos (Time-Travel Debugging)",
+  "id": "workflow_chronos",
+  "version": "1.0.0",
+  "description": "Visual timeline and debugging for autonomous agent actions.",
+  "type": "tool",
+  "category": "Development",
+  "permissions": ["state:snapshot", "workflow:replay"],
+  "entry": "index.ts"
+}

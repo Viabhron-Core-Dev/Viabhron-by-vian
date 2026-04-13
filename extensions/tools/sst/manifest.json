@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Substrate Tuner (SST)",
+  "id": "sst",
+  "version": "1.0.0",
+  "description": "Performance optimization and resource allocation.",
+  "type": "tool",
+  "category": "Efficiency",
+  "permissions": ["resource:scale", "metabolic:limit"],
+  "entry": "index.ts"
+}

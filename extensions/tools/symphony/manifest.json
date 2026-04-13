@@ -1,0 +1,10 @@
+{
+  "name": "Symphony Orchestration",
+  "id": "symphony",
+  "version": "1.0.0",
+  "description": "Converting project tickets into autonomous implementation runs.",
+  "type": "tool",
+  "category": "Development",
+  "permissions": ["ticket:monitor", "forge:sandbox"],
+  "entry": "index.ts"
+}

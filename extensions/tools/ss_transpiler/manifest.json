@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign-Script (SS) Transpiler",
+  "id": "ss_transpiler",
+  "version": "1.0.0",
+  "description": "Converting declarative intent manifests into functional code.",
+  "type": "tool",
+  "category": "Engine",
+  "permissions": ["manifest:transpile", "security:harden"],
+  "entry": "index.ts"
+}

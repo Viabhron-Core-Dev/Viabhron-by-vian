@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Identity & 8004 Protocol",
+  "id": "identity_8004",
+  "version": "1.0.0",
+  "description": "On-chain agent identity and multi-chain accreditation.",
+  "type": "tool",
+  "category": "Security",
+  "permissions": ["identity:manage", "blockchain:sign"],
+  "entry": "index.ts"
+}

@@ -17,7 +17,7 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client' | 'nexus' | 'symphony' | 'creative';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client' | 'nexus' | 'symphony' | 'creative' | 'sound_forge' | 'image_studio' | 'video_suite' | 'moss_system';
 
 export type SystemMode = 'turbo' | 'eco' | 'stealth';
 
@@ -328,6 +328,8 @@ export interface Agent {
   systemInstruction: string;
   activeExtensionIds: string[];
   isStaff?: boolean;
+  isAnchor?: boolean;
+  isResident?: boolean;
   avatar?: string;
   color: string;
   parentId?: string; // For hierarchy (Sub/Minor agents)
@@ -580,6 +582,33 @@ export interface Client {
   type: 'native' | 'web' | 'cli' | 'ambient';
   status: 'active' | 'inactive' | 'error';
   accreditationId: string;
+}
+
+export interface Secret {
+  id: string;
+  label: string;
+  value: string;
+  type: 'api_key' | 'oauth_token' | 'other';
+  createdAt: Date;
+}
+
+export interface SovereignSkill {
+  id: string;
+  name: string;
+  description: string;
+  code: string;
+  type: 'script' | 'tool' | 'workflow';
+  status: 'draft' | 'ratified' | 'archived';
+  authorId: string;
+  createdAt: Date;
+}
+
+export interface HeartbeatLog {
+  id: string;
+  type: 'pulse' | 'optimization' | 'audit' | 'hatch';
+  content: string;
+  impact?: string;
+  timestamp: Date;
 }
 
 export interface RatificationProposal {

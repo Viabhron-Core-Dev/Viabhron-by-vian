@@ -1,0 +1,12 @@
+{
+  "name": "TurboQuant Substrate Patch",
+  "description": "Performance optimization for LLM inference and token throughput with dynamic quantization.",
+  "version": "1.0.0",
+  "category": "module",
+  "permissions": [
+    "inference_optimization",
+    "dynamic_quantization",
+    "memory_management"
+  ],
+  "mission": "To accelerate the OS's intelligence throughput."
+}

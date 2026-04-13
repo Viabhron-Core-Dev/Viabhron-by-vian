@@ -1,0 +1,10 @@
+{
+  "name": "Parallel Forge",
+  "id": "parallel_forge",
+  "version": "1.0.0",
+  "description": "Fleet-scale agent development in isolated sandboxes.",
+  "type": "tool",
+  "category": "Development",
+  "permissions": ["sandbox:create", "agent:train"],
+  "entry": "index.ts"
+}

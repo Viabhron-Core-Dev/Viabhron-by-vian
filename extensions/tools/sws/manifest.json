@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Web Shield (SWS)",
+  "id": "sws",
+  "version": "1.0.0",
+  "description": "Advanced protection against web-based AI attacks.",
+  "type": "tool",
+  "category": "Security",
+  "permissions": ["web:scrape", "diff:analyze"],
+  "entry": "index.ts"
+}

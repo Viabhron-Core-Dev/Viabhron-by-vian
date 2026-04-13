@@ -198,6 +198,7 @@ export const SetupBox: React.FC<SetupBoxProps> = ({ onComplete }) => {
 
                 <div className="space-y-4">
                   {[
+                    { id: 'm2.7', name: 'MiniMax M2.7', desc: 'Self-Evolving Specialist (Open-Weights)', icon: <Zap size={20} /> },
                     { id: 'gemma-2b', name: 'Gemma', desc: 'Safety-First Logician (Google Open-Weights)', icon: <Shield size={20} /> },
                     { id: 'llama-3', name: 'Llama', desc: 'Versatile Generalist (Meta Open-Weights)', icon: <Brain size={20} /> },
                     { id: 'qwen-2', name: 'Qwen', desc: 'Technical Specialist (Alibaba Open-Weights)', icon: <Cpu size={20} /> }

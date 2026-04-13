@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Linguistic Evolution (SLE)",
+  "id": "sle",
+  "version": "1.0.0",
+  "description": "Context-aware adaptation of agent communication.",
+  "type": "tool",
+  "category": "Intelligence",
+  "permissions": ["prompt:tune", "interaction:history"],
+  "entry": "index.ts"
+}

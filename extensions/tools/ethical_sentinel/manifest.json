@@ -1,0 +1,10 @@
+{
+  "name": "Ethical Sentinel",
+  "id": "ethical_sentinel",
+  "version": "1.0.0",
+  "description": "Safety-by-design and child safety compliance.",
+  "type": "tool",
+  "category": "Compliance",
+  "permissions": ["content:filter", "safety:audit"],
+  "entry": "index.ts"
+}

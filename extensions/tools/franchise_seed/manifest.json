@@ -1,0 +1,10 @@
+{
+  "name": "Franchise Seed (One-Click Deployment)",
+  "id": "franchise_seed",
+  "version": "1.0.0",
+  "description": "Rapid deployment of new Viabhron instances.",
+  "type": "tool",
+  "category": "Infrastructure",
+  "permissions": ["cloud:provision", "infra:manifest"],
+  "entry": "index.ts"
+}

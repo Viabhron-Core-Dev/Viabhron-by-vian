@@ -1,4 +1,4 @@
-import { Terminal, Activity, Bug, Shield, Plus, Palette, Library, Music } from 'lucide-react';
+import { Terminal, Activity, Bug, Shield, Plus, Palette, Library, Music, Play, Sprout } from 'lucide-react';
 import { Extension } from '../../src/types';
 
 export const agentTerminalModule: Extension = { 
@@ -99,4 +99,44 @@ export const symphonyModule: Extension = {
   status: 'active',
   source: 'inbuilt',
   description: 'Autonomous AI-driven implementation runs based on Linear tickets.'
+};
+
+export const soundForgeModule: Extension = {
+  id: 't14',
+  name: 'Sovereign Sound Forge',
+  category: 'module',
+  icon: Music,
+  status: 'active',
+  source: 'inbuilt',
+  description: 'High-fidelity audio synthesis and music generation tool.'
+};
+
+export const imageStudioModule: Extension = {
+  id: 't15',
+  name: 'Sovereign Image Studio',
+  category: 'module',
+  icon: Palette,
+  status: 'active',
+  source: 'inbuilt',
+  description: 'Rapid visual synthesis and asset creation studio.'
+};
+
+export const videoSuiteModule: Extension = {
+  id: 't16',
+  name: 'Sovereign Video Suite',
+  category: 'module',
+  icon: Play,
+  status: 'active',
+  source: 'inbuilt',
+  description: 'Short-form animation and cinematic video generation suite.'
+};
+
+export const mossSystemModule: Extension = {
+  id: 't17',
+  name: 'Moss System',
+  category: 'module',
+  icon: Sprout,
+  status: 'active',
+  source: 'inbuilt',
+  description: 'App transmutation and lifecycle management for Sovereign Moss.'
 };

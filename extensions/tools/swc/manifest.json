@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Weight-Check (SWC)",
+  "id": "swc",
+  "version": "1.0.0",
+  "description": "Auditing model weights and checking for bias.",
+  "type": "tool",
+  "category": "Security",
+  "permissions": ["weight:audit", "bias:check"],
+  "entry": "index.ts"
+}

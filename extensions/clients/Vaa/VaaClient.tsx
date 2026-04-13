@@ -64,7 +64,9 @@ import {
   Agent,
   CanvasNode,
   CanvasEdge,
-  NewsCard
+  NewsCard,
+  Extension,
+  Secret
 } from "../../../src/types";
 import { Toaster, toast } from "sonner";
 import { Canvas } from "../../../src/components/Shell/Canvas";
@@ -113,11 +115,25 @@ import { ContactList } from "./components/ContactList";
 
 interface VaaClientProps {
   agents?: Agent[];
+  extensions?: Extension[];
+  secrets?: Secret[];
+  onCreateAgent?: (agent: Partial<Agent>) => void;
+  onAddSecret?: (secret: Omit<Secret, 'id' | 'createdAt'>) => void;
+  onDeleteSecret?: (id: string) => void;
+  onUpdateSecret?: (id: string, updates: Partial<Secret>) => void;
 }
 
 const TABS: ("chats" | "news" | "workflow" | "extensions")[] = ["chats", "news", "workflow", "extensions"];
 
-export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
+export const VaaClient: React.FC<VaaClientProps> = ({ 
+  agents = [], 
+  extensions = [], 
+  secrets = [],
+  onCreateAgent,
+  onAddSecret,
+  onDeleteSecret,
+  onUpdateSecret
+}) => {
   const [activeTab, setActiveTab] = useState<"chats" | "news" | "workflow" | "extensions">("chats");
   const [selectedChat, setSelectedChat] = useState<CelestialChat | null>(null);
   const [view, setView] = useState<"main" | "workflow">("main");
@@ -137,8 +153,10 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
   const [showQRScanner, setShowQRScanner] = useState(false);
   const [showContactList, setShowContactList] = useState(false);
   const [activeChatFilter, setActiveChatFilter] = useState("All");
+  const [chatSearchQuery, setChatSearchQuery] = useState("");
   const [availableChatFilters, setAvailableChatFilters] = useState(["All", "Semi Local", "Cloudflare", "GitHub", "Gmail", "Corporate", "Hatchery"]);
   const [activeChatFilters, setActiveChatFilters] = useState(["All", "Semi Local", "Cloudflare", "GitHub", "Gmail"]);
+  const [chats, setChats] = useState<CelestialChat[]>([]);
   
   const contentRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -152,6 +170,117 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
   useClickOutside(plusMenuRef, () => setShowPlusMenu(false));
 
   const displayTabs = [TABS[TABS.length - 1], ...TABS, TABS[0]];
+
+  useEffect(() => {
+    // Initialize chats
+    const residentAgent = agents.find(a => a.isResident && a.role === 'head');
+    
+    const agentNodes: CelestialChat[] = agents
+      .filter(agent => (!agent.isStaff || agent.isResident) && agent.id !== residentAgent?.id)
+      .map(agent => ({
+        id: `agent-${agent.id}`,
+        nodeId: agent.id,
+        name: agent.name,
+        lastMessage: agent.description || "System Agent ready for deployment.",
+        messages: [],
+        type: "agent",
+        updatedAt: Date.now(),
+        isHeadAgent: agent.role === 'head',
+        filterCategory: agent.isResident ? "Semi Local" : "Corporate"
+      }));
+
+    const initialChats: CelestialChat[] = [
+      {
+        id: residentAgent ? `agent-${residentAgent.id}` : "cloud-manager-resident",
+        nodeId: residentAgent?.id || "cloud-manager",
+        name: "Cloud Manager",
+        lastMessage: residentAgent?.description || "Sovereign Brain Initialized. Awaiting Chairman's command.",
+        messages: [
+          {
+            id: "cm1",
+            role: "assistant",
+            content: "Welcome back, Chairman. The Sovereign Kernel is stable. I am your Resident Agent, managing the private cloud substrate. How shall we proceed?",
+            timestamp: new Date().toISOString()
+          }
+        ],
+        type: "agent",
+        isHeadAgent: true,
+        updatedAt: Date.now(),
+        filterCategory: "Semi Local"
+      },
+      {
+        id: "sentinel-feed",
+        name: "Sentinel Feed",
+        lastMessage: "System Monitoring Active: All bulkheads secure.",
+        messages: [
+          {
+            id: "s1",
+            role: "assistant",
+            content: "[INFO] Viabhron Kernel initialized successfully.",
+            timestamp: new Date().toISOString()
+          },
+          {
+            id: "s2",
+            role: "assistant",
+            content: "[SUCCESS] Sovereign Listener Bridge connected.",
+            timestamp: new Date().toISOString()
+          },
+          {
+            id: "s3",
+            role: "assistant",
+            content: "[WARN] High memory usage detected in Node-7.",
+            timestamp: new Date().toISOString()
+          }
+        ],
+        type: "sentinel",
+        isSentinel: true,
+        updatedAt: Date.now(),
+        filterCategory: "Semi Local"
+      },
+      {
+        id: "glasswing-auditor",
+        name: "Glasswing Auditor",
+        lastMessage: "Chairman, I have synthesized a new vulnerability in Node-7.",
+        messages: [
+          { 
+            id: "gw1", 
+            role: "assistant", 
+            content: "[GLASSWING BRIEFING] I have identified a potential privilege escalation flaw in the 'Extra Processor' node manifest. This flaw is similar to the 27-year-old OpenBSD bug recently disclosed. I have a Sovereign Patch ready for ratification.", 
+            timestamp: new Date().toISOString(),
+            metadata: { type: "security-alert", severity: "high" }
+          }
+        ],
+        type: "agent",
+        updatedAt: Date.now(),
+        filterCategory: "Cloudflare"
+      },
+      {
+        id: "mission-control",
+        name: "Mission Control",
+        lastMessage: "Finance Auditor Agent: 1,240 claims processed.",
+        messages: [
+          { 
+            id: "mc1", 
+            role: "assistant", 
+            content: "[MISSION LOG] Finance Auditor Agent has successfully connected to the UiPath Orchestrator substrate. Primary User status confirmed.", 
+            timestamp: new Date().toISOString()
+          },
+          { 
+            id: "mc2", 
+            role: "assistant", 
+            content: "[STATUS] Healthcare Claims Worker synthesis at 45%. Adversarial Auditor is currently vetting the automation manifest.", 
+            timestamp: new Date().toISOString()
+          }
+        ],
+        type: "agent",
+        updatedAt: Date.now(),
+        filterCategory: "Corporate"
+      },
+      ...agentNodes
+    ];
+
+    setChats(initialChats);
+  }, [agents]);
 
   const handleTabClick = (tabId: "chats" | "news" | "workflow" | "extensions") => {
     if (showContactList) setShowContactList(false);
@@ -239,6 +368,8 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
               filters={activeChatFilters} 
               activeFilter={activeChatFilter}
               onFilterChange={setActiveChatFilter}
+              searchQuery={chatSearchQuery}
+              onSearchChange={setChatSearchQuery}
             />
             <ChatList chats={filteredChats} onSelectChat={setSelectedChat} />
           </>
@@ -274,7 +405,9 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
       messages: [],
       type: "agent",
       updatedAt: Date.now(),
-      isHeadAgent: agent.name.toLowerCase().includes("architect") || agent.name.toLowerCase().includes("omega")
+      isHeadAgent: agent.name.toLowerCase().includes("architect") || 
+                   agent.name.toLowerCase().includes("omega") || 
+                   agent.name.toLowerCase().includes("cloud manager")
     }));
 
   const allChats: CelestialChat[] = [
@@ -396,20 +529,24 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
     ...agentNodes
   ];
 
-  const filteredChats = allChats.filter(chat => {
-    if (activeChatFilter === "All") return true;
-    return chat.filterCategory === activeChatFilter;
+  const filteredChats = chats.filter(chat => {
+    const matchesFilter = activeChatFilter === "All" || chat.filterCategory === activeChatFilter;
+    const matchesSearch = chat.name.toLowerCase().includes(chatSearchQuery.toLowerCase()) || 
+                         chat.lastMessage.toLowerCase().includes(chatSearchQuery.toLowerCase()) ||
+                         chat.messages.some(m => m.content.toLowerCase().includes(chatSearchQuery.toLowerCase()));
+    
+    return matchesFilter && matchesSearch;
   });
 
-  const headAgentChat = allChats.find(c => c.isHeadAgent) || allChats[0];
+  const headAgentChat = chats.find(c => c.isHeadAgent) || chats[0];
 
   const handleSelectContact = (agent: Agent) => {
     // Check if chat already exists
-    const existingChat = allChats.find(c => c.nodeId === agent.id);
+    const existingChat = chats.find(c => c.nodeId === agent.id);
     if (existingChat) {
       setSelectedChat(existingChat);
     } else {
-      // Create a new chat thread (simulated for now)
+      // Create a new chat thread
       const newChat: CelestialChat = {
         id: `chat-${Date.now()}`,
         nodeId: agent.id,
@@ -419,10 +556,54 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
         updatedAt: Date.now(),
         lastMessage: "Mission initiated."
       };
+      setChats(prev => [newChat, ...prev]);
       setSelectedChat(newChat);
     }
     setShowContactList(false);
     setShowPlusMenu(false);
+  };
+
+  const handleSendMessage = (content: string) => {
+    if (!selectedChat || !content.trim()) return;
+
+    const newMessage: Message = {
+      id: `msg-${Date.now()}`,
+      role: "user",
+      content: content.trim(),
+      timestamp: new Date().toISOString()
+    };
+
+    const updatedChat = {
+      ...selectedChat,
+      messages: [...selectedChat.messages, newMessage],
+      lastMessage: content.trim(),
+      updatedAt: Date.now()
+    };
+
+    setChats(prev => prev.map(c => c.id === selectedChat.id ? updatedChat : c));
+    setSelectedChat(updatedChat);
+
+    // Simulate agent response
+    setTimeout(() => {
+      const response: Message = {
+        id: `resp-${Date.now()}`,
+        role: "assistant",
+        content: `I have received your command: "${content.trim()}". Processing via Sovereign Kernel...`,
+        timestamp: new Date().toISOString()
+      };
+
+      const finalChat = {
+        ...updatedChat,
+        messages: [...updatedChat.messages, response],
+        lastMessage: response.content,
+        updatedAt: Date.now()
+      };
+
+      setChats(prev => prev.map(c => c.id === selectedChat.id ? finalChat : c));
+      if (selectedChat?.id === finalChat.id) {
+        setSelectedChat(finalChat);
+      }
+    }, 1500);
   };
 
   return (
@@ -476,8 +657,14 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
           >
             <ContactList 
               agents={agents} 
+              extensions={extensions}
+              secrets={secrets}
               onSelect={handleSelectContact} 
-              onBack={() => setShowContactList(false)} 
+              onBack={() => setShowContactList(false)}
+              onCreateAgent={(agent) => {
+                onCreateAgent?.(agent);
+                setShowContactList(false);
+              }}
             />
           </motion.div>
         ) : !selectedChat ? (
@@ -565,7 +752,10 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
               {/* Stacked FABs */}
               <div className="absolute bottom-8 right-6 flex flex-col gap-4 items-center z-50">
                 <button 
-                  onClick={() => setSelectedChat(headAgentChat)}
+                  onClick={() => {
+                    // Direct Connect to Cloud Manager (Resident Agent)
+                    setSelectedChat(headAgentChat);
+                  }}
                   className="w-14 h-14 bg-wa-accent text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 z-30 ring-4 ring-white"
                 >
                   <span className="text-2xl font-bold">Ω</span>
@@ -692,6 +882,8 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
               chat={selectedChat} 
               onBack={() => setSelectedChat(null)} 
               onShowMenu={() => setShowChatMenu(!showChatMenu)}
+              onOpenCommandCenter={() => window.dispatchEvent(new CustomEvent('viabhron:toggle-ui'))}
+              onSendMessage={handleSendMessage}
               showMenu={showChatMenu}
               menuRef={chatMenuRef}
             />
@@ -770,6 +962,10 @@ export const VaaClient: React.FC<VaaClientProps> = ({ agents = [] }) => {
               );
             }}
             onReorderFilters={setAvailableChatFilters}
+            secrets={secrets}
+            onAddSecret={onAddSecret!}
+            onDeleteSecret={onDeleteSecret!}
+            onUpdateSecret={onUpdateSecret!}
           />
         )}
       </AnimatePresence>

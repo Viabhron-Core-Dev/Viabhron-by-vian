@@ -1,0 +1,10 @@
+{
+  "name": "Luma Uni-1",
+  "id": "luma_uni1",
+  "version": "1.0.0",
+  "description": "Unified image generation and reasoning traces.",
+  "type": "connector",
+  "category": "Intelligence",
+  "permissions": ["image:generate", "reasoning:trace"],
+  "entry": "index.ts"
+}

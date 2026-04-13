@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Quantum Substrate (SQS)",
+  "id": "sqs",
+  "version": "1.0.0",
+  "description": "High-performance compute layer for complex simulations.",
+  "type": "tool",
+  "category": "Infrastructure",
+  "permissions": ["crypto:advanced", "logic:process"],
+  "entry": "index.ts"
+}
