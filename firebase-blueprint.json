@@ -336,6 +336,185 @@
         "autoVerify": { "type": "boolean" }
       },
       "required": ["defaultChain", "enabledChains", "registrarAgentId"]
+    },
+    "AuditReport": {
+      "title": "Audit Report",
+      "description": "A security and compliance report for an extension or project.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "extensionId": { "type": "string" },
+        "status": { "type": "string", "enum": ["passed", "failed", "warning"] },
+        "guardianScore": { "type": "number" },
+        "consultantAScore": { "type": "number" },
+        "consultantBScore": { "type": "number" },
+        "vulnerabilities": { "type": "array", "items": { "type": "string" } },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "extensionId", "status", "timestamp"]
+    },
+    "HatcheryProject": {
+      "title": "Hatchery Project",
+      "description": "A development project within the Sovereign Hatchery.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["ideation", "development", "auditing", "staging", "production"] },
+        "manifest": { "$ref": "SovereignManifest" },
+        "auditReport": { "$ref": "AuditReport" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "status", "createdAt"]
+    },
+    "SOP": {
+      "title": "Standard Operating Procedure (SOP)",
+      "description": "A ratified procedure for agentic workflows.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "department": { "type": "string" },
+        "leadAgentId": { "type": "string" },
+        "supportAgentIds": { "type": "array", "items": { "type": "string" } },
+        "requiredExtensionIds": { "type": "array", "items": { "type": "string" } },
+        "manifest": { "type": "string", "description": "The Sovereign-Script (SS) manifest." },
+        "status": { "type": "string", "enum": ["active", "draft", "archived"] },
+        "lastExecuted": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "leadAgentId", "manifest", "status"]
+    },
+    "RatificationProposal": {
+      "title": "Ratification Proposal",
+      "description": "A proposal for system changes requiring Chairman ratification.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["department", "governance", "infrastructure"] },
+        "impact": {
+          "type": "object",
+          "properties": {
+            "tokenCost": { "type": "string" },
+            "computeCost": { "type": "string" },
+            "benefit": { "type": "string" }
+          }
+        },
+        "status": { "type": "string", "enum": ["pending", "ratified", "shelved", "vetoed"] },
+        "isUnfolded": { "type": "boolean" },
+        "shadowModeAvailable": { "type": "boolean" },
+        "sunsetClause": {
+          "type": "object",
+          "properties": {
+            "reviewIntervalDays": { "type": "integer" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "type", "status", "createdAt"]
+    },
+    "Extension": {
+      "title": "Extension",
+      "description": "A functional extension or connector for the OS.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string", "enum": ["connector", "skill", "tool", "mcp", "module", "gaming", "testing"] },
+        "status": { "type": "string", "enum": ["active", "inactive", "error"] },
+        "isBound": { "type": "boolean" },
+        "source": { "type": "string", "enum": ["inbuilt", "external"] },
+        "url": { "type": "string" },
+        "config": { "type": "object" }
+      },
+      "required": ["id", "name", "category", "status", "source"]
+    },
+    "SovereignManifest": {
+      "title": "Sovereign Manifest",
+      "description": "A declarative manifest of intent for an app or SOP.",
+      "type": "object",
+      "properties": {
+        "kind": { "type": "string", "enum": ["SovereignApp", "SovereignSOP"] },
+        "metadata": { "type": "object" },
+        "intent": { "type": "object" },
+        "security": { "type": "object" },
+        "blocks": { "type": "array", "items": { "$ref": "SovereignBlock" } },
+        "ratification": { "type": "object" }
+      },
+      "required": ["kind", "metadata", "intent"]
+    },
+    "SovereignBlock": {
+      "title": "Sovereign Block",
+      "description": "A malleable component block within a manifest.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "config": { "type": "object" },
+        "inputs": { "type": "array", "items": { "type": "string" } },
+        "malleable": { "type": "boolean" }
+      },
+      "required": ["id", "type", "config", "malleable"]
+    },
+    "EfficiencyPatch": {
+      "title": "Efficiency Patch",
+      "description": "A performance optimization patch applied to the OS.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "version": { "type": "string" },
+        "applied": { "type": "boolean" },
+        "metrics": { "type": "object" }
+      },
+      "required": ["id", "name", "applied"]
+    },
+    "MiniApp": {
+      "title": "Mini App",
+      "description": "A lightweight application within the Sovereign ecosystem.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["local", "sovereign"] },
+        "category": { "type": "string", "enum": ["utility", "creative", "security", "intelligence"] },
+        "status": { "type": "string", "enum": ["active", "inactive", "error"] }
+      },
+      "required": ["id", "name", "type", "category", "status"]
+    },
+    "Client": {
+      "title": "Sovereign Client",
+      "description": "A native or web client authenticated with the OS.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["native", "web", "cli", "ambient"] },
+        "status": { "type": "string", "enum": ["active", "inactive", "error"] },
+        "accreditationId": { "type": "string" }
+      },
+      "required": ["id", "name", "type", "status", "accreditationId"]
+    },
+    "LogEntry": {
+      "title": "System Log Entry",
+      "description": "A general-purpose system log for auditing and debugging.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "level": { "type": "string", "enum": ["DEBUG", "INFO", "WARN", "ERROR", "CRITICAL"] },
+        "source": { "type": "string" },
+        "message": { "type": "string" },
+        "metadata": { "type": "object" },
+        "traceId": { "type": "string" }
+      },
+      "required": ["id", "timestamp", "level", "source", "message"]
     }
   },
   "firestore": {
@@ -430,6 +609,38 @@
     "/users/{userId}/notifications/{notificationId}": {
       "schema": "Notification",
       "description": "System-wide notifications."
+    },
+    "/users/{userId}/hatchery/projects/{projectId}": {
+      "schema": "HatcheryProject",
+      "description": "Sovereign Hatchery development projects."
+    },
+    "/users/{userId}/governance/proposals/{proposalId}": {
+      "schema": "RatificationProposal",
+      "description": "Chairman ratification proposals."
+    },
+    "/users/{userId}/governance/sops/{sopId}": {
+      "schema": "SOP",
+      "description": "Ratified Standard Operating Procedures."
+    },
+    "/users/{userId}/system/efficiency/patches/{patchId}": {
+      "schema": "EfficiencyPatch",
+      "description": "Applied performance optimizations."
+    },
+    "/users/{userId}/system/miniapps/{appId}": {
+      "schema": "MiniApp",
+      "description": "Installed Sovereign mini-apps."
+    },
+    "/users/{userId}/system/clients/{clientId}": {
+      "schema": "Client",
+      "description": "Authenticated OS clients."
+    },
+    "/users/{userId}/system/extensions/{extensionId}": {
+      "schema": "Extension",
+      "description": "Active OS extensions and connectors."
+    },
+    "/users/{userId}/system/logs/{logId}": {
+      "schema": "LogEntry",
+      "description": "General system audit logs."
     }
   }
 }

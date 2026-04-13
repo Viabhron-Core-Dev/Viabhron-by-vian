@@ -1,32 +1,32 @@
-import { Globe, BookOpen, Terminal } from 'lucide-react';
+import { Globe, FileText, Code } from 'lucide-react';
 import { Extension } from '../../src/types';
 
-export const headlessBrowserTool: Extension = { 
-  id: 't1', 
-  name: 'Headless Browser', 
-  category: 'tool', 
-  icon: Globe, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Server-side web automation' 
+export const headlessBrowserTool: Extension = {
+  id: 'headless-browser',
+  name: 'Headless Browser',
+  description: 'Automated web browsing and data extraction.',
+  icon: Globe,
+  category: 'tool',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const pdfExtractorTool: Extension = { 
-  id: 't2', 
-  name: 'PDF Extractor', 
-  category: 'tool', 
-  icon: BookOpen, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Client-side text extraction' 
+export const pdfExtractorTool: Extension = {
+  id: 'pdf-extractor',
+  name: 'PDF Extractor',
+  description: 'Advanced text and data extraction from PDF documents.',
+  icon: FileText,
+  category: 'tool',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const codeParserTool: Extension = { 
-  id: 't3', 
-  name: 'Code Parser', 
-  category: 'tool', 
-  icon: Terminal, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Extract code from chat' 
+export const codeParserTool: Extension = {
+  id: 'code-parser',
+  name: 'Code Parser',
+  description: 'Multi-language code analysis and parsing.',
+  icon: Code,
+  category: 'tool',
+  status: 'active',
+  source: 'inbuilt'
 };

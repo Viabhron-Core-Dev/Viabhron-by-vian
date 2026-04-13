@@ -130,6 +130,10 @@ This document contains the technical blueprints and manifests for the Gamma-tier
 *   **Purpose**: High-performance compute layer for complex simulations.
 *   **Architecture**: Advanced cryptography and high-density logic processing.
 
+## 31. Sovereign Swarm Simulator (SSS)
+*   **Purpose**: Multi-agent scenario testing in Digital Twin environments.
+*   **Architecture**: Isolated simulation sandboxes and scenario-based agentic workflows.
+
 ## 32. Deep Execution Substrate (The Hands)
 *   **Purpose**: Autonomous shell execution and file editing in hardened environments.
 *   **Architecture**: Manager-Contractor model with ephemeral Forge Sandboxes and self-healing code logic.

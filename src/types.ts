@@ -1,6 +1,6 @@
 import { LucideIcon } from "lucide-react";
 
-export type ExtensionCategory = 'connector' | 'skill' | 'tool' | 'mcp' | 'module' | 'gaming' | 'testing';
+export type ExtensionCategory = 'connector' | 'skill' | 'tool' | 'mcp' | 'module' | 'gaming' | 'testing' | 'agent';
 
 export type AgentRole = 'head' | 'executive' | 'contractor' | 'consultant' | 'specialized';
 

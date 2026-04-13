@@ -129,6 +129,42 @@ service cloud.firestore {
     //   - active: bool (required)
     //   - createdAt: timestamp
     //
+    // Collection: users/{userId}/secrets
+    // Document ID: {secretId}
+    // Fields:
+    //   - id: string (required)
+    //   - label: string (required)
+    //   - value: string (required)
+    //   - type: string (required, enum: api_key, oauth_token, other)
+    //   - createdAt: timestamp
+    //
+    // Collection: users/{userId}/skills
+    // Document ID: {skillId}
+    // Fields:
+    //   - id: string (required)
+    //   - name: string (required)
+    //   - code: string (required)
+    //   - type: string (required, enum: script, tool, workflow)
+    //   - status: string (required, enum: draft, ratified, archived)
+    //   - createdAt: timestamp
+    //
+    // Collection: users/{userId}/hatchery/projects
+    // Document ID: {projectId}
+    // Fields:
+    //   - id: string (required)
+    //   - name: string (required)
+    //   - status: string (required, enum: ideation, development, auditing, staging, production)
+    //   - createdAt: timestamp
+    //
+    // Collection: users/{userId}/governance/proposals
+    // Document ID: {proposalId}
+    // Fields:
+    //   - id: string (required)
+    //   - title: string (required)
+    //   - type: string (required, enum: department, governance, infrastructure)
+    //   - status: string (required, enum: pending, ratified, shelved, vetoed)
+    //   - createdAt: timestamp
+    //
     // ===============================================================
 
     // ===============================================================
@@ -226,6 +262,40 @@ service cloud.firestore {
              data.urgencyLevel in ['standard', 'critical'];
     }
 
+    function isValidSecret(data) {
+      return data.keys().hasAll(['id', 'label', 'value', 'type', 'createdAt']) &&
+             data.type in ['api_key', 'oauth_token', 'other'];
+    }
+
+    function isValidSkill(data) {
+      return data.keys().hasAll(['id', 'name', 'code', 'type', 'status', 'createdAt']) &&
+             data.type in ['script', 'tool', 'workflow'] &&
+             data.status in ['draft', 'ratified', 'archived'];
+    }
+
+    function isValidHatcheryProject(data) {
+      return data.keys().hasAll(['id', 'name', 'status', 'createdAt']) &&
+             data.status in ['ideation', 'development', 'auditing', 'staging', 'production'];
+    }
+
+    function isValidProposal(data) {
+      return data.keys().hasAll(['id', 'title', 'type', 'status', 'createdAt']) &&
+             data.type in ['department', 'governance', 'infrastructure'] &&
+             data.status in ['pending', 'ratified', 'shelved', 'vetoed'];
+    }
+
+    function isValidSOP(data) {
+      return data.keys().hasAll(['id', 'title', 'leadAgentId', 'manifest', 'status']) &&
+             data.status in ['active', 'draft', 'archived'];
+    }
+
+    function isValidExtension(data) {
+      return data.keys().hasAll(['id', 'name', 'category', 'status', 'source']) &&
+             data.category in ['connector', 'skill', 'tool', 'mcp', 'module', 'gaming', 'testing'] &&
+             data.status in ['active', 'inactive', 'error'] &&
+             data.source in ['inbuilt', 'external'];
+    }
+
     // ===============================================================
     // Rules
     // ===============================================================
@@ -311,6 +381,54 @@ service cloud.firestore {
       match /notifications/{notificationId} {
         allow read: if isOwner(userId);
         allow create, update: if isOwner(userId) && isValidNotification(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /secrets/{secretId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidSecret(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /skills/{skillId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidSkill(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /hatchery/projects/{projectId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidHatcheryProject(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /governance/proposals/{proposalId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidProposal(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /governance/sops/{sopId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidSOP(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /system/extensions/{extensionId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidExtension(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /system/logs/{logId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId);
+        allow delete: if isOwner(userId);
+      }
+
+      match /heartbeat/{logId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId);
         allow delete: if isOwner(userId);
       }
     }

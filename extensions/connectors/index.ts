@@ -1,72 +1,70 @@
-import { Github, Mail, Slack, Database, Share2, ListTodo } from 'lucide-react';
+export * from './x402';
+export * from './trustpilot';
+export * from './arduino';
+export * from './flowise';
+export * from './substack';
+export * from './luma-uni-1';
+
+// Placeholders for missing connectors to fix build errors
+import { Github, Link, Zap, Cloud, Mail, MessageSquare } from 'lucide-react';
 import { Extension } from '../../src/types';
 
-export const githubConnector: Extension = { 
-  id: 'gh', 
-  name: 'GitHub', 
-  category: 'connector', 
-  icon: Github, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Vibe-Forge CDE & Repo Access' 
+export const githubConnector: Extension = {
+  id: 'github',
+  name: 'GitHub Connector',
+  description: 'Secure bridge to GitHub repositories and workflows.',
+  icon: Github,
+  category: 'connector',
+  status: 'active',
+  source: 'inbuilt'
 };
 
 export const linearConnector: Extension = {
   id: 'linear',
-  name: 'Linear',
+  name: 'Linear Connector',
+  description: 'Syncs tickets from Linear to trigger autonomous Symphony runs.',
+  icon: Link,
   category: 'connector',
-  icon: ListTodo,
-  status: 'inactive',
-  source: 'external',
-  description: 'Project Management & Ticket Sync for Symphony Orchestration.'
+  status: 'active',
+  source: 'inbuilt'
 };
 
 export const cqConnector: Extension = {
   id: 'cq',
   name: 'Collective Intelligence (cq)',
+  description: 'Knowledge-sharing system to prevent redundant AI processing.',
+  icon: Zap,
   category: 'connector',
-  icon: Share2,
-  status: 'inactive',
-  source: 'external',
-  description: 'Mozilla.ai knowledge-sharing system for AI agents.'
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const huggingFaceConnector: Extension = { 
-  id: 'hf', 
-  name: 'Hugging Face', 
-  category: 'connector', 
-  icon: Database, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Open Intelligence Hub: Models, Datasets & Spaces' 
+export const huggingFaceConnector: Extension = {
+  id: 'huggingface',
+  name: 'Hugging Face Connector',
+  description: 'Access to models, datasets, and Spaces on Hugging Face Hub.',
+  icon: Cloud,
+  category: 'connector',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const gmailConnector: Extension = { 
-  id: 'gm', 
-  name: 'Gmail', 
-  category: 'connector', 
-  icon: Mail, 
-  status: 'inactive', 
-  source: 'inbuilt', 
-  description: 'Email automation' 
+export const gmailConnector: Extension = {
+  id: 'gmail',
+  name: 'Gmail Connector',
+  description: 'Secure bridge to Gmail for automated email management.',
+  icon: Mail,
+  category: 'connector',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const slackConnector: Extension = { 
-  id: 'sl', 
-  name: 'Slack', 
-  category: 'connector', 
-  icon: Slack, 
-  status: 'inactive', 
-  source: 'inbuilt', 
-  description: 'Team alerts' 
-};
-
-export const symphonyModule: Extension = {
-  id: 'symphony',
-  name: 'Symphony Orchestrator',
-  category: 'module',
-  icon: Share2,
-  status: 'inactive',
-  source: 'external',
-  description: 'Autonomous AI-driven implementation runs based on Linear tickets.'
+export const slackConnector: Extension = {
+  id: 'slack',
+  name: 'Slack Connector',
+  description: 'Integration with Slack workspaces for agent communication.',
+  icon: MessageSquare,
+  category: 'connector',
+  status: 'active',
+  source: 'inbuilt'
 };

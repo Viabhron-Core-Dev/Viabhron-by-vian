@@ -1,52 +1,52 @@
-import { Database, Cpu, BookOpen, Layout, Box } from 'lucide-react';
+import { Database, Activity, Book, Cloud, Zap } from 'lucide-react';
 import { Extension } from '../../src/types';
 
-export const localDatabaseMcp: Extension = { 
-  id: 'm1', 
-  name: 'Local Database', 
-  category: 'mcp', 
-  icon: Database, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'SQLite MCP Server' 
+export const localDatabaseMcp: Extension = {
+  id: 'local-db-mcp',
+  name: 'Local Database MCP',
+  description: 'Standardized access to local data storage.',
+  icon: Database,
+  category: 'mcp',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const systemMetricsMcp: Extension = { 
-  id: 'm2', 
-  name: 'System Metrics', 
-  category: 'mcp', 
-  icon: Cpu, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Host performance monitoring' 
+export const systemMetricsMcp: Extension = {
+  id: 'system-metrics-mcp',
+  name: 'System Metrics MCP',
+  description: 'Standardized telemetry and performance monitoring.',
+  icon: Activity,
+  category: 'mcp',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const geminiApiDocsMcp: Extension = { 
-  id: 'm3', 
-  name: 'Gemini API Docs', 
-  category: 'mcp', 
-  icon: BookOpen, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Real-time access to Gemini API documentation' 
+export const geminiApiDocsMcp: Extension = {
+  id: 'gemini-docs-mcp',
+  name: 'Gemini API Docs MCP',
+  description: 'Standardized access to Gemini API documentation.',
+  icon: Book,
+  category: 'mcp',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const googleWorkspaceMcp: Extension = { 
-  id: 'm4', 
-  name: 'Google Workspace', 
-  category: 'mcp', 
-  icon: Layout, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Read, write, and manage data across Google Workspace apps' 
+export const googleWorkspaceMcp: Extension = {
+  id: 'google-workspace-mcp',
+  name: 'Google Workspace MCP',
+  description: 'Standardized integration with Google Workspace services.',
+  icon: Cloud,
+  category: 'mcp',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const openClawProtocol: Extension = { 
-  id: 'm5', 
-  name: 'OpenClaw Protocol', 
-  category: 'mcp', 
-  icon: Box, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Self-hosted agent framework for private execution' 
+export const openClawProtocol: Extension = {
+  id: 'openclaw-protocol',
+  name: 'OpenClaw Protocol',
+  description: 'Self-building substrate for autonomous OS evolution.',
+  icon: Zap,
+  category: 'mcp',
+  status: 'active',
+  source: 'inbuilt'
 };

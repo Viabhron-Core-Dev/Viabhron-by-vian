@@ -5,27 +5,31 @@ This document tracks the physical "Hatching" of Gamma-tier extensions from the R
 ---
 
 ## 🏗️ Physical Infrastructure Status
-**Status**: 🟢 All 48 Gamma Extensions Hatched
+**Status**: 🟢 All 48 Gamma Extensions Hatched & Reorganized
+**Hierarchy**: 🌲 8-Division Forest Substrate
 **Location**: `/extensions/`
 **Last Sprout**: 2026-04-13
 
-## 📦 Hatched Extension Inventory
+## 📦 Sovereign Vault HQ Inventory
 
-### 1. Connectors (External Bridges)
+### 1. Engine (Heartwood) - `/extensions/engine/`
+*   `ss-transpiler`: Sovereign-Script (SS) Transpiler
+*   `seo`: Sovereign Engine Orchestrator
+*   `turboquant`: TurboQuant Substrate Patch
+
+### 2. Connectors (Roots) - `/extensions/connectors/`
 *   `x402`: Sovereign x402 Payment Gateway
 *   `trustpilot`: Trustpilot AI Visibility
 *   `flowise`: Hardened Flowise AI
 *   `arduino`: Sovereign I/O Bridge (Arduino)
 *   `substack`: Sovereign Publishing Hub (Substack)
+*   `luma-uni-1`: Luma Uni-1 (Unified Intelligence)
 
-### 2. Modules (Kernel Infrastructure)
+### 3. Modules (Trunk) - `/extensions/modules/`
 *   `identity-8004`: Sovereign Identity & 8004 Protocol
 *   `security-radar`: Global Security Radar
-*   `ethical-sentinel`: Ethical Sentinel
-*   `parallel-forge`: Parallel Forge (Fleet Commander)
-*   `corporate-governance`: Corporate Governance Hub
 *   `agent-registry`: Governed Agent Catalog
-*   `smp`: Sovereign Monitor Protocol (SMP)
+*   `smonitor-protocol`: Sovereign Monitor Protocol (SMP)
 *   `openclaw`: Advanced OpenClaw Prototype
 *   `linguistic-bridge`: Sovereign Linguistic Bridge
 *   `svh`: Sovereign Vine Hardener (SVH)
@@ -34,18 +38,15 @@ This document tracks the physical "Hatching" of Gamma-tier extensions from the R
 *   `svl`: Sovereign Verification Loop (SVL)
 *   `seb`: Sovereign Event Bus (SEB)
 *   `sd`: Sovereign Dispatch (SD)
-*   `memory-palace`: Sovereign Memory Palace (SMP)
+*   `memory-palace`: Sovereign Memory Palace
 *   `swc`: Sovereign Weight-Check (SWC)
 *   `spp`: Sovereign Privacy Proxy (SPP)
 *   `swm`: Sovereign Workforce Manager (SWM)
-*   `seo`: Sovereign Engine Orchestrator (SEO)
 *   `sle`: Sovereign Linguistic Evolution (SLE)
 *   `sws`: Sovereign Web Shield (SWS)
-*   `sqs`: Sovereign Quantum Substrate (SQS)
 *   `sss`: Sovereign Swarm Simulator (SSS)
 *   `deep-execution`: Deep Execution Substrate
 *   `web-recon-shield`: Web Reconnaissance Shield
-*   `turboquant`: TurboQuant Substrate Patch
 *   `device-intelligence`: Device Intelligence
 *   `parallel-task`: Parallel Task Orchestration
 *   `vibe-assembly`: Vibe-Assembly
@@ -58,18 +59,47 @@ This document tracks the physical "Hatching" of Gamma-tier extensions from the R
 *   `ghost-implementation`: Ghost Implementation
 *   `workflow-chronos`: Workflow Chronos
 *   `token-governance`: Token Governance Substrate
-*   `ss-transpiler`: Sovereign-Script (SS) Transpiler
+*   `corporate-governance`: Corporate Governance Hub
+*   `ethical-sentinel`: Ethical Sentinel
 
-### 3. Tools (Specialized Substrates)
-*   `luma-uni-1`: Luma Uni-1 (Unified Intelligence)
-*   `vision-lab`: Sovereign Vision Lab
+### 4. Tools (Branches) - `/extensions/tools/`
 *   `refactor-specialist`: The Refactor Specialist
+*   `vision-lab`: Sovereign Vision Lab
+
+### 5. Agents (Inhabitants) - `/extensions/agents/`
+*   `cloud-manager`: The Cloud Manager
+*   `fiscal-comptroller`: The Fiscal Comptroller
+*   `identity-registrar`: The Sovereign Identity Registrar
+*   `sentinel`: The Sentinel
+*   `adversarial-auditor`: The Adversarial Auditor
+*   (And 20+ other role manifests)
+
+### 6. Skills (Leaves) - `/extensions/skills/`
+*   `/actions/`: Executable TypeScript functions.
+*   `/recipes/`: Declarative SS manifests.
+
+### 7. MCP (Mycelium) - `/extensions/mcp/`
+*   (Standardized protocol servers)
+
+### 8. Patches (Sap) - `/extensions/patches/`
+*   (Efficiency and metabolic optimizations)
+
+---
+
+## 📜 Protocol Layer
+**Location**: `/sops/`
+*   `01-onboarding-genesis.md`
+*   `02-agent-accreditation.md`
+*   `03-mission-dispatch.md`
+*   `04-metabolic-governance.md`
+*   `05-emergency-fold.md`
 
 ---
 
 ## 🛡️ Integrity Check
-*   **Manifest Validation**: All `manifest.json` files follow the Sovereign standard (Name, Description, Version, Category, Permissions, Mission).
-*   **Directory Alignment**: Folders are categorized under `connectors/`, `modules/`, or `tools/` to match the OS hierarchy.
-*   **Mirror Readiness**: The physical file tree is now synchronized with the `BLUEPRINTS.md` knowledge base.
+*   **Headless Alignment**: All UI components moved to `src/components/Extensions/`.
+*   **Naming Standard**: All folders converted to `kebab-case`.
+*   **Deduplication**: Ghost duplicates pruned from `/tools/`.
+*   **Observability**: README indexes created for all divisions.
 
-**Chairman's Note**: The seeds are planted. The OS now has the physical organs required to execute the Gamma-tier missions.
+**Chairman's Note**: The Forest is pruned. The organs are in their correct divisions. The OS is now a perfectly ordered Sovereign machine.

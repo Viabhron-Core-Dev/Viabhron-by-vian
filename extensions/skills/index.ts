@@ -1,72 +1,72 @@
-import { Globe, FileText, Layout, Code, Share2, ShieldAlert, Paintbrush } from 'lucide-react';
+import { Activity, FileText, Box, Search, Shield, Github, Palette } from 'lucide-react';
 import { Extension } from '../../src/types';
 
-export const globalPulseSkill: Extension = { 
-  id: 's1', 
-  name: 'Global Pulse', 
-  category: 'skill', 
-  icon: Globe, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Political & Geopolitical analysis engine' 
+export const globalPulseSkill: Extension = {
+  id: 'global-pulse',
+  name: 'Global Pulse',
+  description: 'Real-time monitoring of global trends and events.',
+  icon: Activity,
+  category: 'skill',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const docForgeSkill: Extension = { 
-  id: 's2', 
-  name: 'Doc Forge', 
-  category: 'skill', 
-  icon: FileText, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'PDF/EPUB generation' 
+export const docForgeSkill: Extension = {
+  id: 'doc-forge',
+  name: 'Doc Forge',
+  description: 'Automated document generation and formatting.',
+  icon: FileText,
+  category: 'skill',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const artifactSandboxSkill: Extension = { 
-  id: 's3', 
-  name: 'Artifact Sandbox', 
-  category: 'skill', 
-  icon: Layout, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Live code execution' 
+export const artifactSandboxSkill: Extension = {
+  id: 'artifact-sandbox',
+  name: 'Artifact Sandbox',
+  description: 'Isolated environment for testing and refining artifacts.',
+  icon: Box,
+  category: 'skill',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const codeHunterSkill: Extension = { 
-  id: 's4', 
-  name: 'Code Hunter', 
-  category: 'skill', 
-  icon: Code, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Deep search for GitHub repos & libraries' 
+export const codeHunterSkill: Extension = {
+  id: 'code-hunter',
+  name: 'Code Hunter',
+  description: 'Advanced code search and vulnerability detection.',
+  icon: Search,
+  category: 'skill',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const socialSentinelSkill: Extension = { 
-  id: 's5', 
-  name: 'Social Sentinel', 
-  category: 'skill', 
-  icon: Share2, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Real-time social media trend monitoring' 
+export const socialSentinelSkill: Extension = {
+  id: 'social-sentinel',
+  name: 'Social Sentinel',
+  description: 'Monitoring and analysis of social media footprints.',
+  icon: Shield,
+  category: 'skill',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const githubSecurityAuditorSkill: Extension = { 
-  id: 's6', 
-  name: 'GitHub Security Auditor', 
-  category: 'skill', 
-  icon: ShieldAlert, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'AI-powered taskflow agent for vulnerability detection' 
+export const githubSecurityAuditorSkill: Extension = {
+  id: 'github-auditor',
+  name: 'GitHub Security Auditor',
+  description: 'Automated security auditing for GitHub repositories.',
+  icon: Github,
+  category: 'skill',
+  status: 'active',
+  source: 'inbuilt'
 };
 
-export const creativeDirectorSkill: Extension = { 
-  id: 's7', 
-  name: 'Creative Director', 
-  category: 'skill', 
-  icon: Paintbrush, 
-  status: 'active', 
-  source: 'inbuilt', 
-  description: 'Agent for assembling multi-step creative workflows on the visual canvas' 
+export const creativeDirectorSkill: Extension = {
+  id: 'creative-director-skill',
+  name: 'Creative Director Skill',
+  description: 'High-level visual orchestration and creative guidance.',
+  icon: Palette,
+  category: 'skill',
+  status: 'active',
+  source: 'inbuilt'
 };
