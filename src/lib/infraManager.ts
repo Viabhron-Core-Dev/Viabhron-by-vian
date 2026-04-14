@@ -59,7 +59,7 @@ class InfrastructureManager {
     }
 
     // Save locally for persistence
-    localStorage.setItem('user_owned_config', JSON.stringify(config));
+    localStorage.setItem('viabhron_firebase_config', JSON.stringify(config));
     
     console.log("Successfully bridged to User-Owned Infrastructure.");
     return this.db;
@@ -90,7 +90,7 @@ class InfrastructureManager {
 
   // 5. Load persisted config on startup
   async loadPersistedConfig() {
-    const savedConfig = localStorage.getItem('user_owned_config');
+    const savedConfig = localStorage.getItem('viabhron_firebase_config');
     if (savedConfig) {
       try {
         const config = JSON.parse(savedConfig);

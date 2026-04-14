@@ -66,6 +66,7 @@ import {
   CanvasEdge,
   NewsCard,
   Extension,
+  MiniApp,
   Secret
 } from "../../../src/types";
 import { Toaster, toast } from "sonner";
@@ -84,6 +85,7 @@ import { HQExtensionsVault } from "./components/HQExtensionsVault";
 import { SearchAndFilters, WorkflowTab } from "./components/Misc";
 import { CameraCapture, QRScanner } from "./components/MediaTools";
 import { ContactList } from "./components/ContactList";
+import { MiniAppLoader } from "../../../src/components/Extensions/MiniAppLoader";
 
 // --- Sub-components ---
 
@@ -116,25 +118,49 @@ import { ContactList } from "./components/ContactList";
 interface VaaClientProps {
   agents?: Agent[];
   extensions?: Extension[];
+  miniApps?: MiniApp[];
   secrets?: Secret[];
   onCreateAgent?: (agent: Partial<Agent>) => void;
   onAddSecret?: (secret: Omit<Secret, 'id' | 'createdAt'>) => void;
   onDeleteSecret?: (id: string) => void;
   onUpdateSecret?: (id: string, updates: Partial<Secret>) => void;
+  onToggleMiniApp?: (id: string) => void;
+  onToggleFreeze?: (id: string) => void;
+  onCloseApp?: (id: string) => void;
+  onOpenStore?: () => void;
+  lastOpenedAppId?: string | null;
+  onAppOpen?: (id: string) => void;
 }
 
-const TABS: ("chats" | "news" | "workflow" | "extensions")[] = ["chats", "news", "workflow", "extensions"];
+const TABS: ("chats" | "news" | "workflow" | "loader")[] = ["chats", "news", "workflow", "loader"];
 
 export const VaaClient: React.FC<VaaClientProps> = ({ 
   agents = [], 
   extensions = [], 
+  miniApps = [],
   secrets = [],
   onCreateAgent,
   onAddSecret,
   onDeleteSecret,
-  onUpdateSecret
+  onUpdateSecret,
+  onToggleMiniApp,
+  onToggleFreeze,
+  onCloseApp,
+  onOpenStore,
+  lastOpenedAppId,
+  onAppOpen
 }) => {
-  const [activeTab, setActiveTab] = useState<"chats" | "news" | "workflow" | "extensions">("chats");
+  const [activeTab, setActiveTab] = useState<"chats" | "news" | "workflow" | "loader">("chats");
+  const [isAppFullscreen, setIsAppFullscreen] = useState(() => {
+    return localStorage.getItem('viabhron:vaa:app-fullscreen') === 'true';
+  });
+  const [isAnyAppActive, setIsAnyAppActive] = useState(false);
+
+  const handleToggleFullscreen = () => {
+    const newState = !isAppFullscreen;
+    setIsAppFullscreen(newState);
+    localStorage.setItem('viabhron:vaa:app-fullscreen', String(newState));
+  };
   const [selectedChat, setSelectedChat] = useState<CelestialChat | null>(null);
   const [view, setView] = useState<"main" | "workflow">("main");
   const [workflowData, setWorkflowData] = useState<{ nodes: CanvasNode[]; edges: CanvasEdge[] }>({ nodes: [], edges: [] });
@@ -282,7 +308,7 @@ export const VaaClient: React.FC<VaaClientProps> = ({
     setChats(initialChats);
   }, [agents]);
 
-  const handleTabClick = (tabId: "chats" | "news" | "workflow" | "extensions") => {
+  const handleTabClick = (tabId: "chats" | "news" | "workflow" | "loader") => {
     if (showContactList) setShowContactList(false);
     const realIndex = TABS.indexOf(tabId);
     const displayIndex = realIndex + 1;
@@ -387,8 +413,22 @@ export const VaaClient: React.FC<VaaClientProps> = ({
         );
       case "workflow":
         return <WorkflowTab onOpenWorkflow={() => setView("workflow")} />;
-      case "extensions":
-        return <HQExtensionsVault onOpenWorkforce={() => setView("workflow")} />;
+      case "loader":
+        return (
+          <MiniAppLoader 
+            miniApps={miniApps} 
+            agents={agents}
+            onToggleMiniApp={onToggleMiniApp || (() => {})}
+            onToggleFreeze={onToggleFreeze || (() => {})}
+            onCloseApp={onCloseApp || (() => {})}
+            onInstall={onOpenStore || (() => {})}
+            onAppOpen={onAppOpen}
+            uiMode="vaa"
+            isFullscreen={isAppFullscreen}
+            onToggleFullscreen={handleToggleFullscreen}
+            onAppActiveChange={setIsAnyAppActive}
+          />
+        );
       default:
         return null;
     }
@@ -676,73 +716,75 @@ export const VaaClient: React.FC<VaaClientProps> = ({
             className="flex flex-col h-full"
           >
             {/* Header */}
-            <div className="bg-wa-header text-white p-5 flex flex-col gap-4 shadow-lg z-20">
-              <div className="flex justify-between items-center">
-                <h1 
-                  className="text-2xl font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => {
-                    // This is a bit tricky since we don't have direct access to setActiveTabId here
-                    // But we can trigger a custom event or use a prop if we pass it down.
-                    // For now, I'll assume the user wants to switch to the "Expert" view (Browser UI)
-                    // which in our case means switching to a non-vhatsappening tab.
-                    window.dispatchEvent(new CustomEvent('viabhron:toggle-ui'));
-                  }}
-                >
-                  VhatsAppeningAi
-                </h1>
-                <div className="flex items-center gap-6 relative">
-                  <QrCode 
-                    className="w-6 h-6 text-white/90 cursor-pointer hover:text-white transition-colors" 
-                    onClick={() => setShowQRScanner(true)}
-                  />
-                  <Camera 
-                    className="w-6 h-6 text-white/90 cursor-pointer hover:text-white transition-colors" 
-                    onClick={() => setShowCamera(true)}
-                  />
-                  <button onClick={() => setShowMenu(!showMenu)}>
-                    <MoreVertical className="w-6 h-6 text-white/90" />
-                  </button>
+            {!(isAppFullscreen && isAnyAppActive) && (
+              <div className="bg-wa-header text-white p-5 flex flex-col gap-4 shadow-lg z-20">
+                <div className="flex justify-between items-center">
+                  <h1 
+                    className="text-2xl font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => {
+                      // This is a bit tricky since we don't have direct access to setActiveTabId here
+                      // But we can trigger a custom event or use a prop if we pass it down.
+                      // For now, I'll assume the user wants to switch to the "Expert" view (Browser UI)
+                      // which in our case means switching to a non-vhatsappening tab.
+                      window.dispatchEvent(new CustomEvent('viabhron:toggle-ui'));
+                    }}
+                  >
+                    VhatsAppeningAi
+                  </h1>
+                  <div className="flex items-center gap-6 relative">
+                    <QrCode 
+                      className="w-6 h-6 text-white/90 cursor-pointer hover:text-white transition-colors" 
+                      onClick={() => setShowQRScanner(true)}
+                    />
+                    <Camera 
+                      className="w-6 h-6 text-white/90 cursor-pointer hover:text-white transition-colors" 
+                      onClick={() => setShowCamera(true)}
+                    />
+                    <button onClick={() => setShowMenu(!showMenu)}>
+                      <MoreVertical className="w-6 h-6 text-white/90" />
+                    </button>
 
-                  <AnimatePresence>
-                    {showMenu && (
-                      <motion.div 
-                        ref={menuRef}
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute right-0 top-10 w-56 bg-white rounded-3xl shadow-2xl border border-slate-100 p-2 z-50"
-                      >
-                        {[
-                          { label: "Settings", icon: <Settings className="w-5 h-5" />, action: () => { setShowVaaSettings(true); setShowMenu(false); } },
-                          { label: "Contacts", icon: <Users className="w-5 h-5" />, action: () => { setShowContactList(true); setShowMenu(false); } },
-                          { label: "Backup/Restore", icon: <History className="w-5 h-5" />, action: () => setShowMenu(false) },
-                          { label: "Logout", icon: <LogOut className="w-5 h-5" />, action: () => setShowMenu(false), color: "text-red-500" }
-                        ].map((item, i) => (
-                          <button 
-                            key={item.label}
-                            onClick={item.action}
-                            className={`w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors ${item.color || "text-slate-700"}`}
-                          >
-                            {item.icon}
-                            <span className="text-sm font-bold">{item.label}</span>
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                    <AnimatePresence>
+                      {showMenu && (
+                        <motion.div 
+                          ref={menuRef}
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute right-0 top-10 w-56 bg-white rounded-3xl shadow-2xl border border-slate-100 p-2 z-50"
+                        >
+                          {[
+                            { label: "Settings", icon: <Settings className="w-5 h-5" />, action: () => { setShowVaaSettings(true); setShowMenu(false); } },
+                            { label: "Contacts", icon: <Users className="w-5 h-5" />, action: () => { setShowContactList(true); setShowMenu(false); } },
+                            { label: "Backup/Restore", icon: <History className="w-5 h-5" />, action: () => setShowMenu(false) },
+                            { label: "Logout", icon: <LogOut className="w-5 h-5" />, action: () => setShowMenu(false), color: "text-red-500" }
+                          ].map((item, i) => (
+                            <button 
+                              key={item.label}
+                              onClick={item.action}
+                              className={`w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors ${item.color || "text-slate-700"}`}
+                            >
+                              {item.icon}
+                              <span className="text-sm font-bold">{item.label}</span>
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Content Area */}
-            <div className="flex-1 flex flex-col overflow-hidden bg-white relative z-10">
+            <div className={`flex-1 flex flex-col overflow-hidden relative z-10 bg-white`}>
               <div 
                 ref={contentRef}
                 className="flex-1 flex overflow-x-auto snap-x snap-mandatory no-scrollbar w-full h-full"
               >
                 {displayTabs.map((tabId, index) => (
                   <div key={`${tabId}-${index}`} className="flex-shrink-0 w-full h-full snap-start snap-always flex flex-col overflow-hidden">
-                    <div className="flex-1 overflow-y-auto no-scrollbar pb-24">
+                    <div className="flex-1 overflow-y-auto no-scrollbar">
                       {renderTabContent(tabId)}
                     </div>
                   </div>
@@ -750,125 +792,133 @@ export const VaaClient: React.FC<VaaClientProps> = ({
               </div>
 
               {/* Stacked FABs */}
-              <div className="absolute bottom-8 right-6 flex flex-col gap-4 items-center z-50">
-                <button 
-                  onClick={() => {
-                    // Direct Connect to Cloud Manager (Resident Agent)
-                    setSelectedChat(headAgentChat);
-                  }}
-                  className="w-14 h-14 bg-wa-accent text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 z-30 ring-4 ring-white"
-                >
-                  <span className="text-2xl font-bold">Ω</span>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-indigo-600 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold">3</div>
-                </button>
-                <div className="relative">
-                  {/* Speed Dial for Workflow */}
-                  <AnimatePresence>
-                    {showWorkflowSpeedDial && activeTab === 'workflow' && (
-                      <div className="absolute bottom-20 right-0 flex flex-col gap-3 items-end">
-                        <motion.button
-                          initial={{ opacity: 0, scale: 0.5, y: 20 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.5, y: 20 }}
-                          onClick={() => {
-                            setShowWorkflowBuilder(true);
-                            setShowWorkflowSpeedDial(false);
-                          }}
-                          className="flex items-center gap-3 bg-white border border-slate-100 px-4 py-3 rounded-2xl shadow-xl whitespace-nowrap"
-                        >
-                          <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Pipeline Builder</span>
-                          <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center">
-                            <Zap className="w-5 h-5" />
-                          </div>
-                        </motion.button>
-                        <motion.button
-                          initial={{ opacity: 0, scale: 0.5, y: 20 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.5, y: 20 }}
-                          transition={{ delay: 0.05 }}
-                          onClick={() => {
-                            setView("workflow");
-                            setShowWorkflowSpeedDial(false);
-                          }}
-                          className="flex items-center gap-3 bg-white border border-slate-100 px-4 py-3 rounded-2xl shadow-xl whitespace-nowrap"
-                        >
-                          <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Visual Lab</span>
-                          <div className="w-10 h-10 bg-wa-header text-white rounded-xl flex items-center justify-center">
-                            <WorkflowIcon className="w-5 h-5" />
-                          </div>
-                        </motion.button>
-                      </div>
-                    )}
-                  </AnimatePresence>
-
+              {!(isAppFullscreen && isAnyAppActive) && (
+                <div className="absolute bottom-8 right-6 flex flex-col gap-4 items-center z-50">
                   <button 
                     onClick={() => {
-                      if (activeTab === 'chats') setShowPlusMenu(!showPlusMenu);
-                      if (activeTab === 'news') setShowSwipeView(true);
-                      if (activeTab === 'workflow') setShowWorkflowSpeedDial(!showWorkflowSpeedDial);
-                      if (activeTab === 'extensions') setShowSovereignCheck(true);
+                      // Direct Connect to Cloud Manager (Resident Agent)
+                      setSelectedChat(headAgentChat);
                     }}
-                    className="w-16 h-16 bg-indigo-500 text-white rounded-3xl shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 z-30"
+                    className="w-14 h-14 bg-wa-accent text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 z-30 ring-4 ring-white"
                   >
-                    {activeTab === 'chats' && <Plus className={`w-8 h-8 transition-transform ${showPlusMenu ? 'rotate-45' : ''}`} />}
-                    {activeTab === 'news' && <Sparkles className="w-8 h-8" />}
-                    {activeTab === 'workflow' && <Plus className={`w-8 h-8 transition-transform ${showWorkflowSpeedDial ? 'rotate-45' : ''}`} />}
-                    {activeTab === 'extensions' && <Shield className="w-8 h-8" />}
+                    <span className="text-2xl font-bold">Ω</span>
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-indigo-600 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold">3</div>
                   </button>
-
-                  <AnimatePresence>
-                    {showPlusMenu && activeTab === 'chats' && (
-                      <motion.div
-                        ref={plusMenuRef}
-                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                        className="absolute bottom-20 right-0 w-56 bg-white rounded-3xl shadow-2xl border border-slate-100 p-2 z-50"
-                      >
-                        {[
-                          { label: "Normal Chat", icon: <MessageCircle className="w-5 h-5" />, action: () => setShowContactList(true) },
-                          { label: "Group Chat", icon: <Users className="w-5 h-5" />, action: () => setShowContactList(true) },
-                          { label: "Debate (Parallel)", icon: <Layout className="w-5 h-5" />, action: () => setShowContactList(true) },
-                          { label: "Debate (Interagent)", icon: <Zap className="w-5 h-5" />, action: () => setShowContactList(true) },
-                        ].map((item) => (
-                          <button 
-                            key={item.label}
-                            onClick={item.action}
-                            className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors text-slate-700"
+                  <div className="relative">
+                    {/* Speed Dial for Workflow */}
+                    <AnimatePresence>
+                      {showWorkflowSpeedDial && activeTab === 'workflow' && (
+                        <div className="absolute bottom-20 right-0 flex flex-col gap-3 items-end">
+                          <motion.button
+                            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.5, y: 20 }}
+                            onClick={() => {
+                              setShowWorkflowBuilder(true);
+                              setShowWorkflowSpeedDial(false);
+                            }}
+                            className="flex items-center gap-3 bg-white border border-slate-100 px-4 py-3 rounded-2xl shadow-xl whitespace-nowrap"
                           >
-                            {item.icon}
-                            <span className="text-sm font-bold">{item.label}</span>
-                          </button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                            <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Pipeline Builder</span>
+                            <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center">
+                              <Zap className="w-5 h-5" />
+                            </div>
+                          </motion.button>
+                          <motion.button
+                            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.5, y: 20 }}
+                            transition={{ delay: 0.05 }}
+                            onClick={() => {
+                              setView("workflow");
+                              setShowWorkflowSpeedDial(false);
+                            }}
+                            className="flex items-center gap-3 bg-white border border-slate-100 px-4 py-3 rounded-2xl shadow-xl whitespace-nowrap"
+                          >
+                            <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Visual Lab</span>
+                            <div className="w-10 h-10 bg-wa-header text-white rounded-xl flex items-center justify-center">
+                              <WorkflowIcon className="w-5 h-5" />
+                            </div>
+                          </motion.button>
+                        </div>
+                      )}
+                    </AnimatePresence>
+
+                    <button 
+                      onClick={() => {
+                        if (activeTab === 'chats') setShowPlusMenu(!showPlusMenu);
+                        if (activeTab === 'news') setShowSwipeView(true);
+                        if (activeTab === 'workflow') setShowWorkflowSpeedDial(!showWorkflowSpeedDial);
+                        if (activeTab === 'loader' && lastOpenedAppId) {
+                          // Trigger opening the last app
+                          const event = new CustomEvent('viabhron:open-mini-app', { detail: { id: lastOpenedAppId } });
+                          window.dispatchEvent(event);
+                        }
+                      }}
+                      className="w-16 h-16 bg-indigo-500 text-white rounded-3xl shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 z-30"
+                    >
+                      {activeTab === 'chats' && <Plus className={`w-8 h-8 transition-transform ${showPlusMenu ? 'rotate-45' : ''}`} />}
+                      {activeTab === 'news' && <Sparkles className="w-8 h-8" />}
+                      {activeTab === 'workflow' && <Plus className={`w-8 h-8 transition-transform ${showWorkflowSpeedDial ? 'rotate-45' : ''}`} />}
+                      {activeTab === 'loader' && <Play className="w-8 h-8" />}
+                    </button>
+
+                    <AnimatePresence>
+                      {showPlusMenu && activeTab === 'chats' && (
+                        <motion.div
+                          ref={plusMenuRef}
+                          initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                          className="absolute bottom-20 right-0 w-56 bg-white rounded-3xl shadow-2xl border border-slate-100 p-2 z-50"
+                        >
+                          {[
+                            { label: "Normal Chat", icon: <MessageCircle className="w-5 h-5" />, action: () => setShowContactList(true) },
+                            { label: "Group Chat", icon: <Users className="w-5 h-5" />, action: () => setShowContactList(true) },
+                            { label: "Debate (Parallel)", icon: <Layout className="w-5 h-5" />, action: () => setShowContactList(true) },
+                            { label: "Debate (Interagent)", icon: <Zap className="w-5 h-5" />, action: () => setShowContactList(true) },
+                          ].map((item) => (
+                            <button 
+                              key={item.label}
+                              onClick={item.action}
+                              className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors text-slate-700"
+                            >
+                              {item.icon}
+                              <span className="text-sm font-bold">{item.label}</span>
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Bottom Navigation */}
-            <div className="bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-40">
-              {[
-                { id: "chats", label: "CHATS", icon: <Sparkles className="w-7 h-7" /> },
-                { id: "news", label: "NEWS", icon: <Globe className="w-7 h-7" /> },
-                { id: "workflow", label: "WORKFLOW", icon: <WorkflowIcon className="w-7 h-7" /> },
-                { id: "extensions", label: "EXTENSIONS", icon: <Zap className="w-7 h-7" /> }
-              ].map(tab => (
-                <button 
-                  key={tab.id}
-                  onClick={() => handleTabClick(tab.id as any)}
-                  className={`flex flex-col items-center gap-1 transition-all ${
-                    activeTab === tab.id ? "text-wa-header scale-110" : "text-slate-400"
-                  }`}
-                >
-                  <div className={`p-1 rounded-xl transition-colors ${activeTab === tab.id ? "bg-indigo-50" : "bg-transparent"}`}>
-                    {tab.icon}
-                  </div>
-                  <span className="text-[9px] font-black tracking-[0.15em]">{tab.label}</span>
-                </button>
-              ))}
-            </div>
+            {!(isAppFullscreen && isAnyAppActive) && (
+              <div className="bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-40">
+                {[
+                  { id: "chats", label: "CHATS", icon: <Sparkles className="w-7 h-7" /> },
+                  { id: "news", label: "NEWS", icon: <Globe className="w-7 h-7" /> },
+                  { id: "workflow", label: "WORKFLOW", icon: <WorkflowIcon className="w-7 h-7" /> },
+                  { id: "loader", label: "LOADER", icon: <Cpu className="w-7 h-7" /> }
+                ].map(tab => (
+                  <button 
+                    key={tab.id}
+                    onClick={() => handleTabClick(tab.id as any)}
+                    className={`flex flex-col items-center gap-1 transition-all ${
+                      activeTab === tab.id ? "text-wa-header scale-110" : "text-slate-400"
+                    }`}
+                  >
+                    <div className={`p-1 rounded-xl transition-colors ${activeTab === tab.id ? "bg-indigo-50" : "bg-transparent"}`}>
+                      {tab.icon}
+                    </div>
+                    <span className="text-[9px] font-black tracking-[0.15em]">{tab.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
         ) : (
           <motion.div 

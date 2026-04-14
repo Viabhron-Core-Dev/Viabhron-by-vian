@@ -33,7 +33,6 @@ import {
 import { Tabs } from './components/Shell/Tabs';
 import { Sidebar } from './components/Shell/Sidebar';
 import { Chat } from './components/Shell/Chat';
-import { Discovery } from './components/Shell/Discovery';
 import { ExtensionStore } from './components/Shell/ExtensionStore';
 import { Canvas } from './components/Shell/Canvas';
 import { BottomNavigation } from './components/Shell/BottomNavigation';
@@ -49,6 +48,7 @@ import { Forge } from './components/Extensions/Forge';
 import { AgentCLI } from './components/Extensions/AgentCLI';
 import { Sentinel } from './components/Extensions/Sentinel';
 import { Nexus } from './components/Extensions/Nexus';
+import { MiniAppLoader } from './components/Extensions/MiniAppLoader';
 import { Symphony } from './components/Extensions/Symphony';
 import { Creative } from './components/Extensions/Creative';
 import { SoundForge } from './components/Extensions/SoundForge';
@@ -145,6 +145,7 @@ export default function App() {
   const [bridgedProjectId, setBridgedProjectId] = useState<string | null>(null);
   const [googleClientId, setGoogleClientId] = useState<string>('');
   const [geminiApiKey, setGeminiApiKey] = useState<string>('');
+  const [lastOpenedAppId, setLastOpenedAppId] = useState<string | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([
     {
       id: 'l1',
@@ -636,6 +637,8 @@ export default function App() {
         const next = prev === 'vaa' ? 'browser' : 'vaa';
         if (next === 'vaa') {
           setActiveTabId('vaa');
+        } else if (next === 'browser' && tabs.length === 0) {
+          handleAddTab('metrics', 'Pulse Monitor');
         }
         return next;
       });
@@ -665,7 +668,11 @@ export default function App() {
       callback: (response: any) => {
         if (response.access_token) {
           setAccessToken(response.access_token);
-          handleAddTab('discovery', 'Cloud Discovery');
+          addLog({
+            level: 'INFO',
+            source: 'Kernel',
+            message: 'Cloud Access Token refreshed successfully.'
+          });
         }
       },
     });
@@ -878,6 +885,28 @@ export default function App() {
     });
   };
 
+  const handleToggleFreeze = (id: string) => {
+    setMiniApps(prev => prev.map(app => app.id === id ? { ...app, isFrozen: !app.isFrozen } : app));
+    const app = miniApps.find(a => a.id === id);
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: `Mini-App "${app?.name}" ${!app?.isFrozen ? 'frozen' : 'thawed'}.`,
+      metadata: { appId: id, isFrozen: !app?.isFrozen }
+    });
+  };
+
+  const handleCloseMiniApp = (id: string) => {
+    setMiniApps(prev => prev.map(app => app.id === id ? { ...app, status: 'inactive', isFrozen: false } : app));
+    const app = miniApps.find(a => a.id === id);
+    addLog({
+      level: 'INFO',
+      source: 'Kernel',
+      message: `Mini-App "${app?.name}" substrate purged.`,
+      metadata: { appId: id }
+    });
+  };
+
   const handleToggleClient = (id: string) => {
     setClients(prev => prev.map(client => client.id === id ? { ...client, enabled: !client.enabled, status: !client.enabled ? 'active' : 'inactive' } : client));
     const client = clients.find(c => c.id === id);
@@ -985,14 +1014,22 @@ export default function App() {
     localStorage.setItem('viabhron_office_name', config.officeName);
     localStorage.setItem('viabhron_resident_brain', config.brainType);
     localStorage.setItem('viabhron_gemini_key', config.geminiKey);
-    setIsProvisioned(true);
     
+    if (config.firebaseConfig) {
+      localStorage.setItem('viabhron_firebase_config', JSON.stringify(config.firebaseConfig));
+    }
+
     addLog({
       level: 'INFO',
       source: 'Kernel',
-      message: `Sovereign Office "${config.officeName}" provisioned successfully.`,
+      message: `Sovereign Office "${config.officeName}" provisioned successfully. Rebooting kernel...`,
       metadata: config
     });
+
+    // Final reload to ensure all services are bound to the new infrastructure
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   };
 
   if (!isProvisioned) {
@@ -1054,6 +1091,7 @@ export default function App() {
             onOpenSOPs={() => onQuickAction(() => handleAddTab('sops', 'SOP Registry'))}
             onOpenProposals={() => onQuickAction(() => handleAddTab('proposals', 'Ratification Registry'))}
             onOpenSettings={() => onQuickAction(() => handleAddTab('settings', 'System Settings'))}
+            onOpenLoader={() => onQuickAction(() => handleAddTab('loader', 'Viabhronic Loader'))}
             onOpenSoundForge={() => onQuickAction(() => handleAddTab('sound_forge', 'Sound Forge'))}
             onOpenImageStudio={() => onQuickAction(() => handleAddTab('image_studio', 'Image Studio'))}
             onOpenVideoSuite={() => onQuickAction(() => handleAddTab('video_suite', 'Video Suite'))}
@@ -1143,11 +1181,18 @@ export default function App() {
                 <VaaClient 
                   agents={agents} 
                   extensions={extensions} 
+                  miniApps={miniApps}
                   secrets={secrets}
                   onCreateAgent={handleCreateAgent}
                   onAddSecret={handleAddSecret}
                   onDeleteSecret={handleDeleteSecret}
                   onUpdateSecret={handleUpdateSecret}
+                  onToggleMiniApp={handleToggleMiniApp}
+                  onToggleFreeze={handleToggleFreeze}
+                  onCloseApp={handleCloseMiniApp}
+                  onOpenStore={() => handleAddTab('store', 'Extension Store')}
+                  lastOpenedAppId={lastOpenedAppId}
+                  onAppOpen={setLastOpenedAppId}
                 />
               ) : (
                 <>
@@ -1174,12 +1219,6 @@ export default function App() {
                       }}
                       isLockdown={isLockdown}
                       checkSovereignProcedures={checkSovereignProcedures}
-                      uiMode={uiMode}
-                    />
-                  ) : tab.type === 'discovery' && accessToken ? (
-                    <Discovery 
-                      accessToken={accessToken} 
-                      onProjectSelected={handleProjectSelected} 
                       uiMode={uiMode}
                     />
                   ) : tab.type === 'store' ? (
@@ -1244,6 +1283,17 @@ export default function App() {
                       }}
                       logs={logs}
                       uiMode={uiMode}
+                    />
+                  ) : tab.type === 'loader' ? (
+                    <MiniAppLoader 
+                      miniApps={miniApps} 
+                      agents={agents}
+                      onToggleMiniApp={handleToggleMiniApp}
+                      onToggleFreeze={handleToggleFreeze}
+                      onCloseApp={handleCloseMiniApp}
+                      onInstall={() => handleAddTab('store', 'Extension Store')} 
+                      onAppOpen={setLastOpenedAppId}
+                      uiMode={uiMode} 
                     />
                   ) : tab.type === 'nexus' ? (
                     <Nexus uiMode={uiMode} />
@@ -1517,11 +1567,18 @@ export default function App() {
                   <VaaClient 
                     agents={agents} 
                     extensions={extensions} 
+                    miniApps={miniApps}
                     secrets={secrets}
                     onCreateAgent={handleCreateAgent}
                     onAddSecret={handleAddSecret}
                     onDeleteSecret={handleDeleteSecret}
                     onUpdateSecret={handleUpdateSecret}
+                    onToggleMiniApp={handleToggleMiniApp}
+                    onToggleFreeze={handleToggleFreeze}
+                    onCloseApp={handleCloseMiniApp}
+                    onOpenStore={() => handleAddTab('store', 'Extension Store')}
+                    lastOpenedAppId={lastOpenedAppId}
+                    onAppOpen={setLastOpenedAppId}
                   />
                 ) : tab.type === 'placeholder_client' ? (
                   <div className="h-full bg-gray-950 flex flex-col items-center justify-center space-y-4 p-8 text-center">

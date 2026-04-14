@@ -17,7 +17,7 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client' | 'nexus' | 'symphony' | 'creative' | 'sound_forge' | 'image_studio' | 'video_suite' | 'moss_system';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client' | 'nexus' | 'symphony' | 'creative' | 'sound_forge' | 'image_studio' | 'video_suite' | 'moss_system' | 'loader';
 
 export type SystemMode = 'turbo' | 'eco' | 'stealth';
 
@@ -569,8 +569,9 @@ export interface MiniApp {
   icon: string; // Lucide icon name
   enabled: boolean;
   type: 'local' | 'sovereign';
-  category: 'utility' | 'creative' | 'security' | 'intelligence';
+  category: 'utility' | 'creative' | 'security' | 'intelligence' | 'forge' | 'core';
   status: 'active' | 'inactive' | 'error';
+  isFrozen?: boolean;
 }
 
 export interface Client {

@@ -17,6 +17,7 @@ import {
   Check,
   X
 } from "lucide-react";
+import * as Icons from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Secret } from "../../../../src/types";
 
@@ -385,6 +386,54 @@ export const VaaSettings: React.FC<VaaSettingsProps> = ({
               </div>
               <div className="w-12 h-6 bg-slate-200 rounded-full relative cursor-pointer">
                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Passive Services</h3>
+          <div className="bg-white rounded-3xl p-4 border border-slate-100 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center">
+                  <Icons.Languages className="w-5 h-5 text-orange-600" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-slate-700">Auto-Translation</div>
+                  <div className="text-[10px] text-slate-400">Real-time message translation</div>
+                </div>
+              </div>
+              <div className="w-12 h-6 bg-orange-600 rounded-full relative cursor-pointer">
+                <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full" />
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-teal-50 flex items-center justify-center">
+                  <Icons.Mic className="w-5 h-5 text-teal-600" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-slate-700">Speech to Text</div>
+                  <div className="text-[10px] text-slate-400">Voice command recognition</div>
+                </div>
+              </div>
+              <div className="w-12 h-6 bg-slate-200 rounded-full relative cursor-pointer">
+                <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm" />
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center">
+                  <Icons.Lock className="w-5 h-5 text-rose-600" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-slate-700">End-to-End Encryption</div>
+                  <div className="text-[10px] text-slate-400">Sovereign tunnel security</div>
+                </div>
+              </div>
+              <div className="w-12 h-6 bg-rose-600 rounded-full relative cursor-pointer">
+                <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full" />
               </div>
             </div>
           </div>

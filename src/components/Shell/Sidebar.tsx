@@ -71,6 +71,7 @@ interface SidebarProps {
   onOpenSOPs: () => void;
   onOpenProposals: () => void;
   onOpenSettings: () => void;
+  onOpenLoader: () => void;
   onOpenSoundForge: () => void;
   onOpenImageStudio: () => void;
   onOpenVideoSuite: () => void;
@@ -112,6 +113,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenSOPs, 
   onOpenProposals, 
   onOpenSettings,
+  onOpenLoader,
   onOpenSoundForge,
   onOpenImageStudio,
   onOpenVideoSuite,
@@ -507,6 +509,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 miniApps={miniApps}
                 onToggleMiniApp={onToggleMiniApp}
                 onOpenStore={onOpenStore}
+                onOpenLoader={onOpenLoader}
                 isOpen={openSections.miniapp}
                 onToggle={() => toggleSection('miniapp')}
               />

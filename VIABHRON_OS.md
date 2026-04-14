@@ -465,11 +465,14 @@ The OS is designed to grow with the user, starting as a "Lean Startup" and expan
 *   **The Sovereign SDK**: A standardized kernel API that provides all apps (SS or Normal) with secure access to Identity, Storage (Soul Core), Intelligence (Agents), and the Sentinel Feed. It acts as the **Hardened Bridge** for Normal Code, ensuring sandbox isolation is never breached.
 
 ### 9. Onboarding & Intent Mapping (Phase 0) [DONE]
-*   **The First Setup Choice**: Immediately following the initial cloud connection, the Chairman is presented with a "Path Selection" gate to prevent functional blind spots:
-    *   **Direct Exploration**: Immediate access to the Resident AI for natural language interaction.
-    *   **Machine Room (Settings)**: Direct access to the configuration layers for manual OS tuning.
-    *   **Intent Questionnaire**: A guided session to map the user's "Business Plan" and usage profile.
-*   **The Intent Questionnaire**: A structured dialogue designed to identify the user's primary goals (e.g., Coding, Research, Enterprise Management, Personal Archive).
+*   **The First Setup Choice (Sovereign Onboarding)**: Immediately following the initial boot, the Chairman is guided through a real infrastructure provisioning flow:
+    1.  **Identity**: Google OAuth integration with required scopes (Cloud Platform, Firebase, Drive).
+    2.  **Discovery**: Real-time scanning of the user's Google Cloud projects.
+    3.  **Brain Selection**: Choosing the Sovereign Anchor (Tiny LLM) for the private cloud.
+    4.  **Fuel Injection**: Providing a Gemini API key for external contractor capabilities.
+    5.  **Ignition**: Automated provisioning of the Triple-Service substrate (Firestore, Cloud Run, Drive) and "Hot-Swapping" the PWA's database connection to the user's own project.
+*   **Agent Awakening**: During ignition, the OS automatically accredits the `cloud-manager` and `fiscal-comptroller` roles within the user's private Firestore.
+*   **Intent Questionnaire**: A guided session to map the user's "Business Plan" and usage profile.
     *   **Usage Profiling**: Asks about hardware availability (to advise on Hybrid/Local substrates) and required departmental wings.
     *   **Expansion Intent**: Asks if the Chairman intends to grow a "Vine" of distributed branches, enabling the **Branches & Mission** and **Extra Processor** sections if ratified.
     *   **Tailored Advice**: The Resident AI generates a **"Sovereign Roadmap"**, recommending specific SOPs, Extensions, and Substrate configurations based on the user's intent.

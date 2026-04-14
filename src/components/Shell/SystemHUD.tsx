@@ -12,7 +12,10 @@ import {
   ChevronDown,
   HardDrive,
   Zap,
-  Shield
+  Shield,
+  Key,
+  Copy,
+  Check
 } from 'lucide-react';
 
 interface SystemHUDProps {
@@ -27,6 +30,17 @@ export const SystemHUD: React.FC<SystemHUDProps> = ({ onClearCache, onHibernateA
   const [storageUsage, setStorageUsage] = useState(12);
   const [networkSpeed, setNetworkSpeed] = useState({ up: 1.2, down: 4.5 });
   const [tokenCount, setTokenCount] = useState(12450);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleAccreditTerminal = () => {
+    const config = localStorage.getItem('viabhron_firebase_config');
+    if (config) {
+      const key = btoa(config);
+      navigator.clipboard.writeText(key);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  };
 
   // Simulate live updates
   useEffect(() => {
@@ -154,6 +168,16 @@ export const SystemHUD: React.FC<SystemHUDProps> = ({ onClearCache, onHibernateA
 
               {/* Actions */}
               <div className="grid grid-cols-2 gap-2 pt-2">
+                <button 
+                  onClick={handleAccreditTerminal}
+                  className="col-span-2 flex items-center justify-between px-4 py-3 bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/20 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-blue-400 hover:text-blue-300 transition-all group"
+                >
+                  <div className="flex items-center gap-2">
+                    <Key className="w-3 h-3" />
+                    Accredit Terminal
+                  </div>
+                  {isCopied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3 opacity-50 group-hover:opacity-100" />}
+                </button>
                 <button 
                   onClick={onClearCache}
                   className="flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-all"
