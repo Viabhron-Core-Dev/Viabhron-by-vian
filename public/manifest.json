@@ -2,7 +2,7 @@
   "name": "Viabhron Sovereign OS",
   "short_name": "Viabhron",
   "description": "A private, portable AI Operating System for sovereign orchestration.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#030712",
   "theme_color": "#2563eb",
