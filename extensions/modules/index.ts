@@ -26,7 +26,22 @@ import {
   Brain,
   Scale,
   Globe,
-  Zap as Vibe
+  Zap as Vibe,
+  Fingerprint,
+  GitBranch,
+  Settings2,
+  Key,
+  Users,
+  MessageCircle,
+  ShieldAlert,
+  Dna,
+  Workflow,
+  History,
+  Coins,
+  Building2,
+  Search,
+  CheckCircle2,
+  HardDrive
 } from 'lucide-react';
 import { Extension } from '../../src/types';
 
@@ -296,6 +311,216 @@ export const vibeAssemblyModule: Extension = {
   name: 'Vibe-Assembly',
   description: 'Artisanal UI generation and style synthesis.',
   icon: Vibe,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const deviceIntelligenceModule: Extension = {
+  id: 'device-intelligence',
+  name: 'Device Intelligence',
+  description: 'Hardware-level device verification and biometric passkeys.',
+  icon: Fingerprint,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const parallelTaskModule: Extension = {
+  id: 'parallel-task',
+  name: 'Parallel Task Orchestration',
+  description: 'Management of multiple concurrent agentic workflows.',
+  icon: GitBranch,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const cqModule: Extension = {
+  id: 'cq',
+  name: 'Collective Intelligence (cq)',
+  description: 'Privacy-first knowledge sharing protocol.',
+  icon: Network,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const mistralForgeModule: Extension = {
+  id: 'mistral-forge',
+  name: 'Mistral Sovereign Forge',
+  description: 'Specialized substrate for Mistral model fine-tuning.',
+  icon: Settings2,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const substrateDeploymentModule: Extension = {
+  id: 'substrate-deployment',
+  name: 'Substrate Deployment',
+  description: 'Standardized deployment manifests for diverse environments.',
+  icon: HardDrive,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const symphonyConductorModule: Extension = {
+  id: 'symphony-conductor',
+  name: 'The Symphony Conductor',
+  description: 'Master agent for orchestrating Symphony implementation runs.',
+  icon: Workflow,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const franchiseSeedModule: Extension = {
+  id: 'franchise-seed',
+  name: 'Franchise Seed',
+  description: 'One-click deployment manifest for new instances.',
+  icon: Send,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const ghostImplementationModule: Extension = {
+  id: 'ghost-implementation',
+  name: 'Ghost Implementation',
+  description: 'Shadow workflows with Merge to Reality gates.',
+  icon: Eye,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const workflowChronosModule: Extension = {
+  id: 'workflow-chronos',
+  name: 'Workflow Chronos',
+  description: 'Time-travel debugging for autonomous actions.',
+  icon: History,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const tokenGovernanceModule: Extension = {
+  id: 'token-governance',
+  name: 'Token Governance Substrate',
+  description: 'Metabolic rate and budget management for the OS.',
+  icon: Coins,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const corporateGovernanceModule: Extension = {
+  id: 'corporate-governance',
+  name: 'Corporate Governance Hub',
+  description: 'Strategic roadmap management and multi-cloud token treasury.',
+  icon: Building2,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const svhModule: Extension = {
+  id: 'svh',
+  name: 'Sovereign Vine Hardener (SVH)',
+  description: 'Security hardening for distributed Vine nodes.',
+  icon: Shield,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const sfrModule: Extension = {
+  id: 'sfr',
+  name: 'Sovereign Federated Registry (SFR)',
+  description: 'Cross-instance agent accreditation.',
+  icon: Users,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const sstModule: Extension = {
+  id: 'sst',
+  name: 'Sovereign Substrate Tuner (SST)',
+  description: 'Performance optimization and resource allocation.',
+  icon: Settings2,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const swcModule: Extension = {
+  id: 'swc',
+  name: 'Sovereign Weight-Check (SWC)',
+  description: 'Auditing model weights and checking for bias.',
+  icon: Search,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const sppModule: Extension = {
+  id: 'spp',
+  name: 'Sovereign Privacy Proxy (SPP)',
+  description: 'Zero-knowledge data handling for external API calls.',
+  icon: Lock,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const swmModule: Extension = {
+  id: 'swm',
+  name: 'Sovereign Workforce Manager (SWM)',
+  description: 'Fleet-scale agent orchestration.',
+  icon: Users,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const sleModule: Extension = {
+  id: 'sle',
+  name: 'Sovereign Linguistic Evolution (SLE)',
+  description: 'Context-aware adaptation of agent communication.',
+  icon: MessageCircle,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const swsModule: Extension = {
+  id: 'sws',
+  name: 'Sovereign Web Shield (SWS)',
+  description: 'Advanced protection against web-based AI attacks.',
+  icon: ShieldAlert,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const sssModule: Extension = {
+  id: 'sss',
+  name: 'Sovereign Swarm Simulator (SSS)',
+  description: 'Multi-agent scenario testing in Digital Twin environments.',
+  icon: Dna,
+  category: 'module',
+  status: 'active',
+  source: 'inbuilt'
+};
+
+export const sqsModule: Extension = {
+  id: 'sqs',
+  name: 'Sovereign Quantum Substrate (SQS)',
+  description: 'High-performance compute layer for complex simulations.',
+  icon: Zap,
   category: 'module',
   status: 'active',
   source: 'inbuilt'

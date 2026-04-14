@@ -14,7 +14,7 @@ RUN npm install --production --legacy-peer-deps
 COPY . .
 
 # Build the frontend (Vite)
-RUN npm run build
+RUN npx vite build
 
 # Expose the port (Cloud Run uses 8080 or 3000)
 EXPOSE 3000
