@@ -20,6 +20,13 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
+          # Ensure the repository exists
+          gcloud artifacts repositories create viabhron \
+            --repository-format=docker \
+            --location=us-central1 \
+            --description="Viabhron OS Images" \
+            --quiet || true
+            
           gcloud auth configure-docker us-central1-docker.pkg.dev
           docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/viabhron/office:latest .
           docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/viabhron/office:latest
