@@ -17,7 +17,7 @@ export interface Extension {
   config?: any;
 }
 
-export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client' | 'nexus' | 'symphony' | 'creative' | 'sound_forge' | 'image_studio' | 'video_suite' | 'moss_system' | 'loader';
+export type TabType = 'chat' | 'settings' | 'discovery' | 'canvas' | 'store' | 'agents' | 'artifacts' | 'metrics' | 'simulation' | 'governance' | 'forge' | 'agent_cli' | 'sentinel' | 'security' | 'efficiency' | 'hatchery' | 'sops' | 'proposals' | 'gaming' | 'testing' | 'vhatsappening' | 'placeholder_client' | 'nexus' | 'symphony' | 'creative' | 'sound_forge' | 'image_studio' | 'video_suite' | 'moss_system' | 'loader' | 'identity-8004' | 'security-radar' | 'vibe-assembly' | 'memory-palace' | 'agent-registry';
 
 export type SystemMode = 'turbo' | 'eco' | 'stealth';
 

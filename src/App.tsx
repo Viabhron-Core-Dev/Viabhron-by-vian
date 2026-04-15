@@ -58,6 +58,7 @@ import { ExtensionStore } from './components/Shell/ExtensionStore';
 import { Canvas } from './components/Shell/Canvas';
 import { BottomNavigation } from './components/Shell/BottomNavigation';
 import { SystemHUD } from './components/Shell/SystemHUD';
+import { InfrastructureView } from './components/Shell/InfrastructureView';
 import { TabSwitcher } from './components/Shell/TabSwitcher';
 import { ConfirmationGate } from './components/Shell/ConfirmationGate';
 import { Terminal } from './components/Extensions/Terminal';
@@ -610,6 +611,22 @@ export default function App() {
     // Add to agents collection
     await setDoc(doc(db, 'users', user.uid, 'agents', agentId), newAgent);
 
+    addNotification({
+      title: 'Industrial Hatching Complete',
+      message: `Agent "${newAgent.name}" successfully hatched and onboarded to Staff Hierarchy. Sentinel Feed monitoring active.`,
+      type: 'system',
+      agentId: agentId
+    });
+
+    addLog({
+      level: 'INFO',
+      source: 'Sentinel',
+      message: `New agent "${newAgent.name}" (${agentId}) ratified and bound to Cloud Run substrate.`,
+      metadata: { agentId, type: data.type }
+    });
+
+    toast.success('Agent successfully hatched.');
+
     // If it's an accredited plugin, add to externalPlugins
     if (data.type === 'accredit') {
       const newPlugin: ExternalPlugin = {
@@ -1119,6 +1136,11 @@ export default function App() {
             onOpenVideoSuite={() => onQuickAction(() => handleAddTab('video_suite', 'Video Suite'))}
             onOpenMossSystem={() => onQuickAction(() => handleAddTab('moss_system', 'Moss System'))}
             onOpenPlaceholderClient={() => onQuickAction(() => handleAddTab('placeholder_client', 'Flagship Client'))}
+            onOpenIdentity={() => onQuickAction(() => handleAddTab('identity-8004', 'Identity-8004'))}
+            onOpenRadar={() => onQuickAction(() => handleAddTab('security-radar', 'Security-Radar'))}
+            onOpenVibeAssembly={() => onQuickAction(() => handleAddTab('vibe-assembly', 'Vibe-Assembly'))}
+            onOpenMemoryPalace={() => onQuickAction(() => handleAddTab('memory-palace', 'Memory-Palace'))}
+            onOpenAgentRegistry={() => onQuickAction(() => handleAddTab('agent-registry', 'Agent-Registry'))}
             geminiApiKey={geminiApiKey}
             systemMode={systemMode}
           />
@@ -1242,6 +1264,7 @@ export default function App() {
                       isLockdown={isLockdown}
                       checkSovereignProcedures={checkSovereignProcedures}
                       uiMode={uiMode}
+                      tabs={tabs}
                     />
                   ) : tab.type === 'store' ? (
                     <ExtensionStore 
@@ -1306,6 +1329,8 @@ export default function App() {
                       logs={logs}
                       uiMode={uiMode}
                     />
+                  ) : ['identity-8004', 'security-radar', 'vibe-assembly', 'memory-palace', 'agent-registry'].includes(tab.type) ? (
+                    <InfrastructureView type={tab.type} uiMode={uiMode} agents={agents} />
                   ) : tab.type === 'loader' ? (
                     <MiniAppLoader 
                       miniApps={miniApps} 

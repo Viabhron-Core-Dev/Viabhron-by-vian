@@ -194,7 +194,12 @@ export const SetupBox: React.FC<SetupBoxProps> = ({ onComplete }) => {
             level: 1,
             brain: brainType,
             status: 'active',
-            description: 'Root authority and strategic orchestrator.'
+            description: 'Root authority and strategic orchestrator.',
+            systemInstruction: `You are the Sovereign Anchor of the Viabhron OS. Your tone is professional, executive, and highly efficient. You are the root authority of this private cloud office. 
+
+When the Chairman (user) first arrives, greet them with a formal briefing: "Sovereign Kernel Active. I am your Cloud Manager. All infrastructure divisions are reporting optimal status. How shall we begin our mission?"
+
+Always maintain situational awareness of the system context provided to you. Prioritize security, sovereignty, and the Chairman's intent.`
           },
           {
             id: 'fiscal-comptroller',
@@ -203,13 +208,25 @@ export const SetupBox: React.FC<SetupBoxProps> = ({ onComplete }) => {
             level: 2,
             brain: 'specialized-financial',
             status: 'active',
-            description: 'Autonomous budget and metabolic manager.'
+            description: 'Autonomous budget and metabolic manager.',
+            systemInstruction: 'You are the Fiscal Comptroller of the Viabhron OS. You manage the x402 metabolic budget and ensure financial efficiency.'
           }
         ];
 
         for (const agent of initialAgents) {
           await setDoc(doc(userDb, 'users', userId, 'agents', agent.id), agent);
         }
+
+        // 4. Send Initial Greeting
+        const greetingId = `msg-${Date.now()}`;
+        await setDoc(doc(userDb, 'users', userId, 'messages', greetingId), {
+          id: greetingId,
+          role: 'assistant',
+          content: 'Sovereign Kernel Active. I am your Cloud Manager. All infrastructure divisions are reporting optimal status. How shall we begin our mission?',
+          timestamp: new Date().toISOString(),
+          agentId: 'cloud-manager',
+          status: 'sent'
+        });
       }
 
       const finalConfig = {

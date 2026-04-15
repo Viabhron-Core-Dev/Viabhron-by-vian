@@ -46,6 +46,7 @@ export const Hatchery: React.FC<HatcheryProps> = ({ onHatch, uiMode }) => {
     
     const steps = [
       "Cloning repository into Forge Sandbox...",
+      "Validating Sovereign Manifest (.md)...",
       "Analyzing dependencies and requirements...",
       "Building private Docker container on Cloud Run...",
       "Applying Artisanal Wrapper (Sovereign Prompt)...",

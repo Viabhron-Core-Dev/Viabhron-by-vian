@@ -5,6 +5,7 @@ export interface AIServiceConfig {
   apiKey: string;
   agent: Agent;
   history: Message[];
+  systemContext?: string;
 }
 
 export type AIProvider = 'gemini' | 'openai' | 'anthropic' | 'groq' | 'local' | 'resident';
@@ -57,11 +58,16 @@ export class AIService {
       parts: [{ text: msg.content }]
     }));
 
+    // Inject system context into the system instruction
+    const systemInstruction = config.systemContext 
+      ? `${config.agent.systemInstruction}\n\n${config.systemContext}`
+      : config.agent.systemInstruction;
+
     const response = await ai.models.generateContent({
       model: config.agent.model || 'gemini-3-flash-preview',
       contents,
       config: {
-        systemInstruction: config.agent.systemInstruction,
+        systemInstruction,
       }
     });
 

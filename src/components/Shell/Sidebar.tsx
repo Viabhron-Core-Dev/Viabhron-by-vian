@@ -77,6 +77,11 @@ interface SidebarProps {
   onOpenVideoSuite: () => void;
   onOpenMossSystem: () => void;
   onOpenPlaceholderClient: () => void;
+  onOpenIdentity: () => void;
+  onOpenRadar: () => void;
+  onOpenVibeAssembly: () => void;
+  onOpenMemoryPalace: () => void;
+  onOpenAgentRegistry: () => void;
   geminiApiKey?: string;
   systemMode: SystemMode;
 }
@@ -119,6 +124,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenVideoSuite,
   onOpenMossSystem,
   onOpenPlaceholderClient,
+  onOpenIdentity,
+  onOpenRadar,
+  onOpenVibeAssembly,
+  onOpenMemoryPalace,
+  onOpenAgentRegistry,
   geminiApiKey, 
   systemMode 
 }) => {
@@ -245,6 +255,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             <div className="flex-1 overflow-y-auto p-3 space-y-2 no-scrollbar">
+              {/* Basic Infrastructure Section */}
+              <div className="mb-6 px-2">
+                <div className="text-[8px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-3 px-1">Basic Infrastructure</div>
+                <div className="space-y-1">
+                  <button 
+                    onClick={onOpenIdentity}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all group"
+                  >
+                    <Icons.Fingerprint className="w-3.5 h-3.5 text-blue-400 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Identity-8004</span>
+                  </button>
+                  <button 
+                    onClick={onOpenRadar}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all group"
+                  >
+                    <Icons.Radar className="w-3.5 h-3.5 text-red-400 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Security-Radar</span>
+                  </button>
+                  <button 
+                    onClick={onOpenVibeAssembly}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all group"
+                  >
+                    <Icons.Zap className="w-3.5 h-3.5 text-yellow-400 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Vibe-Assembly</span>
+                  </button>
+                  <button 
+                    onClick={onOpenMemoryPalace}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all group"
+                  >
+                    <Icons.Database className="w-3.5 h-3.5 text-green-400 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Memory-Palace</span>
+                  </button>
+                  <button 
+                    onClick={onOpenAgentRegistry}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-all group"
+                  >
+                    <Icons.List className="w-3.5 h-3.5 text-purple-400 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Agent-Registry</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Canvas Section */}
               <div className="mb-4">
                 <button 

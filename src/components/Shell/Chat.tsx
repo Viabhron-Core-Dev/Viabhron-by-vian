@@ -32,7 +32,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Message, Extension, Agent, ExternalPlugin, UIMode } from '../../types';
+import { Message, Extension, Agent, ExternalPlugin, UIMode, Tab } from '../../types';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -45,6 +45,7 @@ import {
   getDoc
 } from 'firebase/firestore';
 import { AIService } from '../../lib/aiService';
+import { getSystemContext } from '../../lib/systemContext';
 
 interface ChatProps {
   tabId: string;
@@ -60,6 +61,7 @@ interface ChatProps {
   isLockdown?: boolean;
   checkSovereignProcedures?: (action: string, metadata?: any) => { allowed: boolean; message?: string };
   uiMode?: UIMode;
+  tabs?: Tab[];
 }
 
 export const Chat: React.FC<ChatProps> = ({ 
@@ -75,7 +77,8 @@ export const Chat: React.FC<ChatProps> = ({
   onUpdateExtensions,
   isLockdown,
   checkSovereignProcedures,
-  uiMode
+  uiMode,
+  tabs = []
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -186,6 +189,8 @@ export const Chat: React.FC<ChatProps> = ({
       const provider = agent?.provider || 'gemini';
       const apiKey = provider === 'gemini' ? geminiApiKey : keys[provider];
 
+      const systemContext = getSystemContext(tabs, agent || undefined);
+
       if (provider === 'local' || provider === 'gemini') {
         // Use user-provided Gemini API key
         const response = await AIService.generateResponse({
@@ -199,7 +204,8 @@ export const Chat: React.FC<ChatProps> = ({
             activeExtensionIds: [],
             color: '#3b82f6'
           },
-          history: [...messages, { id: 'temp', role: 'user', content, timestamp: new Date() }]
+          history: [...messages, { id: 'temp', role: 'user', content, timestamp: new Date() }],
+          systemContext
         });
 
         await addDoc(messagesRef, {
@@ -217,7 +223,8 @@ export const Chat: React.FC<ChatProps> = ({
         const response = await AIService.generateResponse({
           apiKey,
           agent: agent!,
-          history: [...messages, { id: 'temp', role: 'user', content, timestamp: new Date() }]
+          history: [...messages, { id: 'temp', role: 'user', content, timestamp: new Date() }],
+          systemContext
         });
 
         await addDoc(messagesRef, {
