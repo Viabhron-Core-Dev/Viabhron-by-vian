@@ -20,24 +20,26 @@ export function useTabs(user: User | null, extensions: Extension[]) {
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) {
-      // Only initialize if we have no tabs
-      setTabs(prev => {
-        if (prev.length > 0) return prev;
-        const defaultExtensionIds = extensions.filter(e => e.status === 'active').map(e => e.id);
-        const initialTab: Tab = { 
-          id: '1', 
-          title: 'VhatsAppeningAi', 
-          type: 'vhatsappening', 
-          active: true,
-          status: 'active',
-          activeExtensionIds: defaultExtensionIds,
-          canvasData: { nodes: [], edges: [] },
-          metadata: { lastAccessed: new Date() }
-        };
-        setActiveTabId('1');
-        return [initialTab];
-      });
+    if (!user || !db) {
+      // Only initialize if we have no tabs and no user/db
+      if (!user) {
+        setTabs(prev => {
+          if (prev.length > 0) return prev;
+          const defaultExtensionIds = extensions.filter(e => e.status === 'active').map(e => e.id);
+          const initialTab: Tab = { 
+            id: '1', 
+            title: 'VhatsAppeningAi', 
+            type: 'vhatsappening', 
+            active: true,
+            status: 'active',
+            activeExtensionIds: defaultExtensionIds,
+            canvasData: { nodes: [], edges: [] },
+            metadata: { lastAccessed: new Date() }
+          };
+          setActiveTabId('1');
+          return [initialTab];
+        });
+      }
       return;
     }
 

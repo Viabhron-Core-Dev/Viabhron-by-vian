@@ -92,7 +92,7 @@ import { infra } from './lib/infraManager';
 import { db } from './lib/firebase';
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from 'firebase/firestore';
 import { AIService } from './lib/aiService';
-import { toast } from 'sonner';
+import { toast, Toaster } from 'sonner';
 
 import { useAuth } from './hooks/useAuth';
 import { useTabs } from './hooks/useTabs';
@@ -147,6 +147,20 @@ export default function App() {
   const systemMenuRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(systemMenuRef, () => setIsSystemMenuOpen(false));
+
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      console.error('Global Error caught:', event.error);
+      addLog({
+        level: 'ERROR',
+        source: 'Kernel',
+        message: `Runtime Error: ${event.error?.message || 'Unknown error'}`,
+        metadata: { stack: event.error?.stack }
+      });
+    };
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
 
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [confirmationRequest, setConfirmationRequest] = useState<{
@@ -1085,6 +1099,7 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100 overflow-hidden font-sans">
+      <Toaster position="top-right" theme="dark" richColors />
       <AnimatePresence>
         {user && !onboarding.completed && (
           <Onboarding 

@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build",
+    "start": "tsx server.ts",
     "preview": "vite preview",
     "sync": "npx cap sync",
     "clean": "rm -rf dist",
