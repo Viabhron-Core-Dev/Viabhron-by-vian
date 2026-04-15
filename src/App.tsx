@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Component } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { 
   Bot, 
@@ -16,7 +16,6 @@ import {
   Download, 
   HelpCircle, 
   Shield,
-  Brain,
   Trash2,
   X,
   Cloud,
@@ -27,6 +26,28 @@ import {
   Activity,
   Database,
   Monitor,
+  CheckCircle2, 
+  AlertCircle, 
+  Info, 
+  ArrowRight, 
+  Brain,
+  Lock, 
+  Smartphone, 
+  Layers, 
+  Code, 
+  Play, 
+  Save, 
+  RefreshCw, 
+  History, 
+  FileText, 
+  Box, 
+  Share2, 
+  Eye, 
+  EyeOff, 
+  Key, 
+  Fingerprint, 
+  Network, 
+  Workflow,
   Sparkles
 } from 'lucide-react';
 
@@ -87,6 +108,7 @@ declare global {
     google: any;
   }
 }
+
 
 export default function App() {
   const { user, isAuthReady, login, logout } = useAuth();

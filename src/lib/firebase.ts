@@ -12,10 +12,6 @@ const defaultEmptyConfig = {
   appId: "placeholder"
 };
 
-let app: FirebaseApp;
-let db: Firestore;
-let auth: Auth;
-
 // Attempt to load from local storage or the config file
 const savedConfig = localStorage.getItem('viabhron_firebase_config');
 let configToUse = defaultEmptyConfig;
@@ -28,6 +24,10 @@ if (savedConfig) {
   }
 }
 
+let app: FirebaseApp | undefined;
+let db: Firestore | undefined;
+let auth: Auth | undefined;
+
 try {
   if (!getApps().length) {
     app = initializeApp(configToUse);
@@ -38,7 +38,6 @@ try {
   auth = getAuth(app);
 } catch (error) {
   console.warn("Firebase initialization deferred or failed. Waiting for Setup Box.", error);
-  // We'll re-initialize later via the Setup Box
 }
 
 export { app, db, auth };

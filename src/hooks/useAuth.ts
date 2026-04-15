@@ -13,6 +13,10 @@ export function useAuth() {
   const [isAuthReady, setIsAuthReady] = useState(false);
 
   useEffect(() => {
+    if (!auth) {
+      setIsAuthReady(true);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setIsAuthReady(true);
