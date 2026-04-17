@@ -11,7 +11,7 @@ import {
   Moon,
   Trash2
 } from 'lucide-react';
-import { Tab, TabType } from '../../types';
+import { Tab, TabType } from '../../src/types';
 
 interface TabSwitcherProps {
   tabs: Tab[];

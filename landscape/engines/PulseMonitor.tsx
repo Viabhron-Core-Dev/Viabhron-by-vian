@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AreaChart, Area, ResponsiveContainer, YAxis } from 'recharts';
-import { UIMode, Agent } from '../../types';
+import { UIMode, Agent } from '../../src/types';
 
 const pulseData = [
   { value: 30 }, { value: 45 }, { value: 35 }, { value: 60 }, 

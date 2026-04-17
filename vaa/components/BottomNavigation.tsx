@@ -18,7 +18,7 @@ import {
   Bug,
   Terminal as TerminalIcon
 } from 'lucide-react';
-import { Tab, TabType } from '../../types';
+import { Tab, TabType } from '../../src/types';
 
 interface BottomNavigationProps {
   tabs: Tab[];

@@ -27,7 +27,7 @@ import {
   Search
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { CelestialChat } from "../../../../src/types";
+import { CelestialChat } from "../../src/types";
 import { toast } from "sonner";
 
 interface ChatViewProps {
@@ -131,13 +131,13 @@ export const ChatView: React.FC<ChatViewProps> = ({
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold truncate text-lg leading-tight">{chat.name}</h3>
                 <p className="text-[9px] font-bold text-white/70 uppercase tracking-widest">
-                  {isSentinel ? "System Monitoring Active" : isOmega ? "Sovereign Brain Active" : "Celestial Engine Active"}
+                  {chat.isSelf ? "Private Scratchpad (Nucleus Buffer)" : isSentinel ? "System Monitoring Active" : isOmega ? "Sovereign Brain Active" : "Celestial Engine Active"}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-5 relative">
-              {!isSentinel && (
+              {!isSentinel && !chat.isSelf && (
                 <>
                   <Video className="w-6 h-6 text-white/90 cursor-pointer hover:text-white transition-colors" />
                   <button onClick={() => setIsCalling(true)}>

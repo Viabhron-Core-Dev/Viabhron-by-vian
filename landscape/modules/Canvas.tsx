@@ -24,7 +24,7 @@ import {
   Type,
   ArrowRight
 } from 'lucide-react';
-import { CanvasNode, CanvasEdge, UIMode } from '../../types';
+import { CanvasNode, CanvasEdge, UIMode } from '../../src/types';
 
 interface CanvasProps {
   tabId: string;

@@ -30,26 +30,26 @@ import {
   Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Extension, ExtensionCategory, SystemMode, MiniApp, Client, SecurityRule, EfficiencyPatch } from '../../types';
+import { Extension, ExtensionCategory, SystemMode, Moss, Client, SecurityRule, EfficiencyPatch } from '../../src/types';
 import { User } from 'firebase/auth';
 import { Logo } from './Logo';
 import * as Icons from 'lucide-react';
-import { SidebarSection } from './Sidebar/SidebarSection';
-import { MachineRoomSection } from './Sidebar/MachineRoomSection';
-import { MiniAppSection } from './Sidebar/MiniAppSection';
-import { ClientSection } from './Sidebar/ClientSection';
-import { TestingSection } from './Sidebar/TestingSection';
+import { SidebarSection } from '../../src/components/Shell/Sidebar/SidebarSection';
+import { MachineRoomSection } from '../../src/components/Shell/Sidebar/MachineRoomSection';
+import { MossSection } from '../../src/components/Shell/Sidebar/MossSection';
+import { ClientSection } from '../../src/components/Shell/Sidebar/ClientSection';
+import { TestingSection } from '../../src/components/Shell/Sidebar/TestingSection';
 
 interface SidebarProps {
   user: User | null;
   login: () => void;
   logout: () => void;
   extensions: Extension[];
-  miniApps: MiniApp[];
+  moss: Moss[];
   clients: Client[];
   securityRules: SecurityRule[];
   efficiencyPatches: EfficiencyPatch[];
-  onToggleMiniApp: (id: string) => void;
+  onToggleMoss: (id: string) => void;
   onToggleClient: (id: string) => void;
   onToggleRule: (id: string) => void;
   onTogglePatch: (id: string) => void;
@@ -92,11 +92,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   login, 
   logout, 
   extensions, 
-  miniApps,
+  moss,
   clients,
   securityRules,
   efficiencyPatches,
-  onToggleMiniApp,
+  onToggleMoss,
   onToggleClient,
   onToggleRule,
   onTogglePatch,
@@ -132,7 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   geminiApiKey, 
   systemMode 
 }) => {
-  const [openSections, setOpenSections] = useState<Record<ExtensionCategory | 'miniapp' | 'client' | 'security' | 'efficiency' | 'testing', boolean>>({
+  const [openSections, setOpenSections] = useState<Record<ExtensionCategory | 'moss' | 'client' | 'security' | 'efficiency' | 'testing', boolean>>({
     connector: false,
     skill: false,
     tool: false,
@@ -140,14 +140,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
     module: false,
     gaming: false,
     testing: false,
-    miniapp: false,
+    moss: false,
     client: false,
     security: false,
     efficiency: false,
     testing_debug: false
   });
 
-  const toggleSection = (category: ExtensionCategory | 'miniapp' | 'client' | 'security' | 'efficiency' | 'testing_debug') => {
+  const toggleSection = (category: ExtensionCategory | 'moss' | 'client' | 'security' | 'efficiency' | 'testing_debug') => {
     setOpenSections(prev => ({ ...prev, [category]: !prev[category] }));
   };
 
@@ -557,13 +557,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onAdd={onOpenStore}
               />
 
-              <MiniAppSection 
-                miniApps={miniApps}
-                onToggleMiniApp={onToggleMiniApp}
+              <MossSection 
+                moss={moss}
+                onToggleMoss={onToggleMoss}
                 onOpenStore={onOpenStore}
                 onOpenLoader={onOpenLoader}
-                isOpen={openSections.miniapp}
-                onToggle={() => toggleSection('miniapp')}
+                isOpen={openSections.moss}
+                onToggle={() => toggleSection('moss')}
               />
 
               <ClientSection 

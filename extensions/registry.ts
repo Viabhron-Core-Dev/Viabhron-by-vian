@@ -1,4 +1,4 @@
-import { Extension } from '../types';
+import { Extension } from '../src/types';
 import { 
   githubConnector, 
   linearConnector, 
@@ -12,10 +12,10 @@ import {
   flowiseConnector,
   substackConnector,
   lumaUni1Connector
-} from '../../extensions/connectors';
-import { globalPulseSkill, docForgeSkill, artifactSandboxSkill, codeHunterSkill, socialSentinelSkill, githubSecurityAuditorSkill, creativeDirectorSkill } from '../../extensions/skills';
-import { headlessBrowserTool, pdfExtractorTool, codeParserTool } from '../../extensions/tools';
-import { localDatabaseMcp, systemMetricsMcp, geminiApiDocsMcp, googleWorkspaceMcp, openClawProtocol } from '../../extensions/mcp';
+} from './connectors';
+import { globalPulseSkill, docForgeSkill, artifactSandboxSkill, codeHunterSkill, socialSentinelSkill, githubSecurityAuditorSkill, creativeDirectorSkill } from './skills';
+import { headlessBrowserTool, pdfExtractorTool, codeParserTool } from './tools';
+import { localDatabaseMcp, systemMetricsMcp, geminiApiDocsMcp, googleWorkspaceMcp, openClawProtocol } from './mcp';
 import { 
   agentTerminalModule, 
   systemMetricsModule, 
@@ -44,7 +44,7 @@ import {
   ethicalSentinelModule,
   webReconShieldModule,
   vibeAssemblyModule,
-} from '../../extensions/modules';
+} from './modules';
 import {
   cloudManagerAgent,
   fiscalComptrollerAgent,
@@ -56,7 +56,7 @@ import {
   chiefEditorAgent,
   soundEngineerAgent,
   visualSynthesizerAgent
-} from '../../extensions/agents';
+} from './agents';
 
 export const INITIAL_EXTENSIONS: Extension[] = [
   // Connectors

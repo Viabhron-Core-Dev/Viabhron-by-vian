@@ -1,7 +1,7 @@
 import React from 'react';
 import { Plus, X, MessageSquare, Zap, Search, Settings, Layout, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Tab, TabType } from '../../types';
+import { Tab, TabType } from '../../src/types';
 
 interface TabsProps {
   tabs: Tab[];

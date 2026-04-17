@@ -1,6 +1,6 @@
-import { MiniApp } from '../types';
+import { Moss } from '../types';
 
-export const INITIAL_MINI_APPS: MiniApp[] = [
+export const INITIAL_MOSS_APPS: Moss[] = [
   {
     id: 'ma-pulse',
     name: 'Pulse Monitor',

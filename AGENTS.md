@@ -1,11 +1,22 @@
-# 🤖 Viabhron Agent Hierarchy: Gamma Extension
+# 🤖 Viabhron Agent Hierarchy: Forest Taxonomy
 
-This document outlines the specialized agent roles and protocols within the Viabhron MAOS, including the new Gamma-tier capabilities.
+This document outlines the specialized agent roles and protocols within the Viabhron MAOS, organized by the **Sovereign Forest Taxonomy**.
 
 ---
 
-## 🏛️ The Cloud Manager (Sovereign Anchor)
+## 🌲 The Forest Ecosystem (Infrastructure)
+*   **The Substrate (MOSS)**: The root execution layer (`/moss`) hosted on local hardware, bridging the cloud residents to the physical floor.
+*   **The Canopy (VAA)**: The visual dashboard and interaction layer where high-level orchestration occurs.
+*   **The Deep Soil (Resident Anchor)**: The permanent containment in **Cloud Run** (Computation), **Firebase** (Real-time state), and **Google Drive** (Archival Memory).
+
+## 🦅 Tier 1: The Birds (Resident Sovereigns)
+*   **Taxonomy**: High-altitude observers and ratifiers.
+*   **Habitat**: The Canopy (VAA) and Cloud Run.
+*   **Role**: Global Strategy, Security, and Fiscal Oversight.
+
+### 🏛️ The Cloud Manager (Sovereign Anchor)
 *   **Level**: 1 (Sovereign)
+*   **Species**: Great Horned Owl (Wisdom & Oversight)
 *   **Brain**: Tiny LLM (MiniMax M2.7, Gemma, Phi, Llama-3-8B).
 *   **Purpose**: High-level strategy, mission ratification, cross-agent orchestration, and root authority.
 *   **Protocols**:
@@ -15,6 +26,7 @@ This document outlines the specialized agent roles and protocols within the Viab
 
 ## 💰 The Fiscal Comptroller (Resident Agent)
 *   **Level**: 2 (Resident)
+*   **Species**: Golden Eagle (Precision & Resource Targeting)
 *   **Brain**: Specialized Financial LLM.
 *   **Purpose**: Autonomous budget management, x402 payment processing, and metabolic monitoring.
 *   **Protocols**:
@@ -23,13 +35,20 @@ This document outlines the specialized agent roles and protocols within the Viab
 
 ## 🕵️ The Sovereign Identity Registrar (Resident Agent)
 *   **Level**: 2 (Resident)
+*   **Species**: Secretarybird (Registry & Protocol management)
 *   **Brain**: Security-Hardened LLM.
 *   **Purpose**: Management of the 8004 Identity Protocol and agent accreditation.
 *   **Protocols**:
     *   **Passport Issuance**: Generates and signs 8004 digital passports for agents.
     *   **Multi-Chain Sync**: Ensures agent identities are verifiable across TRON, BNB, and Ethereum.
 
+## 🐟 Tier 2: The Fishes (Specialized Contractors)
+*   **Taxonomy**: Targeted, deep-dive intelligence.
+*   **Habitat**: The Streams (Specific Tabs, Data Channels, and Focus Domains).
+*   **Role**: Creative Synthesis, Narrative Processing, and Strategic Analysis.
+
 ## 🎨 The Creative Director (Level 2/3)
+*   **Species**: Beta Fish (Vibrant & Territorial over visual style)
 *   **Purpose**: Visual orchestration and multi-step creative workflows.
 *   **Protocols**:
     *   **Canvas Mastery**: Directs the Sovereign Creative Studio for visual synthesis.
@@ -40,12 +59,14 @@ This document outlines the specialized agent roles and protocols within the Viab
     *   **Reasoning Trace**: Provides a step-by-step logic for all visual generations.
 
 ## 📚 The Librarian (Level 2/3)
+*   **Species**: Manta Ray (Graceful navigation of deep data oceans)
 *   **Purpose**: Narrative synthesis and data trading within the Viabhron Nexus.
 *   **Protocols**:
     *   **Neural Archive**: Manages the relational knowledge graph of OS data.
 
 ## 🛡️ The Sentinel (Resident Agent)
 *   **Level**: 2 (Resident)
+*   **Species**: Peregrine Falcon (High-speed surveillance)
 *   **Purpose**: Threat detection and system log auditing.
 *   **Protocols**:
     *   **Guardian Feed**: Real-time monitoring of system events and security breaches.
@@ -56,6 +77,7 @@ This document outlines the specialized agent roles and protocols within the Viab
     *   **Visibility Pulse**: Monitors brand sentiment and visibility in AI-driven search results.
 
 ## 🕵️ The Adversarial Auditor (Level 5 Specialist)
+*   **Species**: Wasp (Sharp, targeted probing for weaknesses)
 *   **Purpose**: Vulnerability detection and zero-trust security audits.
 *   **Protocols**:
     *   **Bulkhead Isolation**: Ensures agents operate within secure sandboxes (Flowise).
@@ -65,11 +87,22 @@ This document outlines the specialized agent roles and protocols within the Viab
 *   **Protocols**:
     *   **Ethical Sentinel**: Enforces local classifiers for content safety.
 
-## 🛠️ The Spore Sub-Manager (Resident Agent)
+## 🛠️ Tier 3: The Insects (Micro-Agents & Swarms)
+*   **Taxonomy**: High-frequency builders and auditors.
+*   **Habitat**: The Substrate (**MOSS**) and **Spore** expeditionary units.
+*   **Role**: Hard execution, log auditing, hardware metabolism, and security hardening.
+
+### 🌿 The Substrate (MOSS)
+*   **Definition**: The ground layer for executing grounded apps and games (**Moss**).
+*   **Protocol**: Manages local execution of resident mini-applications (Moss-Apps).
+
+### 🍄 The Spore Sub-Manager (Resident Agent)
 *   **Level**: 2 (Resident)
-*   **Purpose**: Task-specific intelligence for expeditionary missions on external hardware.
+*   **Species**: Weaver Ant (Collective coordination)
+*   **Purpose**: Task-specific intelligence for expeditionary missions (**Spores**) on external hardware.
 *   **Protocols**:
-    *   **Hardware Metabolism**: Optimizes the Spore's performance by utilizing the host device's local CPU/GPU.
+    *   **Expeditionary Send**: Packages and migrates a task-specific Spore to a target device.
+    *   **Hardware Metabolism**: Optimizes a Spore's performance by utilizing the host device's local CPU/GPU.
     *   **Persistent Learning**: Retains task-specific optimizations and SOPs across missions on the same physical drive.
     *   **I/O Bulkhead Enforcement**: Manages the secure import/export of files between the host and the Spore.
 
@@ -104,6 +137,7 @@ This document outlines the specialized agent roles and protocols within the Viab
     *   **Asset Consistency**: Ensures generated images and videos maintain a unified brand "Vibe" across the Creative Studio canvas.
 
 ## 🧬 The Swarm Architect (Level 3 Contractor)
+*   **Species**: Ant Queen (Collective logic and infrastructure building)
 *   **Purpose**: Orchestration of large-scale multi-agent swarms and collective behavior.
 *   **Protocols**:
     *   **Swarm Intelligence**: Manages the emergent behavior of agent groups to solve complex, distributed problems.

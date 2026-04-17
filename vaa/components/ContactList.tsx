@@ -17,7 +17,7 @@ import {
   ChevronDown,
   Key
 } from 'lucide-react';
-import { Agent, Extension, Secret } from '../../../../src/types';
+import { Agent, Extension, Secret } from '../../src/types';
 
 interface ContactListProps {
   agents: Agent[];

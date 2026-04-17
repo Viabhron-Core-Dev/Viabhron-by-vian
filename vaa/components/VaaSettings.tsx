@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import * as Icons from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { Secret } from "../../../../src/types";
+import { Secret } from "../../src/types";
 
 interface VaaSettingsProps {
   onClose: () => void;

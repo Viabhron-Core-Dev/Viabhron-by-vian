@@ -64,6 +64,7 @@ export interface CelestialChat {
   debateId?: string;
   isSentinel?: boolean;
   isHeadAgent?: boolean;
+  isSelf?: boolean;
   filterCategory?: string;
 }
 
@@ -330,6 +331,7 @@ export interface Agent {
   isStaff?: boolean;
   isAnchor?: boolean;
   isResident?: boolean;
+  taxonomy?: 'bird' | 'fish' | 'insect';
   avatar?: string;
   color: string;
   parentId?: string; // For hierarchy (Sub/Minor agents)
@@ -562,16 +564,28 @@ export interface SOP {
   lastExecuted?: Date;
 }
 
-export interface MiniApp {
+export interface Moss {
   id: string;
   name: string;
   description: string;
   icon: string; // Lucide icon name
   enabled: boolean;
   type: 'local' | 'sovereign';
-  category: 'utility' | 'creative' | 'security' | 'intelligence' | 'forge' | 'core';
+  category: 'utility' | 'creative' | 'security' | 'intelligence' | 'forge' | 'core' | 'game';
   status: 'active' | 'inactive' | 'error';
   isFrozen?: boolean;
+}
+
+export interface Spore {
+  id: string;
+  targetDeviceId: string;
+  status: 'airborne' | 'landed' | 'harvesting' | 'complete';
+  missionBrief: string;
+  metabolism: {
+    cpuUsage: number;
+    memoryUsage: number;
+    lastHeartbeat: Date;
+  };
 }
 
 export interface Client {

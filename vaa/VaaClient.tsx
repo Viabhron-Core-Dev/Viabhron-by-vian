@@ -55,7 +55,7 @@ import {
   Brain
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { localDb } from "../../../src/lib/db";
+import { localDb } from "../src/lib/db";
 import { 
   CelestialNode, 
   CelestialChat, 
@@ -66,13 +66,13 @@ import {
   CanvasEdge,
   NewsCard,
   Extension,
-  MiniApp,
+  Moss,
   Secret
-} from "../../../src/types";
+} from "../src/types";
 import { Toaster, toast } from "sonner";
-import { Canvas } from "../../../src/components/Shell/Canvas";
+import { Canvas } from "../landscape/modules/Canvas";
 
-import { useClickOutside } from "../../../src/hooks/useClickOutside";
+import { useClickOutside } from "../src/hooks/useClickOutside";
 
 // --- Extracted Components ---
 import { SovereignCheck } from "./components/SovereignCheck";
@@ -85,7 +85,7 @@ import { HQExtensionsVault } from "./components/HQExtensionsVault";
 import { SearchAndFilters, WorkflowTab } from "./components/Misc";
 import { CameraCapture, QRScanner } from "./components/MediaTools";
 import { ContactList } from "./components/ContactList";
-import { MiniAppLoader } from "../../../src/components/Extensions/MiniAppLoader";
+import { MossLoader } from "../moss/MossLoader";
 
 // --- Sub-components ---
 
@@ -118,13 +118,13 @@ import { MiniAppLoader } from "../../../src/components/Extensions/MiniAppLoader"
 interface VaaClientProps {
   agents?: Agent[];
   extensions?: Extension[];
-  miniApps?: MiniApp[];
+  moss?: Moss[];
   secrets?: Secret[];
   onCreateAgent?: (agent: Partial<Agent>) => void;
   onAddSecret?: (secret: Omit<Secret, 'id' | 'createdAt'>) => void;
   onDeleteSecret?: (id: string) => void;
   onUpdateSecret?: (id: string, updates: Partial<Secret>) => void;
-  onToggleMiniApp?: (id: string) => void;
+  onToggleMoss?: (id: string) => void;
   onToggleFreeze?: (id: string) => void;
   onCloseApp?: (id: string) => void;
   onOpenStore?: () => void;
@@ -137,13 +137,13 @@ const TABS: ("chats" | "news" | "workflow" | "loader")[] = ["chats", "news", "wo
 export const VaaClient: React.FC<VaaClientProps> = ({ 
   agents = [], 
   extensions = [], 
-  miniApps = [],
+  moss = [], 
   secrets = [],
   onCreateAgent,
   onAddSecret,
   onDeleteSecret,
   onUpdateSecret,
-  onToggleMiniApp,
+  onToggleMoss,
   onToggleFreeze,
   onCloseApp,
   onOpenStore,
@@ -151,6 +151,7 @@ export const VaaClient: React.FC<VaaClientProps> = ({
   onAppOpen
 }) => {
   const [activeTab, setActiveTab] = useState<"chats" | "news" | "workflow" | "loader">("chats");
+  const [lastOpenedAppIdState, setLastOpenedAppIdState] = useState<string | null>('ma-pulse');
   const [isAppFullscreen, setIsAppFullscreen] = useState(() => {
     return localStorage.getItem('viabhron:vaa:app-fullscreen') === 'true';
   });
@@ -216,6 +217,17 @@ export const VaaClient: React.FC<VaaClientProps> = ({
       }));
 
     const initialChats: CelestialChat[] = [
+      {
+        id: "my-notes",
+        nodeId: "user-self",
+        name: "My Notes (Nucleus Buffer)",
+        lastMessage: "Chairman's private scratchpad initiated.",
+        messages: [],
+        type: "agent",
+        updatedAt: Date.now(),
+        filterCategory: "Semi Local",
+        isSelf: true
+      },
       {
         id: residentAgent ? `agent-${residentAgent.id}` : "cloud-manager-resident",
         nodeId: residentAgent?.id || "cloud-manager",
@@ -415,14 +427,17 @@ export const VaaClient: React.FC<VaaClientProps> = ({
         return <WorkflowTab onOpenWorkflow={() => setView("workflow")} />;
       case "loader":
         return (
-          <MiniAppLoader 
-            miniApps={miniApps} 
+          <MossLoader 
+            moss={moss} 
             agents={agents}
-            onToggleMiniApp={onToggleMiniApp || (() => {})}
+            onToggleMoss={onToggleMoss || (() => {})}
             onToggleFreeze={onToggleFreeze || (() => {})}
             onCloseApp={onCloseApp || (() => {})}
             onInstall={onOpenStore || (() => {})}
-            onAppOpen={onAppOpen}
+            onAppOpen={(id) => {
+              setLastOpenedAppIdState(id);
+              onAppOpen?.(id);
+            }}
             uiMode="vaa"
             isFullscreen={isAppFullscreen}
             onToggleFullscreen={handleToggleFullscreen}
@@ -623,6 +638,9 @@ export const VaaClient: React.FC<VaaClientProps> = ({
     setChats(prev => prev.map(c => c.id === selectedChat.id ? updatedChat : c));
     setSelectedChat(updatedChat);
 
+    // Skip AI simulation for self-chats
+    if (updatedChat.isSelf) return;
+
     // Simulate agent response
     setTimeout(() => {
       const response: Message = {
@@ -791,7 +809,7 @@ export const VaaClient: React.FC<VaaClientProps> = ({
                 ))}
               </div>
 
-              {/* Stacked FABs */}
+              {/* Global Sovereign Action Stack (Omega + FAB) */}
               {!(isAppFullscreen && isAnyAppActive) && (
                 <div className="absolute bottom-8 right-6 flex flex-col gap-4 items-center z-50">
                   <button 
@@ -849,9 +867,9 @@ export const VaaClient: React.FC<VaaClientProps> = ({
                         if (activeTab === 'chats') setShowPlusMenu(!showPlusMenu);
                         if (activeTab === 'news') setShowSwipeView(true);
                         if (activeTab === 'workflow') setShowWorkflowSpeedDial(!showWorkflowSpeedDial);
-                        if (activeTab === 'loader' && lastOpenedAppId) {
+                        if (activeTab === 'loader' && lastOpenedAppIdState) {
                           // Trigger opening the last app
-                          const event = new CustomEvent('viabhron:open-mini-app', { detail: { id: lastOpenedAppId } });
+                          const event = new CustomEvent('viabhron:open-mini-app', { detail: { id: lastOpenedAppIdState } });
                           window.dispatchEvent(event);
                         }
                       }}

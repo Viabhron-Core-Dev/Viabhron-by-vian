@@ -10,7 +10,7 @@ import {
   Zap
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { Agent } from "../../../../src/types";
+import { Agent } from "../../src/types";
 
 interface CameraCaptureProps {
   onClose: () => void;

@@ -70,7 +70,7 @@ import { Forge } from './components/Extensions/Forge';
 import { AgentCLI } from './components/Extensions/AgentCLI';
 import { Sentinel } from './components/Extensions/Sentinel';
 import { Nexus } from './components/Extensions/Nexus';
-import { MiniAppLoader } from './components/Extensions/MiniAppLoader';
+import { MossLoader } from '../../moss/MossLoader';
 import { Symphony } from './components/Extensions/Symphony';
 import { Creative } from './components/Extensions/Creative';
 import { SoundForge } from './components/Extensions/SoundForge';
@@ -87,7 +87,7 @@ import { Logo } from './components/Shell/Logo';
 import { VaaClient } from "../extensions/clients/Vaa";
 import { SetupBox } from './components/Shell/SetupBox';
 
-import { Extension, TabType, Agent, UIConfig, UIMode, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, MiniApp, Client, OnboardingState, Secret } from './types';
+import { Extension, TabType, Agent, UIConfig, UIMode, Notification, SystemMode, SecurityRule, EfficiencyPatch, ExternalPlugin, BackgroundTask, LogEntry, SOP, RatificationProposal, Moss, Client, OnboardingState, Secret } from './types';
 import { infra } from './lib/infraManager';
 import { db } from './lib/firebase';
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from 'firebase/firestore';
@@ -99,7 +99,7 @@ import { useTabs } from './hooks/useTabs';
 import { INITIAL_EXTENSIONS } from './constants/extensions';
 import { INITIAL_SOPS } from './constants/sops';
 import { INITIAL_PROPOSALS } from './constants/proposals';
-import { INITIAL_MINI_APPS } from './constants/miniapps';
+import { INITIAL_MOSS_APPS } from './constants/miniapps';
 import { INITIAL_CLIENTS } from './constants/clients';
 
 import { useClickOutside } from './hooks/useClickOutside';
@@ -123,7 +123,7 @@ export default function App() {
   const [extensions, setExtensions] = useState<Extension[]>(INITIAL_EXTENSIONS);
   const [sops, setSops] = useState<SOP[]>(INITIAL_SOPS);
   const [proposals, setProposals] = useState<RatificationProposal[]>(INITIAL_PROPOSALS);
-  const [miniApps, setMiniApps] = useState<MiniApp[]>(INITIAL_MINI_APPS);
+  const [moss, setMoss] = useState<Moss[]>(INITIAL_MOSS_APPS);
   const [clients, setClients] = useState<Client[]>(INITIAL_CLIENTS);
   const [onboarding, setOnboarding] = useState<OnboardingState>({
     step: 'choice',
@@ -927,35 +927,35 @@ export default function App() {
     setProposals(prev => prev.map(p => p.id === id ? { ...p, status: 'vetoed' } : p));
   };
 
-  const handleToggleMiniApp = (id: string) => {
-    setMiniApps(prev => prev.map(app => app.id === id ? { ...app, enabled: !app.enabled, status: !app.enabled ? 'active' : 'inactive' } : app));
-    const app = miniApps.find(a => a.id === id);
+  const handleToggleMoss = (id: string) => {
+    setMoss(prev => prev.map(app => app.id === id ? { ...app, enabled: !app.enabled, status: !app.enabled ? 'active' : 'inactive' } : app));
+    const app = moss.find(a => a.id === id);
     addLog({
       level: 'INFO',
       source: 'Kernel',
-      message: `Mini-App "${app?.name}" ${!app?.enabled ? 'enabled' : 'disabled'}.`,
+      message: `Moss App "${app?.name}" ${!app?.enabled ? 'enabled' : 'disabled'}.`,
       metadata: { appId: id, enabled: !app?.enabled }
     });
   };
 
   const handleToggleFreeze = (id: string) => {
-    setMiniApps(prev => prev.map(app => app.id === id ? { ...app, isFrozen: !app.isFrozen } : app));
-    const app = miniApps.find(a => a.id === id);
+    setMoss(prev => prev.map(app => app.id === id ? { ...app, isFrozen: !app.isFrozen } : app));
+    const app = moss.find(a => a.id === id);
     addLog({
       level: 'INFO',
       source: 'Kernel',
-      message: `Mini-App "${app?.name}" ${!app?.isFrozen ? 'frozen' : 'thawed'}.`,
+      message: `Moss App "${app?.name}" ${!app?.isFrozen ? 'frozen' : 'thawed'}.`,
       metadata: { appId: id, isFrozen: !app?.isFrozen }
     });
   };
 
-  const handleCloseMiniApp = (id: string) => {
-    setMiniApps(prev => prev.map(app => app.id === id ? { ...app, status: 'inactive', isFrozen: false } : app));
-    const app = miniApps.find(a => a.id === id);
+  const handleCloseMoss = (id: string) => {
+    setMoss(prev => prev.map(app => app.id === id ? { ...app, status: 'inactive', isFrozen: false } : app));
+    const app = moss.find(a => a.id === id);
     addLog({
       level: 'INFO',
       source: 'Kernel',
-      message: `Mini-App "${app?.name}" substrate purged.`,
+      message: `Moss App "${app?.name}" substrate purged.`,
       metadata: { appId: id }
     });
   };
@@ -1246,9 +1246,9 @@ export default function App() {
                   onAddSecret={handleAddSecret}
                   onDeleteSecret={handleDeleteSecret}
                   onUpdateSecret={handleUpdateSecret}
-                  onToggleMiniApp={handleToggleMiniApp}
+                  onToggleMoss={handleToggleMoss}
                   onToggleFreeze={handleToggleFreeze}
-                  onCloseApp={handleCloseMiniApp}
+                  onCloseApp={handleCloseMoss}
                   onOpenStore={() => handleAddTab('store', 'Extension Store')}
                   lastOpenedAppId={lastOpenedAppId}
                   onAppOpen={setLastOpenedAppId}
@@ -1347,12 +1347,12 @@ export default function App() {
                   ) : ['identity-8004', 'security-radar', 'vibe-assembly', 'memory-palace', 'agent-registry'].includes(tab.type) ? (
                     <InfrastructureView type={tab.type} uiMode={uiMode} agents={agents} />
                   ) : tab.type === 'loader' ? (
-                    <MiniAppLoader 
-                      miniApps={miniApps} 
+                    <MossLoader 
+                      moss={moss} 
                       agents={agents}
-                      onToggleMiniApp={handleToggleMiniApp}
+                      onToggleMoss={handleToggleMoss}
                       onToggleFreeze={handleToggleFreeze}
-                      onCloseApp={handleCloseMiniApp}
+                      onCloseApp={handleCloseMoss}
                       onInstall={() => handleAddTab('store', 'Extension Store')} 
                       onAppOpen={setLastOpenedAppId}
                       uiMode={uiMode} 
@@ -1635,9 +1635,9 @@ export default function App() {
                     onAddSecret={handleAddSecret}
                     onDeleteSecret={handleDeleteSecret}
                     onUpdateSecret={handleUpdateSecret}
-                    onToggleMiniApp={handleToggleMiniApp}
+                    onToggleMoss={handleToggleMoss}
                     onToggleFreeze={handleToggleFreeze}
-                    onCloseApp={handleCloseMiniApp}
+                    onCloseApp={handleCloseMoss}
                     onOpenStore={() => handleAddTab('store', 'Extension Store')}
                     lastOpenedAppId={lastOpenedAppId}
                     onAppOpen={setLastOpenedAppId}

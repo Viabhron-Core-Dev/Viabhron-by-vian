@@ -1,6 +1,6 @@
 import React from "react";
 import { Terminal } from "lucide-react";
-import { CelestialChat } from "../../../../src/types";
+import { CelestialChat } from "../../src/types";
 
 interface ChatListProps {
   chats: CelestialChat[];

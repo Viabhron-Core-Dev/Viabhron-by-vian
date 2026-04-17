@@ -19,6 +19,10 @@ interface SubstrateFrameProps {
   children: React.ReactNode;
 }
 
+/**
+ * MOSS Substrate Frame
+ * The secure bulkhead container for running Spores.
+ */
 export const SubstrateFrame: React.FC<SubstrateFrameProps> = ({
   name,
   isFrozen,
@@ -35,12 +39,12 @@ export const SubstrateFrame: React.FC<SubstrateFrameProps> = ({
       exit={{ opacity: 0, scale: 0.95 }}
       className={`${isFullscreen ? 'fixed inset-0 z-[200]' : 'absolute inset-0 z-[100]'} bg-white flex flex-col`}
     >
-      {/* Substrate Frame Top Bar - Vaa Indigo Style */}
+      {/* MOSS Frame Top Bar */}
       <div className="h-12 bg-wa-header flex items-center justify-between px-4 shadow-md">
         <div className="flex items-center gap-3">
           <div className={`w-2 h-2 rounded-full ${isFrozen ? 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.5)]' : 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]'}`} />
           <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] truncate max-w-[150px]">
-            {name} {isFrozen && <span className="text-blue-300 ml-2">[ FROZEN ]</span>}
+            {name} {isFrozen && <span className="text-blue-300 ml-2">[ METABOLIC STASIS ]</span>}
           </span>
         </div>
 
@@ -48,7 +52,7 @@ export const SubstrateFrame: React.FC<SubstrateFrameProps> = ({
           <button 
             onClick={onToggleFreeze}
             className={`p-2 rounded-lg transition-all ${isFrozen ? 'bg-white/20 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
-            title={isFrozen ? "Thaw Metabolism" : "Freeze Metabolism"}
+            title={isFrozen ? "Thaw Spore" : "Freeze Spore"}
           >
             {isFrozen ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
           </button>
@@ -65,20 +69,20 @@ export const SubstrateFrame: React.FC<SubstrateFrameProps> = ({
           <button 
             onClick={onClose}
             className="p-2 text-white/70 hover:text-white hover:bg-red-500/80 rounded-lg transition-all"
-            title="Purge Substrate"
+            title="Purge Spore"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Mini-App Content */}
+      {/* Spore Content */}
       <div className="flex-1 relative overflow-hidden bg-white">
         <div className={`h-full transition-all duration-500 ${isFrozen ? 'filter grayscale brightness-90 pointer-events-none' : ''}`}>
           {children}
         </div>
 
-        {/* Frost Overlay */}
+        {/* Moss Frost Overlay */}
         <AnimatePresence>
           {isFrozen && (
             <motion.div 

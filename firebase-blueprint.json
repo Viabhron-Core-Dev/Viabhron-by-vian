@@ -57,6 +57,7 @@
         "isAnchor": { "type": "boolean", "description": "Whether the agent is the Sovereign Anchor (Tiny LLM)." },
         "isCloudManager": { "type": "boolean", "description": "Whether the agent is the primary Cloud Manager (Resident Head Agent)." },
         "isResident": { "type": "boolean", "description": "Whether the agent is a resident of the private cloud." },
+        "taxonomy": { "type": "string", "enum": ["bird", "fish", "insect"], "description": "The biological classification within the Sovereign Forest." },
         "lastActive": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "name", "role", "provider", "model", "status"]
@@ -474,19 +475,33 @@
       },
       "required": ["id", "name", "applied"]
     },
-    "MiniApp": {
-      "title": "Mini App",
-      "description": "A lightweight application within the Sovereign ecosystem.",
+    "Moss": {
+      "title": "Moss (App/Game)",
+      "description": "A grounded application or game executing within the MOSS substrate of the VAA client.",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
         "name": { "type": "string" },
         "description": { "type": "string" },
         "type": { "type": "string", "enum": ["local", "sovereign"] },
-        "category": { "type": "string", "enum": ["utility", "creative", "security", "intelligence"] },
+        "category": { "type": "string", "enum": ["utility", "creative", "security", "intelligence", "game"] },
         "status": { "type": "string", "enum": ["active", "inactive", "error"] }
       },
       "required": ["id", "name", "type", "category", "status"]
+    },
+    "Spore": {
+      "title": "Spore (Expeditionary Mission)",
+      "description": "A task-specific mission instance migrating to external hardware for edge execution.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "targetDeviceId": { "type": "string" },
+        "status": { "type": "string", "enum": ["airborne", "landed", "harvesting", "complete"] },
+        "missionBrief": { "type": "string" },
+        "metabolicData": { "type": "object" }
+      },
+      "required": ["id", "targetDeviceId", "status"]
     },
     "Client": {
       "title": "Sovereign Client",

@@ -1,21 +1,21 @@
 import React from 'react';
 import { Layout, ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MiniApp } from '../../../types';
+import { Moss } from '../../../types';
 import * as Icons from 'lucide-react';
 
-interface MiniAppSectionProps {
-  miniApps: MiniApp[];
-  onToggleMiniApp: (id: string) => void;
+interface MossSectionProps {
+  moss: Moss[];
+  onToggleMoss: (id: string) => void;
   onOpenStore: () => void;
   onOpenLoader: () => void;
   isOpen: boolean;
   onToggle: () => void;
 }
 
-export const MiniAppSection: React.FC<MiniAppSectionProps> = ({
-  miniApps,
-  onToggleMiniApp,
+export const MossSection: React.FC<MossSectionProps> = ({
+  moss,
+  onToggleMoss,
   onOpenStore,
   onOpenLoader,
   isOpen,
@@ -44,7 +44,7 @@ export const MiniAppSection: React.FC<MiniAppSectionProps> = ({
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden space-y-0.5 ml-2 border-l border-white/5 pl-2"
           >
-            {miniApps.map((app) => {
+            {moss.map((app) => {
               const Icon = (Icons as any)[app.icon] || Layout;
               return (
                 <div
@@ -63,7 +63,7 @@ export const MiniAppSection: React.FC<MiniAppSectionProps> = ({
                     </div>
                   </div>
                   <button
-                    onClick={() => onToggleMiniApp(app.id)}
+                    onClick={() => onToggleMoss(app.id)}
                     className={`
                       w-7 h-4 rounded-full relative transition-all duration-200
                       ${app.enabled ? 'bg-blue-600' : 'bg-gray-700'}
@@ -82,7 +82,7 @@ export const MiniAppSection: React.FC<MiniAppSectionProps> = ({
               className="w-full flex items-center gap-2 px-2 py-1.5 text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
             >
               <Plus className="w-3 h-3" />
-              Add Mini-App
+              Add Moss-App
             </button>
           </motion.div>
         )}
